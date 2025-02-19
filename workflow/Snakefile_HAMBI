@@ -1,0 +1,99 @@
+import os
+if not os.path.exists('slurm_logs'):
+			os.makedirs('slurm_logs')
+
+BARCODES = ["bcAd1023T--bcAd1023T", "bcAd1037T--bcAd1037T", "bcAd1039T--bcAd1039T", "bcAd1046T--bcAd1046T", "bcAd1063T--bcAd1063T"]
+
+rule all:
+	input:
+		"/scratch/project_2006608/Veera_PacBio/Raw_subread_data/m64145_231126_001443.subreads.bam",
+		expand("HAMBI_data/HiFi_bam/m64145_231126_001443_demultiplex.{barcode}.bam", barcode=BARCODES),
+		expand("HAMBI_data/metagenomic_assembly/{barcode}.fasta", barcode=BARCODES)
+
+rule ccs:
+	input:
+		"/scratch/project_2006608/Veera_PacBio/Raw_subread_data/m64145_231126_001443.subreads.bam"
+	output:
+		bam=temp("HAMBI_data/ccs_reads/m64145_231126_001443.ccs.bam"),
+		report="HAMBI_data/ccs_reads/m64145_231126_001443.report"
+	message:
+		"-- Creating CCS reads  --"
+	singularity:
+		"docker://quay.io/biocontainers/pbccs:6.4.0--h9ee0642_0"
+	log:
+		"HAMBI_data/ccs_reads/m64145_231126_001443.log"
+	resources:
+		cpus=40, mem_mb=24000, time_min=3000, tmpdir="tmp_dir/"
+	threads:
+		40
+	shell:
+		"""
+		ccs {input} {output.bam} \
+		--report-file {output.report} \
+		--num-threads {threads} --log-file {log}
+		"""
+
+rule lima:
+	input:
+		bam="HAMBI_data/ccs_reads/m64145_231126_001443.ccs.bam",
+		fasta="HAMBI_data/ccs_reads/barcodes.fasta"
+	output:
+		temp("HAMBI_data/HiFi_bam/m64145_231126_001443_demultiplex.{barcode}.bam")
+	message:
+		"-- Demultiplex --"
+	singularity:
+		"docker://quay.io/biocontainers/lima:2.6.0--h9ee0642_0"
+	resources:
+		cpus=4
+	threads:
+		4
+	params:
+		prefix="HAMBI_data/HiFi_bam/m64145_231126_001443_demultiplex.bam"
+	shell:
+		"""
+		lima --ccs {input.bam} {input.fasta} {params.prefix} \
+		--peek-guess \
+		--hifi-preset SYMMETRIC-ADAPTERS \
+		--split-bam-named -j {threads}
+		"""
+
+rule bam2fastq:
+	input:
+		"HAMBI_data/HiFi_bam/m64145_231126_001443_demultiplex.{barcode}.bam"
+	output:
+		"HAMBI_data/HiFi_fastq/{barcode}.hifi_reads.fastq.gz"
+	params:
+		prefix="HAMBI_data/HiFi_fastq/{barcode}.hifi_reads"
+	message:
+		"-- Converting bam files into fastq files --"
+	resources:
+		cpus=1
+	threads:
+		1
+	shell:
+		"""
+		bam2fastq {input} -o {params.prefix}
+		"""
+
+rule hifiasm_reads:
+	input:
+		"HAMBI_data/HiFi_fastq/{barcode}.hifi_reads.fastq.gz"
+	output:
+		"HAMBI_data/metagenomic_assembly/{barcode}.fasta"
+	message:
+		"-- Assemble reads into contigs --"
+	singularity:
+		"docker://quay.io/biocontainers/hifiasm:0.19.8--h43eeafb_0"
+	log:
+		err="HAMBI_data/metagenomic_assembly/{barcode}_asm.log"
+	resources:
+		cpus=24, mem_mb=80000, time_min=3000
+	threads:
+		24
+	params:
+		prefix="HAMBI_data/metagenomic_assembly/{barcode}.asm"
+	shell:
+		"""
+		hifiasm -o {params.prefix} -t {threads} {input} 2> {log.err}
+		bash src/convert_fasta.sh {wildcards.barcode} > {output}
+		"""
