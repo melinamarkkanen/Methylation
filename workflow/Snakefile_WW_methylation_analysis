@@ -1,18 +1,19 @@
 import os
 if not os.path.exists('slurm_logs'):
 			os.makedirs('slurm_logs')
-CONTIGS, = glob_wildcards("HAMBI_data/contigs/{contigs}.fasta")
+
+CONTIGS, = glob_wildcards("/scratch/project_2006608/Methylation/WW_data/{sample}_contigs/{contigs}.fasta")
 
 rule all:
 	input:
-		expand("HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_basemods.gff", contig=CONTIGS)
+		expand("WW_data/{sample}_contigs/{contig}_basemods.gff", contig=CONTIGS)
 
 rule pbbm2_align_contig:
 	input:
-		fasta="contigs/{contig}.fasta",
-		bam="contigs/bcAd1063T--bcAd1063T_{contig}.bam" # "HAMBI_data/HiFi_bam/hifi_kinetic_reads.{barcode}.bam"
+		fasta="WW_data/{sample}_contigs/{contig}.fasta",
+		bam="WW_data/{sample}_contigs/{contig}.bam"
 	output:
-		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam"
+		temp("WW_data/{sample}_contigs/{contig}_mapped.bam")
 	message:
 		"-- Aligning reads to the contigs --"
 	singularity:
@@ -29,9 +30,9 @@ rule pbbm2_align_contig:
 
 rule index_mapped_bam:
 	input:
-		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam"
+		"WW_data/{sample}_contigs/{contig}_mapped.bam"
 	output:
-		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam.pbi"
+		temp("WW_data/{sample}_contigs/{contig}_mapped.bam.pbi")
 	message:
 		"-- Creating index files for mapped bam --"
 	envmodules:
@@ -47,17 +48,17 @@ rule index_mapped_bam:
 
 rule ipdSummary:
 	input: 
-		fasta="HAMBI_data/contigs/{contig}.fasta",
-		fai="HAMBI_data/contigs/{contig}.fasta.fai",
-		bam="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam",
-		pbi="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam.pbi"
+		fasta="WW_data/{sample}_contigs/{contig}.fasta",
+		fai="WW_data/{sample}_contigs/{contig}.fasta.fai",
+		bam="WW_data/{sample}_contigs/{contig}_mapped.bam",
+		pbi="WW_data/{sample}_contigs/{contig}_mapped.bam.pbi"
 	output:
-		gff="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_basemods.gff",
-		csv="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_kinetics.csv"
+		gff="WW_data/{sample}_contigs/{contig}_basemods.gff",
+		csv="WW_data/{sample}_contigs/{contig}_kinetics.csv"
 	message:    
 		"-- Summarizing the IPD data --"
 	log:
-		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_ipd.log"
+		"WW_data/{sample}_contigs/{contig}_ipd.log"
 	resources:
 		cpus=10, time_min=1440, mem_mb=9000
 	threads:
