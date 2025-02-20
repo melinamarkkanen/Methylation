@@ -1,0 +1,270 @@
+import os
+if not os.path.exists('slurm_logs'):
+			os.makedirs('slurm_logs')
+
+BARCODES = ["bcAd1023T--bcAd1023T", "bcAd1037T--bcAd1037T", "bcAd1039T--bcAd1039T", "bcAd1046T--bcAd1046T", "bcAd1063T--bcAd1063T"]
+
+rule all:
+	input:
+		"/scratch/project_2006608/Veera_PacBio/Raw_subread_data/m64145_231126_001443.subreads.bam",
+		"HAMBI_data/metagenomic_assembly/blast_out.txt",
+		expand("HAMBI_data/HiFi_bam/{barcode}.hifi_kinetic_reads.bam", barcode=BARCODES)
+
+		expand("HAMBI_data/assemblies/{barcode}_mapped.bam.bai", barcode=BARCODES)
+		expand("HAMBI_data/assemblies/{barcode}_extract_bam_done.txt", barcode=BARCODES)
+
+rule ccs:
+	input:
+		"/scratch/project_2006608/Veera_PacBio/Raw_subread_data/m64145_231126_001443.subreads.bam"
+	output:
+		bam=temp("HAMBI_data/ccs_reads/m64145_231126_001443.ccs.bam"),
+		report="HAMBI_data/ccs_reads/m64145_231126_001443.report"
+	message:
+		"-- Creating CCS reads  --"
+	singularity:
+		"docker://quay.io/biocontainers/pbccs:6.4.0--h9ee0642_0"
+	log:
+		"HAMBI_data/ccs_reads/m64145_231126_001443.log"
+	resources:
+		cpus=40, mem_mb=24000, time_min=3000, tmpdir="tmp_dir/"
+	threads:
+		40
+	shell:
+		"""
+		ccs {input} {output.bam} \
+		--report-file {output.report} \
+		--num-threads {threads} --log-file {log}
+		"""
+
+rule lima:
+	input:
+		bam="HAMBI_data/ccs_reads/m64145_231126_001443.ccs.bam",
+		fasta="HAMBI_data/ccs_reads/barcodes.fasta"
+	output:
+		temp("HAMBI_data/HiFi_bam/demultiplex.{barcode}.bam")
+	message:
+		"-- Demultiplex --"
+	singularity:
+		"docker://quay.io/biocontainers/lima:2.6.0--h9ee0642_0"
+	resources:
+		cpus=4
+	threads:
+		4
+	params:
+		prefix="HAMBI_data/HiFi_bam/demultiplex.bam"
+	shell:
+		"""
+		lima --ccs {input.bam} {input.fasta} {params.prefix} \
+		--peek-guess \
+		--hifi-preset SYMMETRIC-ADAPTERS \
+		--split-bam-named -j {threads}
+		"""
+
+rule bam2fastq:
+	input:
+		"HAMBI_data/HiFi_bam/demultiplex.{barcode}.bam"
+	output:
+		"HAMBI_data/HiFi_fastq/{barcode}.hifi_reads.fastq.gz"
+	params:
+		prefix="HAMBI_data/HiFi_fastq/{barcode}.hifi_reads"
+	message:
+		"-- Converting bam files into fastq files --"
+	resources:
+		cpus=1
+	threads:
+		1
+	shell:
+		"""
+		bam2fastq {input} -o {params.prefix}
+		"""
+
+rule hifiasm_reads:
+	input:
+		"HAMBI_data/HiFi_fastq/{barcode}.hifi_reads.fastq.gz"
+	output:
+		"HAMBI_data/metagenomic_assembly/{barcode}.fasta"
+	message:
+		"-- Assemble reads into contigs --"
+	singularity:
+		"docker://quay.io/biocontainers/hifiasm:0.19.8--h43eeafb_0"
+	log:
+		err="HAMBI_data/metagenomic_assembly/{barcode}_asm.log"
+	resources:
+		cpus=24, mem_mb=80000, time_min=3000
+	threads:
+		24
+	params:
+		prefix="HAMBI_data/metagenomic_assembly/{barcode}.asm"
+	shell:
+		"""
+		hifiasm -o {params.prefix} -t {threads} {input} 2> {log.err}
+		bash src/convert_fasta.sh {wildcards.barcode} > {output}
+		"""
+
+rule blastn:
+	input:
+		file1="HAMBI_data/metagenomic_assembly/bcAd1023T--bcAd1023T.fasta",
+		file2="HAMBI_data/metagenomic_assembly/bcAd1037T--bcAd1037T.fasta",
+		file3="HAMBI_data/metagenomic_assembly/bcAd1039T--bcAd1039T.fasta",
+		file4="HAMBI_data/metagenomic_assembly/bcAd1046T--bcAd1046T.fasta",
+		file5="HAMBI_data/metagenomic_assembly/bcAd1063T--bcAd1063T.fasta",
+		db="HAMBI_data/WGS_data/HAMBI_genomes.fasta"
+	output:
+		contigs="HAMBI_data/metagenomic_assembly/assembly.fasta",
+		blast="HAMBI_data/metagenomic_assembly/blast_out.txt"
+	message:
+		"-- Blasting assemblies against WGS data --"
+	envmodules:
+		"blast/2.16.0"
+	log:
+		err="slurm_logs/blastn.log"
+	resources:
+		cpus=10, mem_mb=80000, time_min=3000
+	threads:
+		10
+	shell:
+		"""
+		cat {input.file1} {input.file2} {input.file3} {input.file4} {input.file5} > {output.contigs}
+		blastn -query {output.contigs} -subject {input.db} -out {output.blast} -outfmt 6
+		"""
+
+rule ccs_kinetics_bystrandify:
+	input:
+		"HAMBI_data/ccs_reads/m64145_231126_001443.ccs.bam"
+	output:
+		temp("HAMBI_data/ccs_reads/m64145_231126_001443_kinetics.ccs.bam")
+	message:
+		"-- Enable base modification detection downstream --"
+	log:
+		"HAMBI_data/ccs_reads/m64145_231126_001443_kinetics.log"
+	resources:
+		cpus=2
+	threads:
+		2
+	shell:
+		"""
+		ccs-kinetics-bystrandify {input} {output} -j {threads}
+		"""
+
+rule lima_kinetics:
+	input:
+		bam="HAMBI_data/ccs_reads/m64145_231126_001443_kinetics.ccs.bam",
+		fasta="HAMBI_data/ccs_reads/barcodes.fasta"
+	output:
+		"HAMBI_data/HiFi_bam/{barcode}.hifi_kinetic_reads.bam"
+	message:
+		"-- Demultiplex --"
+	singularity:
+		"docker://quay.io/biocontainers/lima:2.6.0--h9ee0642_0"
+	resources:
+		cpus=4
+	threads:
+		4
+	params:
+		prefix="HAMBI_data/HiFi_bam/demultiplex.kinetics.bam"
+	shell:
+		"""
+		lima --ccs {input.bam} {input.fasta} {params.prefix} \
+		--peek-guess \
+		--hifi-preset SYMMETRIC-ADAPTERS \
+		--split-bam-named -j {threads}
+		"""
+
+rule index_fasta_sample:
+	input:
+		"HAMBI_data/metagenomic_assembly/{barcode}.fasta"
+	output:
+		"HAMBI_data/metagenomic_assembly/{barcode}.mmi"
+	message:
+		"-- Creating index for mapping --"
+	singularity:
+		"docker://quay.io/biocontainers/pbmm2:1.10.0--h9ee0642_0"
+	resources:
+		cpus=8, time_min=360, mem_mb=25000
+	threads:
+		8
+	shell:
+		"""
+		pbmm2 index {input} {output}
+		"""
+
+rule pbbm2_align_sample:
+	input:
+		mmi="HAMBI_data/metagenomic_assembly/{barcode}.mmi",
+		bam="HAMBI_data/HiFi_bam/{barcode}.hifi_kinetic_reads.bam"
+	output:
+		"HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam"
+	message:
+		"-- Aligning reads to the assembly --"
+	singularity:
+		"docker://quay.io/biocontainers/pbmm2:1.10.0--h9ee0642_0"
+	log:
+		"slurm_logs/pbbm2_align_sample.log"
+	resources:
+		cpus=20, time_min=1440, mem_mb=20000, tmpdir="tmp_dir/"
+	threads:
+		20
+	shell:
+		"""
+		pbmm2 align {input.mmi} {input.bam} {output} \
+		--sort --preset CCS --num-threads {threads} \
+		--log-file {log}
+		"""
+
+rule index_bam_sample:
+	input:
+		"HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam"
+	output:
+		"HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam.bai"
+	message:
+		"-- Creating index files --"
+	envmodules:
+		"samtools/1.16.1"
+	resources:
+		cpus=16, time_min=1440, mem_mb=15000
+	threads:
+		16
+	shell:
+		"""
+		samtools index {input}
+		"""
+
+rule index_fasta_contig:
+	input:
+		"HAMBI_data/contigs/{contig}.fasta"
+	output:
+		"HAMBI_data/contigs/{contig}.fasta.fai"
+	message:
+		"-- Create index files for contigs --"
+	envmodules:
+		"samtools/1.16.1"
+	resources:
+		cpus=10, time_min=120, mem_mb=15000
+	threads:
+		10
+	shell:
+		"""
+		samtools faidx {input}
+		"""
+
+rule extract_bam_by_contig:
+	input:
+		bam="HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam",
+		bai="HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam.bai"
+	output:
+		"HAMBI_data/metagenomic_assembly/{barcode}.extract_bam_done.txt",
+	message:
+		"-- Split mapped reads to separate bam files --"
+	log:
+		"HAMBI_data/metagenomic_assembly/{barcode}_extract_bam.log"
+	envmodules:
+		"samtools/1.16.1"
+	resources:
+		cpus=4, time_min=120, mem_mb=9000
+	threads:
+		4
+	shell:
+		"""
+		bash src/extract_bam.sh {wildcards.barcode} 2>{log}
+		touch {output}
+		"""

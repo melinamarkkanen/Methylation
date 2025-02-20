@@ -1,0 +1,70 @@
+import os
+if not os.path.exists('slurm_logs'):
+			os.makedirs('slurm_logs')
+CONTIGS, = glob_wildcards("HAMBI_data/contigs/{contigs}.fasta")
+
+rule all:
+	input:
+		expand("HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_basemods.gff", contig=CONTIGS)
+
+rule pbbm2_align_contig:
+	input:
+		fasta="contigs/{contig}.fasta",
+		bam="contigs/bcAd1063T--bcAd1063T_{contig}.bam"
+	output:
+		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam"
+	message:
+		"-- Aligning reads to the contigs --"
+	singularity:
+		"docker://quay.io/biocontainers/pbmm2:1.10.0--h9ee0642_0"
+	resources:
+		cpus=4, time_min=180, tmpdir="tmp_dir/"
+	threads:
+		4
+	shell:
+		"""
+		pbmm2 align {input.fasta} {input.bam} {output} \
+		--sort --preset CCS --num-threads {threads}
+		"""
+
+rule index_mapped_bam:
+	input:
+		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam"
+	output:
+		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam.pbi"
+	message:
+		"-- Creating index files for mapped bam --"
+	envmodules:
+		"samtools/1.16.1"
+	resources:
+		cpus=10, time_min=120, mem_mb=15000
+	threads:
+		10
+	shell:
+		"""
+		pbindex {input}
+		"""
+
+rule ipdSummary:
+	input: 
+		fasta="HAMBI_data/contigs/{contig}.fasta",
+		fai="HAMBI_data/contigs/{contig}.fasta.fai",
+		bam="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam",
+		pbi="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam.pbi"
+	output:
+		gff="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_basemods.gff",
+		csv="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_kinetics.csv"
+	message:    
+		"-- Summarizing the IPD data --"
+	log:
+		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_ipd.log"
+	resources:
+		cpus=10, time_min=1440, mem_mb=9000
+	threads:
+		10
+	shell:
+		"""
+		ipdSummary {input.bam} --reference {input.fasta} \
+		--identify m6A,m4C \
+		--gff {output.gff} --csv {output.csv} -j {threads} --log-file {log}
+		"""
