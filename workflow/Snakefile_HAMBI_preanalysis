@@ -8,16 +8,16 @@ rule all:
 	input:
 		"/scratch/project_2006608/Veera_PacBio/Raw_subread_data/m64145_231126_001443.subreads.bam",
 		"HAMBI_data/metagenomic_assembly/blast_out.txt",
-		expand("HAMBI_data/HiFi_bam/hifi_kinetic_reads.{barcode}.bam", barcode=BARCODES)
+		expand("HAMBI_data/HiFi_bam/{barcode}.hifi_reads_kinetic.bam", barcode=BARCODES)
 
-		expand("HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam.bai", barcode=BARCODES)
-		expand("HAMBI_data/metagenomic_assembly/{barcode}_extract_bam_done.txt", barcode=BARCODES)
+		#expand("HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam.bai", barcode=BARCODES)
+		#expand("HAMBI_data/metagenomic_assembly/{barcode}_extract_bam_done.txt", barcode=BARCODES)
 
 rule ccs:
 	input:
 		"/scratch/project_2006608/Veera_PacBio/Raw_subread_data/m64145_231126_001443.subreads.bam"
 	output:
-		bam=temp("HAMBI_data/ccs_reads/m64145_231126_001443.ccs.bam"),
+		bam="HAMBI_data/ccs_reads/m64145_231126_001443.ccs.bam",
 		report="HAMBI_data/ccs_reads/m64145_231126_001443.report"
 	message:
 		"-- Creating CCS reads  --"
@@ -130,13 +130,13 @@ rule blastn:
 
 rule ccs_kinetics_bystrandify:
 	input:
-		"HAMBI_data/ccs_reads/m64145_231126_001443.ccs.bam"
+		"HAMBI_data/HiFi_bam/demultiplex.{barcode}.bam"
 	output:
-		temp("HAMBI_data/ccs_reads/m64145_231126_001443_kinetics.ccs.bam")
+		"HAMBI_data/HiFi_bam/{barcode}.hifi_reads_kinetic.bam"
 	message:
 		"-- Enable base modification detection downstream --"
 	log:
-		"HAMBI_data/ccs_reads/m64145_231126_001443_kinetics.log"
+		"slurm_logs/{barcode}_kinetics.log"
 	resources:
 		cpus=2
 	threads:
@@ -144,31 +144,6 @@ rule ccs_kinetics_bystrandify:
 	shell:
 		"""
 		ccs-kinetics-bystrandify {input} {output} -j {threads}
-		"""
-
-rule lima_kinetics:
-	input:
-		bam="HAMBI_data/ccs_reads/m64145_231126_001443_kinetics.ccs.bam",
-		pbi="HAMBI_data/ccs_reads/m64145_231126_001443_kinetics.ccs.bam.pbi",
-		fasta="HAMBI_data/ccs_reads/barcodes.fasta"
-	output:
-		"HAMBI_data/HiFi_bam/hifi_kinetic_reads.{barcode}.bam"
-	message:
-		"-- Demultiplex --"
-	singularity:
-		"docker://quay.io/biocontainers/lima:2.6.0--h9ee0642_0"
-	resources:
-		cpus=4
-	threads:
-		4
-	params:
-		prefix="HAMBI_data/HiFi_bam/hifi_kinetic_reads.bam"
-	shell:
-		"""
-		lima --ccs {input.bam} {input.fasta} {params.prefix} \
-		--peek-guess \
-		--hifi-preset SYMMETRIC-ADAPTERS \
-		--split-bam-named -j {threads}
 		"""
 
 rule index_fasta_sample:
@@ -192,7 +167,7 @@ rule index_fasta_sample:
 rule pbbm2_align_sample:
 	input:
 		mmi="HAMBI_data/metagenomic_assembly/{barcode}.mmi",
-		bam="HAMBI_data/HiFi_bam/hifi_kinetic_reads.{barcode}.bam"
+		bam="HAMBI_data/HiFi_bam/{barcode}.hifi_reads_kinetic.bam"
 	output:
 		"HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam"
 	message:
@@ -200,7 +175,7 @@ rule pbbm2_align_sample:
 	singularity:
 		"docker://quay.io/biocontainers/pbmm2:1.10.0--h9ee0642_0"
 	log:
-		"slurm_logs/pbbm2_align_sample.log"
+		"slurm_logs/pbbm2_align_sample_{barcode}.log"
 	resources:
 		cpus=20, time_min=1440, mem_mb=20000, tmpdir="tmp_dir/"
 	threads:
@@ -266,6 +241,6 @@ rule extract_bam_by_contig:
 		4
 	shell:
 		"""
-		bash src/HAMBI_extract_bam.sh {wildcards.barcode} 2>{log}	# rename in Puhti
+		bash src/HAMBI_extract_bam.sh {wildcards.barcode} 2>{log}
 		touch {output}
 		"""

@@ -2,11 +2,11 @@ import os
 if not os.path.exists('slurm_logs'):
 			os.makedirs('slurm_logs')
 
-CONTIGS, = glob_wildcards("/scratch/project_2006608/Methylation/WW_data/{sample}_contigs/{contigs}.fasta")
+CONTIGS, = glob_wildcards("/scratch/project_2006608/Methylation/WW_data/{sample}_contigs/{contigs}.fasta") # ??
 
 rule all:
 	input:
-		expand("WW_data/{sample}_contigs/{contig}_basemods.gff", contig=CONTIGS)
+		expand("WW_data/{sample}_contigs/{contig}_basemods.gff", contig=CONTIGS, sample=SAMPLES)
 
 rule pbbm2_align_contig:
 	input:

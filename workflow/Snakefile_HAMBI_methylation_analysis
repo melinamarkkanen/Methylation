@@ -7,6 +7,10 @@ rule all:
 	input:
 		expand("HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_basemods.gff", contig=CONTIGS)
 
+
+# renaming of contigs to have sample names as well?
+
+
 rule pbbm2_align_contig:
 	input:
 		fasta="contigs/{contig}.fasta",
