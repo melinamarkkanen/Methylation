@@ -68,24 +68,6 @@ rule index_bam_sample:
 		samtools index {input}
 		"""
 
-rule index_fasta_contig:
-	input:
-		"WW_data/{sample}_contigs/{contig}.fasta"
-	output:
-		"WW_data/{sample}_contigs/{contig}.fasta.fai"
-	message:
-		"-- Create index files for contigs --"
-	envmodules:
-		"samtools/1.16.1"
-	resources:
-		cpus=10, time_min=120, mem_mb=15000
-	threads:
-		10
-	shell:
-		"""
-		samtools faidx {input}
-		"""
-
 rule extract_bam_by_contig:
 	input:
 		bam="WW_data/{sample}/{sample}_contigs_mapped.bam",

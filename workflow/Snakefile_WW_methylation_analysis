@@ -2,11 +2,30 @@ import os
 if not os.path.exists('slurm_logs'):
 			os.makedirs('slurm_logs')
 
-CONTIGS, = glob_wildcards("/scratch/project_2006608/Methylation/WW_data/{sample}_contigs/{contigs}.fasta") # ??
+SAMPLES,CONTIGS, = glob_wildcards("/scratch/project_2006608/Methylation/WW_data/{sample}_contigs/{contigs}.fasta")
+SAMPLES = ['EFF1']
 
 rule all:
 	input:
 		expand("WW_data/{sample}_contigs/{contig}_basemods.gff", contig=CONTIGS, sample=SAMPLES)
+
+rule index_fasta_contig:
+	input:
+		"WW_data/{sample}_contigs/{contig}.fasta"
+	output:
+		"WW_data/{sample}_contigs/{contig}.fasta.fai"
+	message:
+		"-- Create index files for contigs --"
+	envmodules:
+		"samtools/1.16.1"
+	resources:
+		cpus=10, time_min=120, mem_mb=15000
+	threads:
+		10
+	shell:
+		"""
+		samtools faidx {input}
+		"""
 
 rule pbbm2_align_contig:
 	input:

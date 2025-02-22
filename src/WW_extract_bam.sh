@@ -8,7 +8,7 @@ module load seqkit/2.5.1
 
 # Set contig variable
 
-contigs=$(ls WW_data/$sample"_contigs"/*.fasta | sed 's/WW_data\/${sample}"_contigs"//g' | sed 's/\.fasta//')
+contigs=$(ls WW_data/$sample"_contigs"/*.fasta | sed "s|WW_data\/${sample}_contigs\/||g" | sed 's/\.fasta//')
 
 # Complete contigs
 for c in $contigs; do
