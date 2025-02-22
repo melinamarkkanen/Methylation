@@ -13,7 +13,7 @@ rule index_fasta_contig:
 	input:
 		"WW_data/{sample}_contigs/{contig}.fasta"
 	output:
-		"WW_data/{sample}_contigs/{contig}.fasta.fai"
+		temp("WW_data/{sample}_contigs/{contig}.fasta.fai")
 	message:
 		"-- Create index files for contigs --"
 	envmodules:

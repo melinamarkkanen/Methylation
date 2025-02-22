@@ -125,7 +125,7 @@ rule blastn:
 	shell:
 		"""
 		cat {input.file1} {input.file2} {input.file3} {input.file4} {input.file5} > {output.contigs}
-		blastn -query {output.contigs} -subject {input.db} -out {output.blast} -outfmt 6
+		blastn -query {output.contigs} -subject {input.db} -out {output.blast} -outfmt 6 -max_target_seqs 1 -perc_identity 90
 		"""
 
 rule ccs_kinetics_bystrandify:
