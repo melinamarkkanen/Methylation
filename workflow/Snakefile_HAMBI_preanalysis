@@ -103,29 +103,23 @@ rule hifiasm_reads:
 
 rule blastn:
 	input:
-		file1="HAMBI_data/metagenomic_assembly/bcAd1023T--bcAd1023T.fasta",
-		file2="HAMBI_data/metagenomic_assembly/bcAd1037T--bcAd1037T.fasta",
-		file3="HAMBI_data/metagenomic_assembly/bcAd1039T--bcAd1039T.fasta",
-		file4="HAMBI_data/metagenomic_assembly/bcAd1046T--bcAd1046T.fasta",
-		file5="HAMBI_data/metagenomic_assembly/bcAd1063T--bcAd1063T.fasta",
+		assembly="HAMBI_data/metagenomic_assembly/{barcode}.fasta",
 		db="HAMBI_data/WGS_data/HAMBI_genomes.fasta"
 	output:
-		contigs="HAMBI_data/metagenomic_assembly/assembly.fasta",
-		blast="HAMBI_data/metagenomic_assembly/blast_out.txt"
+		blast="HAMBI_data/metagenomic_assembly/{barcode}_blast_out.txt"
 	message:
 		"-- Blasting assemblies against WGS data --"
 	envmodules:
 		"blast/2.16.0"
 	log:
-		err="slurm_logs/blastn.log"
+		err="slurm_logs/{barcode}_blastn.log"
 	resources:
 		cpus=10, mem_mb=80000, time_min=3000
 	threads:
 		10
 	shell:
 		"""
-		cat {input.file1} {input.file2} {input.file3} {input.file4} {input.file5} > {output.contigs}
-		blastn -query {output.contigs} -subject {input.db} -out {output.blast} -outfmt 6 -max_target_seqs 1 -perc_identity 90
+		blastn -query {input.assembly} -subject {input.db} -out {output.blast} -outfmt 6 -max_target_seqs 1 -perc_identity 90
 		"""
 
 rule ccs_kinetics_bystrandify:

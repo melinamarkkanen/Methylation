@@ -2,7 +2,8 @@ import os
 if not os.path.exists('slurm_logs'):
 			os.makedirs('slurm_logs')
 
-SAMPLES = ["EFF1"]
+#SAMPLES = ["EFF1"]
+SAMPLES = ["INF1"]
 
 rule all:
 	input:

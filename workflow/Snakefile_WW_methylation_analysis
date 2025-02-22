@@ -3,7 +3,8 @@ if not os.path.exists('slurm_logs'):
 			os.makedirs('slurm_logs')
 
 SAMPLES,CONTIGS, = glob_wildcards("/scratch/project_2006608/Methylation/WW_data/{sample}_contigs/{contigs}.fasta")
-SAMPLES = ['EFF1']
+#SAMPLES = ['EFF1']
+SAMPLES = ['INF1']
 
 rule all:
 	input:
