@@ -71,27 +71,3 @@
 | HAMBI_2443 | *Paracoccus denitrificans* | chromosome |
 | HAMBI_2443 | *Paracoccus denitrificans* | plasmid unnamed1 |
 | HAMBI_2443 | *Paracoccus denitrificans* | plasmid unnamed2 |
-
-## Method validation
-### Metagenome assemmbly of HAMBI community
-#### Preparations
-
-
-### Methylation analysis of HAMBI community
-#### Preparations
-
-
-### UMAP
-#### Preparations
-
-
-### Random Forest Classifier
-#### Preparations
-
-
-### Sequence logos vs. MultiMotifMaker
-#### Preparations
-
-
-### MultiMotifMaker of clustered contigs
-#### Preparations
