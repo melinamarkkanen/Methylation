@@ -4,7 +4,8 @@ if not os.path.exists('slurm_logs'):
 
 #SAMPLES = ["EFF1"]
 #SAMPLES = ["INF1"]
-SAMPLES = ["SLU1"]
+#SAMPLES = ["SLU1"]
+SAMPLES = ["EFF2"]
 
 rule all:
 	input:
@@ -83,7 +84,7 @@ rule extract_bam_by_contig:
 	envmodules:
 		"samtools/1.16.1"
 	resources:
-		cpus=4, time_min=480, mem_mb=9000
+		cpus=4, time_min=1440, mem_mb=9000
 	threads:
 		4
 	shell:
