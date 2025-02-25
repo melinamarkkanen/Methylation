@@ -10,10 +10,10 @@ cd HAMBI_data/WGS_data
 cat *fna > HAMBI_genomes.fasta
 ```
 ### Running ```workflow/Snakefile_HAMBI_preanalysis```: *(should we add snakemake dry run draws?)*
-    - generation of HiFi reads **without** kinetics tags (fastq.gz) for the assembly
-    - metagenomic assembly of the community
-    - BLASTn search between the metagenomic assemblies and WGS data
-    - generation of HiFi reads **with** kinetics tags (.bam) for the methylation analysis
+####    - generation of HiFi reads **without** kinetics tags (fastq.gz) for the assembly
+####    - metagenomic assembly of the community
+####    - BLASTn search between the metagenomic assemblies and WGS data
+####    - generation of HiFi reads **with** kinetics tags (.bam) for the methylation analysis
 ```
 module load snakemake
 snakemake --profile workflow/profile --use-envmodules --use-singularity \
@@ -41,8 +41,8 @@ sed -i 's/\.1 /\.1\t/g' WGS_ID.txt
 awk 'NR==FNR {a[$1]=$0; next} $2 in a {print $0, a[$2]}' WGS_ID.txt ../metagenomic_assembly/filtered_blast_out.txt > ../metagenomic_assembly/HAMBI_taxa_names.txt
 ```
 ### Modify ```HAMBI_taxa_names.txt``` further in excel 
-#### - modify the labels according to GTDB nomenclature
-#### - fill in column headers:
+####    - modify the labels according to GTDB nomenclature
+####    - fill in column headers:
 ```
 contig	fullname	accession	element	domain	phylum	class	order	family	genus	species	secondary_accession	sample
 ---------------------------	------------------------	----------	-------------	--------------------	------	-------------	-----------------	------------	---------------	----------	--------------------	------------------
@@ -75,8 +75,8 @@ rename bcad1046t--bcad1046t bcAd1046T--bcAd1046T *.fasta
 rename bcad1063t--bcad1063t bcAd1063T--bcAd1063T *.fasta
 ```
 ### Running ```workflow/Snakefile_HAMBI_methylation_analysis```: *(should we add snakemake dry run draws?)*
-    - x
-    - y
+####    - x
+####    - y
 ```
 script here
 ```
