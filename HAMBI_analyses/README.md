@@ -75,10 +75,9 @@ rename bcad1046t--bcad1046t bcAd1046T--bcAd1046T *.fasta
 rename bcad1063t--bcad1063t bcAd1063T--bcAd1063T *.fasta
 ```
 ### Running ```workflow/Snakefile_HAMBI_methylation_analysis```: *(should we add snakemake dry run draws?)*
-<ul style="line-height: 1.1;">
-  <li>x</li>
-  <li>y</li>
-</ul>
+- x
+- y
+
 ```
 script here
 ```
