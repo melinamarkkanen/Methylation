@@ -1,23 +1,26 @@
 # Method validation
 ## Metagenome assemmbly of wastewater communities
-### Preparations
+```
+# Set variable
+sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p doc/sample_names.txt)
 
+# Run
+hifiasm_meta -t 4 -o assemblies/${sample} data/${sample}.hifi_reads.fastq.gz
+
+# Convert to fasta
+awk '/^S/{print ">"$2;print $3}' ${sample}.p_ctg.gfa > ${sample}.p_ctg.fa
+```
 
 ## Methylation analysis of wastewater communities
-### Preparations
 
 
 ## UMAP
-### Preparations
 
 
 ## Random Forest Classifier
-### Preparations
 
 
 ## Sequence logos vs. MultiMotifMaker
-### Preparations
 
 
 ## MultiMotifMaker of clustered contigs
-### Preparations

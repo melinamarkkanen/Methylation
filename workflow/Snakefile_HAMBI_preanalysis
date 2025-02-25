@@ -137,7 +137,7 @@ rule ccs_kinetics:
 		40
 	shell:
 		"""
-		ccs {input} {output.bam} \
+		ccs {input} {output.bam} --hifi-kinetics \
 		--report-file {output.report} \
 		--num-threads {threads} --log-file {log}
 		"""
