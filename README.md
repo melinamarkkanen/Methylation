@@ -30,7 +30,7 @@
 | bcAd1063T--bcAd1063T | *e* |
 
 ### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*doi*)
-#### Assemblies for available WGS data
+#### Assemblies for available WGS data (n=18 strains)
 | Strain ID | Species | Element |
 | ------------- | ------------- | ------------- |
 | HAMBI_1299 | *Kluyvera intermedia* | chromosome |
@@ -72,4 +72,26 @@
 | HAMBI_2443 | *Paracoccus denitrificans* | plasmid unnamed1 |
 | HAMBI_2443 | *Paracoccus denitrificans* | plasmid unnamed2 |
 
-## Jotain
+## Method validation
+### Metagenome assemmbly of HAMBI community
+#### Preparations
+
+
+### Methylation analysis of HAMBI community
+#### Preparations
+
+
+### UMAP
+#### Preparations
+
+
+### Random Forest Classifier
+#### Preparations
+
+
+### Sequence logos vs. MultiMotifMaker
+#### Preparations
+
+
+### MultiMotifMaker of clustered contigs
+#### Preparations

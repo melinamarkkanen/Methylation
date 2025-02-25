@@ -5,16 +5,57 @@ CONTIGS, = glob_wildcards("HAMBI_data/contigs/{contigs}.fasta")
 
 rule all:
 	input:
+		expand("HAMBI_data/metagenomic_assembly/{barcode}_extract_bam_done.txt", barcode=BARCODES),
+
 		expand("HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_basemods.gff", contig=CONTIGS)
 
 
 # renaming of contigs to have sample names as well?
 
+rule extract_bam_by_contig:
+	input:
+		bam="HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam",
+		bai="HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam.bai"
+	output:
+		"HAMBI_data/metagenomic_assembly/{barcode}.extract_bam_done.txt",
+	message:
+		"-- Split mapped reads to separate bam files --"
+	log:
+		"HAMBI_data/metagenomic_assembly/{barcode}_extract_bam.log"
+	envmodules:
+		"samtools/1.16.1"
+	resources:
+		cpus=4, time_min=120, mem_mb=9000
+	threads:
+		4
+	shell:
+		"""
+		bash src/HAMBI_extract_bam.sh {wildcards.barcode} 2>{log}
+		touch {output}
+		"""
+		
+rule index_fasta_contig:
+	input:
+		"HAMBI_data/contigs/{contig}.fasta"
+	output:
+		"HAMBI_data/contigs/{contig}.fasta.fai"
+	message:
+		"-- Create index files for contigs --"
+	envmodules:
+		"samtools/1.16.1"
+	resources:
+		cpus=10, time_min=120, mem_mb=15000
+	threads:
+		10
+	shell:
+		"""
+		samtools faidx {input}
+		"""
 
 rule pbbm2_align_contig:
 	input:
-		fasta="contigs/{contig}.fasta",
-		bam="contigs/bcAd1063T--bcAd1063T_{contig}.bam" # "HAMBI_data/HiFi_bam/hifi_kinetic_reads.{barcode}.bam"
+		fasta="HAMBI_data/contigs/{contig}.fasta",
+		bam="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}.bam" # "HAMBI_data/HiFi_bam/hifi_kinetic_reads.{barcode}.bam"
 	output:
 		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam"
 	message:
