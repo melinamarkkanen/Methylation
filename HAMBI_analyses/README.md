@@ -10,10 +10,10 @@ cd HAMBI_data/WGS_data
 cat *fna > HAMBI_genomes.fasta
 ```
 ### Running ```workflow/Snakefile_HAMBI_preanalysis```: *(should we add snakemake dry run draws?)*
-####    - generation of HiFi reads **without** kinetics tags (fastq.gz) for the assembly
-####    - metagenomic assembly of the community
-####    - BLASTn search between the metagenomic assemblies and WGS data
-####    - generation of HiFi reads **with** kinetics tags (.bam) for the methylation analysis
+- generation of HiFi reads **without** kinetics tags (fastq.gz) for the assembly
+- metagenomic assembly of the community
+- BLASTn search between the metagenomic assemblies and WGS data
+- generation of HiFi reads **with** kinetics tags (.bam) for the methylation analysis
 ```
 module load snakemake
 snakemake --profile workflow/profile --use-envmodules --use-singularity \
@@ -75,8 +75,10 @@ rename bcad1046t--bcad1046t bcAd1046T--bcAd1046T *.fasta
 rename bcad1063t--bcad1063t bcAd1063T--bcAd1063T *.fasta
 ```
 ### Running ```workflow/Snakefile_HAMBI_methylation_analysis```: *(should we add snakemake dry run draws?)*
-####    - x
-####    - y
+<ul style="line-height: 1.1;">
+  <li>x</li>
+  <li>y</li>
+</ul>
 ```
 script here
 ```
