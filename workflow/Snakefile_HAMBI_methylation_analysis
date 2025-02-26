@@ -1,23 +1,23 @@
 import os
 if not os.path.exists('slurm_logs'):
 			os.makedirs('slurm_logs')
+
 CONTIGS, = glob_wildcards("HAMBI_data/contigs/{contigs}.fasta")
+BARCODES = ["bcAd1023T--bcAd1023T", "bcAd1037T--bcAd1037T", "bcAd1039T--bcAd1039T", "bcAd1046T--bcAd1046T", "bcAd1063T--bcAd1063T"]
 
 rule all:
 	input:
-		expand("HAMBI_data/metagenomic_assembly/{barcode}_extract_bam_done.txt", barcode=BARCODES),
-
-		expand("HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_basemods.gff", contig=CONTIGS)
-
-
-# renaming of contigs to have sample names as well?
+		expand("HAMBI_data/metagenomic_assembly/{barcode}_extract_bam_done.txt", barcode=BARCODES)
+		
+#		expand("HAMBI_data/contigs/{contig}.fasta", contig=CONTIGS),
+#		expand("HAMBI_data/contigs/{contig}_basemods.gff", contig=CONTIGS)
 
 rule extract_bam_by_contig:
 	input:
 		bam="HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam",
 		bai="HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam.bai"
 	output:
-		"HAMBI_data/metagenomic_assembly/{barcode}.extract_bam_done.txt",
+		"HAMBI_data/metagenomic_assembly/{barcode}_extract_bam_done.txt",
 	message:
 		"-- Split mapped reads to separate bam files --"
 	log:
@@ -55,9 +55,9 @@ rule index_fasta_contig:
 rule pbbm2_align_contig:
 	input:
 		fasta="HAMBI_data/contigs/{contig}.fasta",
-		bam="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}.bam" # "HAMBI_data/HiFi_bam_kinetic/{barcode}_hifi_kinetic_reads.bam"
+		bam="HAMBI_data/contigs/{contig}.bam"
 	output:
-		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam"
+		"HAMBI_data/contigs/{contig}_mapped.bam"
 	message:
 		"-- Aligning reads to the contigs --"
 	singularity:
@@ -74,9 +74,9 @@ rule pbbm2_align_contig:
 
 rule index_mapped_bam:
 	input:
-		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam"
+		"HAMBI_data/contigs/{contig}_mapped.bam"
 	output:
-		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam.pbi"
+		"HAMBI_data/contigs/{contig}_mapped.bam.pbi"
 	message:
 		"-- Creating index files for mapped bam --"
 	envmodules:
@@ -94,15 +94,15 @@ rule ipdSummary:
 	input: 
 		fasta="HAMBI_data/contigs/{contig}.fasta",
 		fai="HAMBI_data/contigs/{contig}.fasta.fai",
-		bam="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam",
-		pbi="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam.pbi"
+		bam="HAMBI_data/contigs/{contig}_mapped.bam",
+		pbi="HAMBI_data/contigs/{contig}_mapped.bam.pbi"
 	output:
-		gff="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_basemods.gff",
-		csv="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_kinetics.csv"
+		gff="HAMBI_data/contigs/{contig}_basemods.gff",
+		csv="HAMBI_data/contigs/{contig}_kinetics.csv"
 	message:    
 		"-- Summarizing the IPD data --"
 	log:
-		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_ipd.log"
+		"HAMBI_data/contigs/{contig}_ipd.log"
 	resources:
 		cpus=10, time_min=1440, mem_mb=9000
 	threads:

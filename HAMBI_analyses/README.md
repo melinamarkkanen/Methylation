@@ -127,7 +127,10 @@ rename bcad1063t--bcad1063t bcAd1063T--bcAd1063T *.fasta
 - y
 
 ```
-script here
+module load snakemake/7.17.1
+
+snakemake --profile workflow/profile --use-envmodules --use-singularity \
+        --snakefile workflow/Snakefile_HAMBI_methylation_analysis --use-singularity -np
 ```
 &nbsp;
 &nbsp;
