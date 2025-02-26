@@ -3,8 +3,8 @@
 ## Wastewater
 ### Number of contigs and analyzed for methylation
 
-|sample	| number of contigs in assembly	| .gff files |	| .csv files |	| passed filtering (?) |
-|-------	|--------------------------------------	|-----------	|-----------	| |
+| sample | number of contigs in assembly | .gff files | | .csv files | | passed filtering (?) |
+| ------- | -------------------------------------- | ----------- |----------- | |
 | EFF1	| 60537	| 60374 | | 60374 |	| |
 | EFF2	| 59860	| |	| |
 | EFF3	| 54991	| |	| |
