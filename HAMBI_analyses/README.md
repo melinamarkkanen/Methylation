@@ -44,19 +44,53 @@ awk 'NR==FNR {a[$1]=$0; next} $2 in a {print $0, a[$2]}' WGS_ID.txt ../metagenom
 - modify the labels according to GTDB nomenclature
 - fill in column headers as follows:
 ```
-contig_id	d	p	c	o	f	g	s	element	str	All	Domain to species	Domain to genus	Domain to family	Domain to order	Domain to class	Domain to phylum
--------------------------------------------	-----------	---------------------	----------------------------	---------------------	------------------------	----------------	----------------------------------	---------------------	----------------	--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	----------------------------------------------------------------------------------------------------------------------------------------------------------------	----------------------------------------------------------------------------------------------------------------------------	-------------------------------------------------------------------------------------------------------------	-------------------------------------------------------------------------------------	--------------------------------------------------------------	---------------------------------
+contig_id       d       p	c	o	f	g	s	element	str	All	Domain to species	Domain to genus	Domain to family	Domain to order	Domain to class	Domain to phylum
+---------------------------	-----------	---------------------	----------------------	-------------------	------------------	-------------	----------------------------	--------------	----------	--------------------------------------------------------------------------------------------------	----------------------------------------------------------------------------------------------------------------------------------------------------------------	---------------------------------------------------------------------------------	------------------------------------------------------------	-----------------------------------------------------	-----------------------------------	-------------------------
 bcAd1023T--bcAd1023T_ptg000001l	Bacteria	Pseudomonadota	Gammaproteobacteria	Burkholderiales	Burkholderiaceae_B	Comamonas	Comamonas testosteroni_C	chromosome	HAMBI_0403	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas_Comamonas_testosteroni_C_chromosome_HAMBI_0403	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas_Comamonas_testosteroni_C	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales	Bacteria_Pseudomonadota_Gammaproteobacteria	Bacteria_Pseudomonadota
 bcAd1023T--bcAd1023T_ptg000003l	Bacteria	Pseudomonadota	Gammaproteobacteria	Enterobacterales	Enterobacteriaceae	Kluyvera	Kluyvera intermedia	plasmid unnamed	HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia_plasmid_unnamed_HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales	Bacteria_Pseudomonadota_Gammaproteobacteria	Bacteria_Pseudomonadota
-…																								
+…																																					
 ```
 - transfer back to Puhti for further modifications
 ```
 # Add the contigs with no label and fill in 'NA'
 cd HAMBI_data/metagenomic_assembly
-
+cat *contigs.fasta | grep ">" | sed 's/>//' > contig_IDs.txt
+cut -f 1 HAMBI_labels.txt > label_IDs.txt
+grep -v -f label_IDs.txt contig_IDs.txt > missing_IDs.txt
+less missing_IDs.txt | wc -l
+# 669
 ```
 
+#### Create file for missing contigs
+#### Run ./create_file.sh
+```
+#!/bin/bash
+
+# Function to create the file
+create_file() {
+    local n_rows=$1      # Number of rows
+    local n_columns=$2   # Number of columns
+    local string=$3      # The string to repeat
+    local filename=$4    # Output file name
+
+    # Create the file with the specified name
+    for ((i = 0; i < n_rows; i++))
+    do
+        # Create a line with the string repeated n_columns times, separated by tabs
+        line=$(for ((j = 0; j < n_columns; j++)); do echo -n "$string"; if (( j < n_columns-1 )); then echo -n -e "\t"; fi; done)
+        # Write the line to the file
+        echo -e "$line" >> "$filename"
+    done
+}
+
+# Create a file with 699 rows and 16 columns, repeating the string "NA"
+create_file 669 16 "NA" "missing_values.txt"
+```
+#### Append them to the original file
+```
+paste -d '\t' missing_IDs.txt missing_values.txt > missing_data.txt
+cat HAMBI_labels.txt missing_data.txt > tmp && mv tmp HAMBI_labels.txt
+```
 - bind to methylation data to create ```merged_data.tsv```
 ```
 ```

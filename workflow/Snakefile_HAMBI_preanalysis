@@ -165,7 +165,7 @@ rule lima_kinetics:
 		bam="HAMBI_data/ccs_reads/hifi_reads_kinetic.bam",
 		fasta="HAMBI_data/ccs_reads/barcodes.fasta"
 	output:
-		"HAMBI_data/HiFi_bam_kinetic/{barcode}.hifi_reads_kinetic.bam"
+		"HAMBI_data/HiFi_bam_kinetic/hifi_reads_kinetic.{barcode}.bam"
 	message:
 		"-- Demultiplex --"
 	log:
@@ -207,7 +207,7 @@ rule index_fasta_sample:
 rule pbbm2_align_sample:
 	input:
 		mmi="HAMBI_data/metagenomic_assembly/{barcode}_contigs.mmi",
-		bam="HAMBI_data/HiFi_bam_kinetic/{barcode}.hifi_reads_kinetic.bam"
+		bam="HAMBI_data/HiFi_bam_kinetic/hifi_reads_kinetic.{barcode}.bam"
 	output:
 		"HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam"
 	message:
