@@ -28,6 +28,7 @@ snakemake --profile workflow/profile --use-envmodules \
 	--snakefile workflow/Snakefile_WW_preanalysis --use-singularity --singularity-args "--bind /scratch/project_2006608/Methylation_Viikki_HiFi/data/" -np
 ```
 ### Running ```workflow/Snakefile_WW_methylation_analysis``` using HyperQueue: *(should we add snakemake dry run draws?)*
+- MISTÄ NE KINETIC READIT TULEE
 ```
 # Dry run
 module load snakemake

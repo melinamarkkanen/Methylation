@@ -40,16 +40,30 @@ less HAMBI_genomes.fasta | grep ">" | sed 's/>//' > WGS_ID.txt
 sed -i 's/\.1 /\.1\t/g' WGS_ID.txt
 awk 'NR==FNR {a[$1]=$0; next} $2 in a {print $0, a[$2]}' WGS_ID.txt ../metagenomic_assembly/filtered_blast_out.txt > ../metagenomic_assembly/HAMBI_taxa_names.txt
 ```
-### Modify ```HAMBI_taxa_names.txt``` further in excel 
-####    - modify the labels according to GTDB nomenclature
-####    - fill in column headers:
+### Modify ```HAMBI_taxa_names.txt``` further in excel, save as ```HAMBI_labels.txt```:
+- modify the labels according to GTDB nomenclature
+- fill in column headers as follows:
 ```
-contig	fullname	accession	element	domain	phylum	class	order	family	genus	species	secondary_accession	sample
----------------------------	------------------------	----------	-------------	--------------------	------	-------------	-----------------	------------	---------------	----------	--------------------	------------------
-bcAd1023T--bcAd1023T_ptg000001l	HAMBI_0403_chromosome	HAMBI_0403	chromosome	HAMBI_0403_chromosome	Bacteria	Pseudomonadota	Gammaproteobacteria	Burkholderiales	Burkholderiaceae_B	Comamonas	Comamonas testosteroni_C	bcAd1023T--bcAd1023T
-bcAd1023T--bcAd1023T_ptg000003l	HAMBI_1299_plasmid unnamed	HAMBI_1299	plasmid unnamed	HAMBI_1299_plasmid unnamed	Bacteria	Pseudomonadota	Gammaproteobacteria	Enterobacterales	Enterobacteriaceae	Kluyvera	Kluyvera intermedia	bcAd1023T--bcAd1023T
-...		
-```	
+contig_id	d	p	c	o	f	g	s	element	str	All	Domain to species	Domain to genus	Domain to family	Domain to order	Domain to class	Domain to phylum
+-------------------------------------------	-----------	---------------------	----------------------------	---------------------	------------------------	----------------	----------------------------------	---------------------	----------------	--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	----------------------------------------------------------------------------------------------------------------------------------------------------------------	----------------------------------------------------------------------------------------------------------------------------	-------------------------------------------------------------------------------------------------------------	-------------------------------------------------------------------------------------	--------------------------------------------------------------	---------------------------------
+bcAd1023T--bcAd1023T_ptg000001l	Bacteria	Pseudomonadota	Gammaproteobacteria	Burkholderiales	Burkholderiaceae_B	Comamonas	Comamonas testosteroni_C	chromosome	HAMBI_0403	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas_Comamonas_testosteroni_C_chromosome_HAMBI_0403	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas_Comamonas_testosteroni_C	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales	Bacteria_Pseudomonadota_Gammaproteobacteria	Bacteria_Pseudomonadota
+bcAd1023T--bcAd1023T_ptg000003l	Bacteria	Pseudomonadota	Gammaproteobacteria	Enterobacterales	Enterobacteriaceae	Kluyvera	Kluyvera intermedia	plasmid unnamed	HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia_plasmid_unnamed_HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales	Bacteria_Pseudomonadota_Gammaproteobacteria	Bacteria_Pseudomonadota
+…																								
+```
+- transfer back to Puhti for further modifications
+```
+# Add the contigs with no label and fill in 'NA'
+cd HAMBI_data/metagenomic_assembly
+
+```
+
+- bind to methylation data to create ```merged_data.tsv```
+```
+```
+
+
+
+
 &nbsp;
 &nbsp;
 ## Methylation analysis of HAMBI community

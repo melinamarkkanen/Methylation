@@ -55,7 +55,7 @@ rule index_fasta_contig:
 rule pbbm2_align_contig:
 	input:
 		fasta="HAMBI_data/contigs/{contig}.fasta",
-		bam="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}.bam" # "HAMBI_data/HiFi_bam/hifi_kinetic_reads.{barcode}.bam"
+		bam="HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}.bam" # "HAMBI_data/HiFi_bam_kinetic/{barcode}_hifi_kinetic_reads.bam"
 	output:
 		"HAMBI_data/contigs/bcAd1063T--bcAd1063T_{contig}_mapped.bam"
 	message:

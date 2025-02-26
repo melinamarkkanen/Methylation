@@ -165,11 +165,11 @@ rule lima_kinetics:
 		bam="HAMBI_data/ccs_reads/hifi_reads_kinetic.bam",
 		fasta="HAMBI_data/ccs_reads/barcodes.fasta"
 	output:
-		"HAMBI_data/HiFi_bam/{barcode}.hifi_reads_kinetic.bam"
+		"HAMBI_data/HiFi_bam_kinetic/{barcode}.hifi_reads_kinetic.bam"
 	message:
 		"-- Demultiplex --"
 	log:
-		"slurm_logs/lima_kinetics.log"
+		"slurm_logs/{barcode}_lima_kinetics.log"
 	singularity:
 		"docker://quay.io/biocontainers/lima:2.6.0--h9ee0642_0"
 	resources:
@@ -177,13 +177,13 @@ rule lima_kinetics:
 	threads:
 		4
 	params:
-		prefix="HAMBI_data/HiFi_bam/hifi_reads_kinetic.bam"
+		prefix="HAMBI_data/HiFi_bam_kinetic/hifi_reads_kinetic.bam"
 	shell:
 		"""
 		lima --ccs {input.bam} {input.fasta} {params.prefix} \
 		--peek-guess \
 		--hifi-preset SYMMETRIC-ADAPTERS \
-		--split-bam-named -j {threads}
+		--split-bam-named -j {threads} 2>{log}
 		"""
 
 rule index_fasta_sample:
@@ -207,7 +207,7 @@ rule index_fasta_sample:
 rule pbbm2_align_sample:
 	input:
 		mmi="HAMBI_data/metagenomic_assembly/{barcode}_contigs.mmi",
-		bam="HAMBI_data/HiFi_bam/{barcode}.hifi_reads_kinetic.bam"
+		bam="HAMBI_data/HiFi_bam_kinetic/{barcode}.hifi_reads_kinetic.bam"
 	output:
 		"HAMBI_data/metagenomic_assembly/{barcode}_mapped.bam"
 	message:
