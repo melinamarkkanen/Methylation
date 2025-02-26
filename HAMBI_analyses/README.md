@@ -42,17 +42,17 @@ awk 'NR==FNR {a[$1]=$0; next} $2 in a {print $0, a[$2]}' WGS_ID.txt ../metagenom
 ```
 ### Modify ```HAMBI_taxa_names.txt``` further in excel, save as ```HAMBI_labels.txt```:
 - modify the labels according to GTDB nomenclature
-- fill in column headers as follows:
+- fill in column headers (see below)
+- transfer back to Puhti for further modifications
 ```
 contig_id       d       p	c	o	f	g	s	element	str	All	Domain to species	Domain to genus	Domain to family	Domain to order	Domain to class	Domain to phylum
----------------------------	-----------	---------------------	----------------------	-------------------	------------------	-------------	----------------------------	--------------	----------	--------------------------------------------------------------------------------------------------	----------------------------------------------------------------------------------------------------------------------------------------------------------------	---------------------------------------------------------------------------------	------------------------------------------------------------	-----------------------------------------------------	-----------------------------------	-------------------------
+---------------------------     -----------     --------------------    ------------------      -------------------	------------------	-------------	----------------------------	--------------	----------	--------------------------------	----------------------------	------------------	---------------------------	-------------------------	---------	-------------------------
 bcAd1023T--bcAd1023T_ptg000001l	Bacteria	Pseudomonadota	Gammaproteobacteria	Burkholderiales	Burkholderiaceae_B	Comamonas	Comamonas testosteroni_C	chromosome	HAMBI_0403	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas_Comamonas_testosteroni_C_chromosome_HAMBI_0403	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas_Comamonas_testosteroni_C	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales	Bacteria_Pseudomonadota_Gammaproteobacteria	Bacteria_Pseudomonadota
 bcAd1023T--bcAd1023T_ptg000003l	Bacteria	Pseudomonadota	Gammaproteobacteria	Enterobacterales	Enterobacteriaceae	Kluyvera	Kluyvera intermedia	plasmid unnamed	HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia_plasmid_unnamed_HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales	Bacteria_Pseudomonadota_Gammaproteobacteria	Bacteria_Pseudomonadota
 …																																					
 ```
-- transfer back to Puhti for further modifications
+- count contigs missing values
 ```
-# Add the contigs with no label and fill in 'NA'
 cd HAMBI_data/metagenomic_assembly
 cat *contigs.fasta | grep ">" | sed 's/>//' > contig_IDs.txt
 cut -f 1 HAMBI_labels.txt > label_IDs.txt
@@ -61,8 +61,8 @@ less missing_IDs.txt | wc -l
 # 669
 ```
 
-#### Create file for missing contigs
-#### Run ./create_file.sh
+- create the contigs with no label and fill in 'NA'
+- run ```./create_file.sh```
 ```
 #!/bin/bash
 
@@ -86,7 +86,7 @@ create_file() {
 # Create a file with 699 rows and 16 columns, repeating the string "NA"
 create_file 669 16 "NA" "missing_values.txt"
 ```
-#### Append them to the original file
+- append them to the original file
 ```
 paste -d '\t' missing_IDs.txt missing_values.txt > missing_data.txt
 cat HAMBI_labels.txt missing_data.txt > tmp && mv tmp HAMBI_labels.txt
