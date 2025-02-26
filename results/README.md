@@ -2,21 +2,14 @@
 &nbsp;
 ## Wastewater
 ### Number of contigs and analyzed for methylation
-
-| sample | number of contigs in assembly | .gff files | | .csv files | | passed filtering (?) |
-| ------- | -------------------------------------- | ----------- |----------- | |
-| EFF1	| 60537	| 60374 | | 60374 |	| |
-| EFF2	| 59860	| |	| |
-| EFF3	| 54991	| |	| |
-| INF1	| 65422	| 64745 | | 64745 |	| |
-| INF2	| 62366	| |	| |
-| INF3	| 62921	| |	| |
-| SLU1	| 74572	| 74388 | | 74388 |	| |
-| SLU2	| 76311	| |	| |
-| SLU3	| 73811	| |	| |
-
-
-| Strain ID | Species | Element |
-| ------------- | ------------- | ------------- |
-| HAMBI_1299 | *Kluyvera intermedia* | chromosome |
-| HAMBI_1299 | *Kluyvera intermedia* | plasmid unnamed |
+| sample | contigs | .gff files | .csv files | after filtering |
+|--------|---------|------------|------------|-----------------|
+| EFF1   | 60537   | 60374      | 60374      | ?               |
+| EFF2   | 59860   |            |            |                 |
+| EFF3   | 54991   |            |            |                 |
+| INF1   | 65422   | 64745      | 64745      |                 |
+| INF2   | 62366   |            |            |                 |
+| INF3   | 62921   |            |            |                 |
+| SLU1   | 74572   | 74388      | 74388      |                 |
+| SLU2   | 76311   |            |            |                 |
+| SLU3   | 73811   |            |            |                 |
