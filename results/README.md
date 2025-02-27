@@ -9,8 +9,8 @@
 | bcAd1039T--bcAd1039T   | 713   | 698      | ?               | 171               |
 | bcAd1046T--bcAd1046T   | 263   | 262      | ?               | 159               |
 | bcAd1063T--bcAd1063T   | 373   | 364      | ?               | 126               |
-&nbsp;
-&nbsp;
+
+
 ## Wastewater
 ### Number of contigs and analyzed for methylation
 | sample | contigs | .gff files | after filtering |
@@ -24,3 +24,31 @@
 | SLU1   | 74572   | 74388      |                 |
 | SLU2   | 76311   |            |                 |
 | SLU3   | 73811   |            |                 |
+
+# Table of HAMBI Random Forest results:
+Domain to Species
+   Accuracy Train  Accuracy Test  Precision    Recall  F1 Score
+0             1.0       0.870787   0.871968  0.870787  0.859151
+Domain to Genus
+Domain to Family
+Domain to Order
+Domain to Class
+Domain to Phylum
+
+# Testing different number of features
+## 50
+Domain to Species
+   Accuracy Train  Accuracy Test  Precision    Recall  F1 Score
+0             1.0       0.882022    0.88702  0.882022  0.871105
+## 70
+   Accuracy Train  Accuracy Test  Precision    Recall  F1 Score
+0             1.0       0.893258   0.893939  0.893258  0.883861
+## 120
+   Accuracy Train  Accuracy Test  Precision    Recall  F1 Score
+0             1.0       0.882022   0.898927  0.882022  0.867911
+## 200
+   Accuracy Train  Accuracy Test  Precision    Recall  F1 Score
+0             1.0       0.848315   0.821896  0.848315  0.829591
+## 250
+   Accuracy Train  Accuracy Test  Precision    Recall  F1 Score
+0             1.0       0.870787    0.89102  0.870787  0.857286
