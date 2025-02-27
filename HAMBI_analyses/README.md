@@ -89,10 +89,7 @@ create_file 669 16 "NA" "missing_values.txt"
 - append them to the original file
 ```
 paste -d '\t' missing_IDs.txt missing_values.txt > missing_data.txt
-cat HAMBI_labels.txt missing_data.txt > tmp && mv tmp HAMBI_labels.txt
-```
-- bind to methylation data to create ```merged_data.tsv```
-```
+cat missing_data.txt >> HAMBI_labels.txt
 ```
 
 
@@ -161,6 +158,7 @@ python3 src/scoring_matrices.py HAMBI_data/contigs/bcAd1023T--bcAd1023T HAMBI_da
 # Clean subfolders
 cd /scratch/project_2006608/Methylation/HAMBI_data/contigs
 rm -r bcAd1023T--bcAd1023T/
+...
 ```
 ### Combine PWM with ```HAMBI_labels.txt```
 ```
@@ -182,6 +180,39 @@ cat bcAd1023T_matrices/flattened/concat_matrices.tsv bcAd1037T_matrices/flattene
 # Check number of columns
 awk -F'\t' '{print NF; exit}' merged_data.tsv
 # 494
+
+# Reorder PWM data according to taxa names
+head -n 1 metagenomic_assembly/HAMBI_labels.txt > reord_merged_data.tsv
+awk -F'\t' '{print NF; exit}' reord_merged_data.tsv
+# 17
+awk 'FNR==NR {x2[$1] = $0; next} $1 in x2 {print x2[$1]}' metagenomic_assembly/HAMBI_labels.txt merged_data.tsv >> reord_merged_data.tsv
+
+# Check row names
+less reord_merged_data.tsv | cut -f 1 | head
+less merged_data.tsv  | cut -f 1 | head
+
+# Remove the contig_id col from merged_data.tsv
+cut -f 2- merged_data.tsv > tmp && mv tmp merged_data.tsv
+
+# Add the final column headers
+## *This is just given now based on previous analyses, could be a function to make it*
+
+# The Common_id etc starts at 494-
+cat header.tsv | cut -f 1-493 > tmp
+cat tmp merged_data.tsv > temp_merged_data.tsv && mv temp_merged_data.tsv merged_data.tsv
+
+# Check again
+less reord_merged_data.tsv | cut -f 1 | head
+less merged_data.tsv  | cut -f 1 | head
+
+# Combine
+paste merged_data.tsv reord_merged_data.tsv > tmp && mv tmp merged_data.tsv
+
+# Check number of cols
+awk -F'\t' '{print NF; exit}' merged_data.tsv
+
+# There are still empty columns in the end, remove them
+cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 ```
 
 &nbsp;
