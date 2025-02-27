@@ -123,15 +123,67 @@ rename bcad1046t--bcad1046t bcAd1046T--bcAd1046T *.fasta
 rename bcad1063t--bcad1063t bcAd1063T--bcAd1063T *.fasta
 ```
 ### Running ```workflow/Snakefile_HAMBI_methylation_analysis```: *(should we add snakemake dry run draws?)*
-- x
-- y
-
+- align the HiFi reads with kinetics to the assemblies
+- run ipSummary to obtain the .gff files for downatream analyses
 ```
-module load snakemake/7.17.1
-
+# Run first only the first rule all
+module load snakemake
 snakemake --profile workflow/profile --use-envmodules --use-singularity \
         --snakefile workflow/Snakefile_HAMBI_methylation_analysis --use-singularity -np
+
+# With two latter **rule all**s add flag ```--keep-going``` to avoid crashing after every contig with no kinetic reads mapped (=failed ipdSummary)
+ module load snakemake
+snakemake --profile workflow/profile --use-envmodules --use-singularity \
+        --snakefile workflow/Snakefile_HAMBI_methylation_analysis --use-singularity --keep-going -np
 ```
+
+
+
+
+&nbsp;
+&nbsp;
+## Create scoring matrices and flattened feature matrices
+### Position Weight Matrices (PWM) 
+- to filter data, the methylation types that have less than 20 detected sites are filled with 0 matrices which increased the models performance
+- the scoring matrices are then flattened to feature matrices. The flattened feature matrices are then used to train the random forest model to predict the taxonomic classification of the contigs. 
+```
+# Prepare folders with .fasta & .gff files for each sample
+cd /scratch/project_2006608/Methylation/HAMBI_data/contigs
+mkdir bcAd1023T--bcAd1023T
+cp bcAd1023T--bcAd1023T_*fasta bcAd1023T--bcAd1023T
+cp bcAd1023T--bcAd1023T_*gff bcAd1023T--bcAd1023T
+
+# Generate the matrices (interactive session)
+module load python-data
+cd /scratch/project_2006608/Methylation
+python3 src/scoring_matrices.py HAMBI_data/contigs/bcAd1023T--bcAd1023T HAMBI_data/bcAd1023T_matrices
+
+# Clean subfolders
+cd /scratch/project_2006608/Methylation/HAMBI_data/contigs
+rm -r bcAd1023T--bcAd1023T/
+```
+### Combine PWM with ```HAMBI_labels.txt```
+```
+# Combine modification types
+cd HAMBI_data/bcAd1023T_matrices/flattened  # repeat for all samples
+
+# Add shared row names
+less m4C.tsv | cut -f 1 > common_id
+# Remove extra contig names
+cut -f 2-  m6A.tsv > tmp && mv tmp m6A.tsv
+cut -f 2-  modified_base.tsv > tmp && mv tmp modified_base.tsv
+# Paste
+paste common_id m4C.tsv modified_base.tsv m6A.tsv > concat_matrices.tsv
+
+# Combine all
+cd HAMBI_data
+cat bcAd1023T_matrices/flattened/concat_matrices.tsv bcAd1037T_matrices/flattened/concat_matrices.tsv bcAd1039T_matrices/flattened/concat_matrices.tsv bcAd1046T_matrices/flattened/concat_matrices.tsv bcAd1063T_matrices/flattened/concat_matrices.tsv > merged_data.tsv
+
+# Check number of columns
+awk -F'\t' '{print NF; exit}' merged_data.tsv
+# 494
+```
+
 &nbsp;
 &nbsp;
 &nbsp;
