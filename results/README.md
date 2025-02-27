@@ -2,9 +2,9 @@
 &nbsp;
 ## HAMBI
 ### Number of contigs and analyzed for methylation
-| sample | contigs | .gff files | after filtering | label NA |
-|--------|---------|------------|-----------------|
-| bcAd1023T--bcAd1023T   | 305   | 300      | ?               | 90               |
+| sample | contigs | .gff files | after filtering | label 'NA' |
+|------------------------|-------|----------|-----------------|-------------------|
+| bcAd1023T--bcAd1023T   | 305   | 300      | ?               | 90                |
 | bcAd1037T--bcAd1037T   | 336   | 327      | ?               | 123               |
 | bcAd1039T--bcAd1039T   | 713   | 698      | ?               | 171               |
 | bcAd1046T--bcAd1046T   | 263   | 262      | ?               | 159               |
