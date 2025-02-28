@@ -32,20 +32,23 @@
 | Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
 |-----------------------|-----|----------|----------|----------|----------|
 | **Domain to Species** | 1.0 | 0.870787 | 0.871968 | 0.870787 | 0.859151 |
-| **Domain to Genus**   |     |          |          |          |          |
-| **Domain to Family**  |     |          |          |          |          |
-| **Domain to Order**   |     |          |          |          |          |
-| **Domain to Class**   |     |          |          |          |          |
-| **Domain to Phylum**  |     |          |          |          |          |
+| **Domain to Genus**   | 1.0 | 0.848315 |          |          |          |
+| **Domain to Family**  | 1.0 | 0.893855 |          |          |          |
+| **Domain to Order**   | 1.0 | 0.905556 |          |          |          |
+| **Domain to Class**   | 1.0 | 0.934066 |          |          |          |
+| **Domain to Phylum**  | 1.0 | 1.0      |          |          |          |
 
 ## Testing different number of features
 | Number of features | Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
 |------|-----------------------|-----|----------|----------|----------|----------|
+| 5    | **Domain to Species** | 1.0 | 0.707865 | 0.709828 | 0.707865 | 0.708207 |
+| 10   | **Domain to Species** | 1.0 | 0.848315 | 0.851571 | 0.848315 | 0.847413 |
+| 20   | **Domain to Species** | 1.0 | 0.870787 | 0.872965 | 0.870787 | 0.867311 |
 | 50   | **Domain to Species** | 1.0 | 0.882022 | 0.88702  | 0.882022 | 0.871105 |
 | 70   | **Domain to Species** | 1.0 | 0.893258 | 0.893939 | 0.893258 | 0.883861 |
 | 120  | **Domain to Species** | 1.0 | 0.882022 | 0.898927 | 0.882022 | 0.867911 |
 | 200  | **Domain to Species** | 1.0 | 0.848315 | 0.821896 | 0.848315 | 0.829591 |
-| 250  | **Domain to Species** | 1.0 | 0.870787 | 0.89102  | 0.870787 | 0.857286 |
+| 250  | **Domain to Species** | 1.0 | 0.870787 | 0.871968 | 0.870787 | 0.859151 |
 
 
 
