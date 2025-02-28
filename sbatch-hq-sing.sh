@@ -35,7 +35,9 @@ while true; do
 done
 
 snakemake -s workflow/Snakefile_WW_methylation_analysis -j 100 --rerun-incomplete \
-        --use-singularity --use-envmodules --executor cluster-generic --cluster-generic-submit-cmd "hq submit --cpus 2"
+        --use-singularity --use-envmodules --keep-going --executor cluster-generic --cluster-generic-submit-cmd "hq submit --cpus 2"
+
+# add --stdout=none --stderr=none
 
 hq worker stop all
 hq server stop

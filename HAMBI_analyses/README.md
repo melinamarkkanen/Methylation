@@ -214,10 +214,16 @@ awk -F'\t' '{print NF; exit}' merged_data.tsv
 # There are still empty columns in the end, remove them
 cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 ```
+&nbsp;
+&nbsp;
+## Run Random Forest analyses ```notebooks/Random_forest_HAMBI```
+&nbsp;
+&nbsp;
+&nbsp;
 
-&nbsp;
-&nbsp;
-&nbsp;
+## Create Sequence logos
+
+
 ## UMAP
 &nbsp;
 &nbsp;
