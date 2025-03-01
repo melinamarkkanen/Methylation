@@ -27,7 +27,7 @@
 
 
 
-# Table of HAMBI Random Forest results:
+# Random Forest **All data**:
 ## All features
 | Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
 |-----------------------|-----|----------|----------|----------|----------|
@@ -50,6 +50,11 @@
 | 200  | **Domain to Species** | 1.0 | 0.848315 | 0.821896 | 0.848315 | 0.829591 |
 | 250  | **Domain to Species** | 1.0 | 0.870787 | 0.871968 | 0.870787 | 0.859151 |
 
+## Random Forest **Filtered data**:
+
+## Random Forest **Chromosome data**:
+
+## Random Forest **Chromosome Filtered data**:
 
 
 
