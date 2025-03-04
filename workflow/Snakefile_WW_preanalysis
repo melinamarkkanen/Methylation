@@ -5,7 +5,8 @@ if not os.path.exists('slurm_logs'):
 #SAMPLES = ["EFF1"]
 #SAMPLES = ["INF1"]
 #SAMPLES = ["SLU1"]
-SAMPLES = ["EFF2"]
+#SAMPLES = ["EFF2"]
+SAMPLES = ["EFF3"]
 
 rule all:
 	input:
