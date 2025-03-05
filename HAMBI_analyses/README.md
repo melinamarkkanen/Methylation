@@ -225,9 +225,15 @@ cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 
 
 ## UMAP
-&nbsp;
-&nbsp;
-&nbsp;
+### Build MAGs according to contigs clustered by UMAP
+```
+cd HAMBI_data
+mkdir MAGs
+
+cd ../src
+./HAMBI_get_contigs_for_MAGs.sh C2
+```
+
 ## Random Forest Classifier
 &nbsp;
 &nbsp;
