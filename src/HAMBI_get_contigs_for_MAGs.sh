@@ -14,5 +14,7 @@ for sample in "${samples[@]}";do
         for i in $lista;do
                 grep -A 1 -f <(echo "$i") HAMBI_data/metagenomic_assembly/$sample"_contigs.fasta" > HAMBI_data/MAGs/$cluster/$sample"_contigs"/$i".fasta"
         done
+
+        # Remove empty ones
         find HAMBI_data/MAGs/$cluster/$sample"_contigs"/ -size 0 -delete
 done

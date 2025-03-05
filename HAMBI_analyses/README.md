@@ -227,11 +227,30 @@ cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 ## UMAP
 ### Build MAGs according to contigs clustered by UMAP
 ```
-cd HAMBI_data
-mkdir MAGs
-
+# Get contigs
 cd ../src
 ./HAMBI_get_contigs_for_MAGs.sh C2
+
+# Check lengths
+cd HAMBI_data/MAGs/C2/bcAd1023T--bcAd1023T_contigs
+module load seqkit/2.5.1
+seqkit fx2tab --length --name --header-line *.fasta > lengths.txt
+
+# Combine contigs if needed
+
+
+# Run CheckM2
+checkm2 predict --input $contig".fasta" \
+	--output-directory CheckM2_out --extension fasta --threads 6 \
+	--database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd      # has to be changed in the future?
+
+# Run GTDB-Tk
+gtdbtk classify_wf --genome_dir $cluster \
+        --out_dir GTDB_out \
+        --skip_ani_screen --cpus $SLURM_CPUS_PER_TASK
+
+# Plasmid predition (geNomad)
+
 ```
 
 ## Random Forest Classifier
@@ -243,3 +262,7 @@ cd ../src
 &nbsp;
 &nbsp;
 ## MultiMotifMaker of clustered contigs
+
+
+
+## Miksi niin moni plasmidi hukataan ??
