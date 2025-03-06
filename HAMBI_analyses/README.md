@@ -240,18 +240,60 @@ seqkit fx2tab --length --name --header-line *.fasta > lengths.txt
 
 
 # Run CheckM2
-checkm2 predict --input $contig".fasta" \
-	--output-directory CheckM2_out --extension fasta --threads 6 \
-	--database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd      # has to be changed in the future?
+# Set the variable
+sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p sample_names.txt)
+
+# Run
+apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input $sample"_contigs"/*.fasta \
+        --output-directory $sample"_CheckM2_out" --extension fasta --threads 6 --force \
+        --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
+
+
+
 
 # Run GTDB-Tk
-gtdbtk classify_wf --genome_dir $cluster \
-        --out_dir GTDB_out \
-        --skip_ani_screen --cpus $SLURM_CPUS_PER_TASK
+# Set the variable
+sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p sample_names.txt)
+
+# Load the environment and variables
+export PATH="/projappl/project_2006608/GTDB-Tk/bin:$PATH"
+export GTDBTK_DATA_PATH=/scratch/project_2006608/GTDB-Tk/release220/
+
+# Run
+gtdbtk classify_wf --genome_dir $sample"_contigs" -x fasta \
+        --out_dir $sample"_GTDB_out" --skip_ani_screen --cpus $SLURM_CPUS_PER_TASK
+
+cat *GTDB_out/g*tsv | cut -f 1,5
+
+
 
 # Plasmid predition (geNomad)
+# Set the variables
+contig=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt)
+contigShort=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt | sed 's/^[^/]*\//g')
 
+# Set DB path
+export DB_PATH=/scratch/project_2006608/sul4_project/db/genomad_db
+
+# Run
+apptainer exec --bind $PWD:$PWD,$DB_PATH:$DB_PATH \
+        /projappl/project_2006608/containers/genomad:1.8.0.sif genomad end-to-end --cleanup --splits 8 $contig geNomad_out/$contigShort $DB_PATH
+
+cat geNomad_out/*_summary/*plasmid_summary* | grep -v "seq_name" | cut -f 1 | sort | uniq
+
+# Transfer the plasmid sequences (according to geNomad) for Web BLAST:
+#geNomad_out/bcAd1063T--bcAd1063T_ptg000203l_summary/bcAd1063T--bcAd1063T_ptg000203l_plasmid.fna
+
+# Or if no plasmid predicted then just *_contigs/
 ```
+
+## Creating sequence logos (sinteractive session)
+```
+module load python-data
+python3 src/create_logos.py HAMBI_data/bcAd1023T_matrices HAMBI_data/bcAd1023T_matrices/logos
+```
+
+
 
 ## Random Forest Classifier
 &nbsp;
