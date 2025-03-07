@@ -249,6 +249,13 @@ apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_
         --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
 
 
+# Individually:
+cd bcAd1046T--bcAd1046T_contigs
+apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input bcAd1046T--bcAd1046T_Acinetobacter.fasta \
+        --output-directory bcAd1046T--bcAd1046T_CheckM2_out_Acineto --extension fasta --threads 6 --force \
+        --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
+
+
 
 
 # Run GTDB-Tk
@@ -289,10 +296,33 @@ cat geNomad_out/*_summary/*plasmid_summary* | grep -v "seq_name" | cut -f 1 | so
 
 ## Creating sequence logos (sinteractive session)
 ```
+export PYTHONUSERBASE=/projappl/project_2009999/my-python-env
 module load python-data
 python3 src/create_logos.py HAMBI_data/bcAd1023T_matrices HAMBI_data/bcAd1023T_matrices/logos
 ```
 
+## ARG Annotations
+```
+# Set variable
+sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p ../sample_names.txt)
+
+# Run
+blastn -query $sample"_contigs.fasta" \
+        -subject ../../db/resfinder_db/all.fsa \
+        -out $sample"_resfinder_out.txt" -outfmt 6
+```
+
+## REBASE
+```
+# Set variable
+contig=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt)
+contigShort=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt | sed 's/^[^/]*\///g' | sed 's/\.fasta//g' )
+
+# Run
+blastn -query $contig \
+        -subject ../../../db/All_REBASE_Gold_Standards_DNA.fasta \
+        -out REBASE_out/$contigShort"_REBASE_out.txt" -outfmt 6
+```
 
 
 ## Random Forest Classifier
