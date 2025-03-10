@@ -237,6 +237,12 @@ module load seqkit/2.5.1
 seqkit fx2tab --length --name --header-line *.fasta > lengths.txt
 
 # Combine contigs if needed
+## C1
+cd bcAd1023T--bcAd1023T_contigs
+cat *l.fasta > all.fasta
+
+cd bcAd1039T--bcAd1039T_contigs
+cat *l.fasta > all.fasta
 
 
 # Run CheckM2
@@ -250,12 +256,10 @@ apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_
 
 
 # Individually:
-cd bcAd1046T--bcAd1046T_contigs
-apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input bcAd1046T--bcAd1046T_Acinetobacter.fasta \
-        --output-directory bcAd1046T--bcAd1046T_CheckM2_out_Acineto --extension fasta --threads 6 --force \
+cd bcAd1039T--bcAd1039T_contigs
+apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input all.fasta \
+        --output-directory all_CheckM2_out --extension fasta --threads 6 --force \
         --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
-
-
 
 
 # Run GTDB-Tk
@@ -275,6 +279,11 @@ cat *GTDB_out/g*tsv | cut -f 1,5
 
 
 # Plasmid predition (geNomad)
+
+## Contig names
+cd /scratch/project_2006608/Methylation/HAMBI_data/MAGs/C1
+ls *contigs/*.fasta > contig_names.txt
+
 # Set the variables
 contig=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt)
 contigShort=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt | sed 's/^[^/]*\//g')
