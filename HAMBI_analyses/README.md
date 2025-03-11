@@ -249,8 +249,11 @@ cat *l.fasta > all.fasta
 # Set the variable
 sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p sample_names.txt)
 
+# Set temp dir
+export TMPDIR="/scratch/project_2006608/Methylation/tmp_dir"
+
 # Run
-apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input $sample"_contigs"/*.fasta \
+apptainer exec --bind $PWD:$PWD,$TMPDIR:/scratch/project_2006608/Methylation/tmp_dir,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input $sample"_contigs"/*.fasta \
         --output-directory $sample"_CheckM2_out" --extension fasta --threads 6 --force \
         --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
 
