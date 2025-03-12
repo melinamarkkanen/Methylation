@@ -1,0 +1,39 @@
+---
+title: "Methylation_R_scripts"
+output: html_document
+date: "2025-03-12"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Libraries
+```{r}
+library(ggplot2)
+```
+# Feature Importance
+```{r}
+feature_importance <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/feature_importance.txt")
+df <- feature_importance[rownames(feature_importance) != "All", ]
+df$Features <- as.numeric(df$Features)
+
+value_h <- feature_importance[grep("All", feature_importance$Features), ]
+value_h = print(value_h["Accuracy.Test"][ ,])
+
+value_v <- 70
+
+p <- ggplot(df, aes(x=Features, y=Accuracy.Test)) + ggtitle("Feature Importance") +
+  geom_line() + theme_bw() +
+  theme(text = element_text(family = "Palatino"),
+    plot.title = element_text(size = 34),
+    axis.title = element_text(size = 34),
+    axis.text = element_text(size = 28))
+p1 <- p + geom_hline(yintercept=value_h, linetype="dashed", color = "red", size = 2) +
+  geom_text(aes(230, value_h, label = "All features", vjust = - 1),
+            color = "red", family = "Palatino", size = 10)
+p2 <- p1 + geom_vline(xintercept=value_v, linetype="dotdash", color = "blue", size = 1)
+p2
+
+ggsave(filename = "plots/feature_importance.png",
+       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+```

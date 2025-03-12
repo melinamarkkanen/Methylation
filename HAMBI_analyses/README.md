@@ -283,6 +283,8 @@ cat *GTDB_out/g*tsv | cut -f 1,5
 gtdbtk classify_wf --genome_dir bcAd1046T--bcAd1046T_contigs -x fasta \
         --out_dir bcAd1046T--bcAd1046T_GTDB_out --skip_ani_screen --cpus $SLURM_CPUS_PER_TASK
 
+gtdbtk classify_wf --genome_dir bcAd1046T--bcAd1046T_contigs -x fa --out_dir bcAd1046T--bcAd1046T_GTDB_out --skip_ani_screen --cpus $SLURM_CPUS_PER_TASK
+
 
 # Plasmid predition (geNomad)
 
