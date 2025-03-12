@@ -259,8 +259,8 @@ apptainer exec --bind $PWD:$PWD,$TMPDIR:/scratch/project_2006608/Methylation/tmp
 
 
 # Individually:
-cd bcAd1039T--bcAd1039T_contigs
-apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input all.fasta \
+cd bcAd1037T--bcAd1037T_contigs
+apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input all_bcAd1023T--bcAd1023T.fasta \
         --output-directory all_CheckM2_out --extension fasta --threads 6 --force \
         --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
 
