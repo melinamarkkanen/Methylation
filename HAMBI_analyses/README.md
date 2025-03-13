@@ -380,7 +380,6 @@ samtools index $name"_Paracoccus_mapped_reads.bam"
 ```
 
 
-
 ## Random Forest Classifier
 &nbsp;
 &nbsp;

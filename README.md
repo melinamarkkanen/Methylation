@@ -22,12 +22,12 @@
 ### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*doi*)
 #### PacBio HiFi metagenomic long-reads
 | Sample code | Sample |
-| ------------- | ------------- |
-| bcAd1023T--bcAd1023T | *a* |
-| bcAd1037T--bcAd1037T | *b* |
-| bcAd1039T--bcAd1039T | *c* |
-| bcAd1046T--bcAd1046T | *d* |
-| bcAd1063T--bcAd1063T | *e* |
+| -------------------- | ------------ |
+| bcAd1023T--bcAd1023T | tc_0.2_15_5  |
+| bcAd1037T--bcAd1037T | su_20_25_3   |
+| bcAd1039T--bcAd1039T | su_20_25_4   |
+| bcAd1046T--bcAd1046T | tc_0.02_37_3 |
+| bcAd1063T--bcAd1063T | no_0_37_3    |
 
 ### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*doi*)
 #### Assemblies for available WGS data (n=18 strains)
