@@ -259,9 +259,9 @@ apptainer exec --bind $PWD:$PWD,$TMPDIR:/scratch/project_2006608/Methylation/tmp
 
 
 # Individually:
-cd bcAd1037T--bcAd1037T_contigs
-apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input all_bcAd1023T--bcAd1023T.fasta \
-        --output-directory all_CheckM2_out --extension fasta --threads 6 --force \
+cd bcAd1039T--bcAd1039T_contigs
+apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input bcAd1039T--bcAd1039T_Paracoccus.fasta \
+        --output-directory bcAd1039T--bcAd1039T_CheckM2_out_Paracoccus --extension fasta --threads 6 --force \
         --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
 
 
@@ -340,6 +340,45 @@ blastn -query $contig \
         -subject ../../../db/All_REBASE_Gold_Standards_DNA.fasta \
         -out REBASE_out/$contigShort"_REBASE_out.txt" -outfmt 6
 ```
+
+## Analyse further the different methylation profiles of genomes of same species between different samples
+### Bakta
+```
+export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
+export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+
+apptainer_wrapper exec bakta $name".fasta" \
+	--prefix $name"_bakta" \
+	--output $name"_bakta_out"/ \
+	--db $BAKTA_DB \
+	--keep-contig-headers \
+	--threads $SLURM_CPUS_PER_TASK
+```
+
+### Align the reads to the reference genome
+```
+# Load tools
+module load samtools/1.21
+
+# Set temp dir
+export TMPDIR="/scratch/project_2006608/Methylation/tmp_dir"
+
+# Go to dir
+cd /scratch/project_2006608/Methylation/HAMBI_data/MAGs/Paracoccus
+
+# Set variable
+name=$(sed -n ${SLURM_ARRAY_TASK_ID}p names.txt)
+
+# Run alignment
+apptainer exec --bind $PWD:$PWD,$TMPDIR:/scratch/project_2006608/Methylation/tmp_dir,$DATA:/scratch/project_2006608/Methylation/HAMBI_data/HiFi_bam_kinetic/ \
+        /projappl/project_2006608/containers/pbmm2:1.17.0.sif pbmm2 align GCF_034627565.1_ASM3462756v1_genomic.fasta /scratch/project_2006608/Methylation/HAMBI_data/HiFi_bam_kinetic/"hifi_reads_kinetic."$name".bam" \
+        $name"_Paracoccus_mapped_reads".bam --sort --preset CCS --log-level INFO --log-file $name"_mapping.log" \
+        --num-threads $SLURM_CPUS_PER_TASK
+
+# Index
+samtools index $name"_Paracoccus_mapped_reads.bam"
+```
+
 
 
 ## Random Forest Classifier
