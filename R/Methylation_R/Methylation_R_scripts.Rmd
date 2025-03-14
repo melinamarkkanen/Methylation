@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Libraries
 ```{r}
 library(ggplot2)
+library(dplyr)
 ```
 # Feature Importance
 ```{r}
@@ -36,4 +37,12 @@ p2
 
 ggsave(filename = "plots/feature_importance.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+```
+# Analysis of Kaiju results
+```{r}
+kaiju_summary <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/kaiju_summary.tsv")
+# Remove extra column headers
+kaiju_summary <- kaiju_summary[- grep("sample", kaiju_summary$sample),]
+# Top % 0.1?
+kaiju_summary_filt <- kaiju_summary %>% filter(percent > 0.1)
 ```

@@ -379,17 +379,71 @@ apptainer exec --bind $PWD:$PWD,$TMPDIR:/scratch/project_2006608/Methylation/tmp
 samtools index $name"_Paracoccus_mapped_reads.bam"
 ```
 
+# Check the taxa of those contigs that are not among our WGS data
+### Remote BLAST
+```
+# Create folder
+cd /scratch/project_2006608/Methylation/HAMBI_data/metagenomic_assembly
+mkdir Missing_labels
 
-## Random Forest Classifier
-&nbsp;
-&nbsp;
-&nbsp;
-## Sequence logos vs. MultiMotifMaker
-&nbsp;
-&nbsp;
-&nbsp;
-## MultiMotifMaker of clustered contigs
+# Split names
+split -l 290 missing_IDs.txt --numeric-suffixes missing_IDs_
 
+# Go to directory
+cd /scratch/project_2006608/Methylation/HAMBI_data/metagenomic_assembly
 
+# Set variable
+name=$(sed -n ${SLURM_ARRAY_TASK_ID}p missing_IDs_00)
+name=$(sed -n ${SLURM_ARRAY_TASK_ID}p missing_IDs_01)
+name=$(sed -n ${SLURM_ARRAY_TASK_ID}p missing_IDs_02)
+
+# Load tools
+module load biokit
+
+# Run
+blastn -query $name".fasta" -db nt -remote -out Missing_labels/$name"_blast_out.txt" -outfmt 6 -perc_identity 90 -max_target_seqs 1
+```
+
+## Investigate the population structure more in detail
+### Metaphlan4
+```
+# Load
+module load metaphlan/4.1.1
+
+# Set environmental variable
+sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p sample_names.txt)
+
+# Run
+metaphlan /scratch/project_2006608/Methylation/HAMBI_data/HiFi_fastq/$sample".hifi_reads.fastq.gz" \
+        --nproc $SLURM_CPUS_PER_TASK \
+        --bowtie2out Metaphlan4_out/$sample".bowtie2.bz2" \
+        --bowtie2db ../db/metaphlan_databases/ \
+        --input_type fastq > Metaphlan4_out/$sample"_profile.txt"
+```
+
+### Kaiju
+```
+cd /scratch/project_2006608/Methylation/db
+mkdir kaijudb
+cd kaijudb
+kaiju-makedb -s refseq
+
+# Go to dir
+cd /scratch/project_2006608/Methylation/HAMBI_data
+
+# Load
+module load kaiju/1.10.0
+
+# Set temp dir
+export TMPDIR="/scratch/project_2006608/Methylation/tmp_dir"
+
+# Set environmental variable
+sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p sample_names.txt)
+
+# Run
+kaiju -z $SLURM_CPUS_PER_TASK -t $KAIJUDB/nodes.dmp -f $KAIJUDB/refseq/kaiju_db_refseq.fmi \
+	-i /scratch/project_2006608/Methylation/HAMBI_data/HiFi_fastq/$sample".hifi_reads.fastq.gz" \
+	-o Kaiju_out/$sample"_kaiju_out" -v
+```
 
 ## Miksi niin moni plasmidi hukataan ??

@@ -83,6 +83,17 @@
 
 
 
+## Mapping samples bcAd1039, bcAd1046 and bcAd1063 to Paracoccus GCF_034627565.1_ASM3462756v1
+
+| ------------------------------------- | bcAd1039 | bcAd1046 | bcAd1063 |
+| ------------------------------------- | -------- | -------- | -------- |
+| Mapped Reads                          | 15390    | 39375    | 82361    |
+| Alignments                            | 19877    | 42325    | 87874    |
+| Mapped Bases                          | 49095177 | 308123371| 733049617|
+| Mean Gap-Compressed Sequence Identity | 86.9052% | 96.1005% | 96.5226% |
+| Max Mapped Read Length                | 30408    | 38483    | 40843    |
+| Mean Mapped Read Length               | 2469.95  | 7279.94  | 8342.05  |
+
 
 
 
