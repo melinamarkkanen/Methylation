@@ -222,7 +222,10 @@ cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 ```
 cd /scratch/project_2006608/Methylation/HAMBI_data
 # List of patterns to match against column names
-cut -f 1,17-27,58-68,99-109,140-150,181-191,222-232,263-273,304-314,345-355,386-396,427-437,468-478,494-510 merged_data.tsv > merged_data_short.tsv
+## 5...-5
+cut -f 1,17-27,58-68,99-109,140-150,181-191,222-232,263-273,304-314,345-355,386-396,427-437,468-478,494-510 merged_data.tsv > merged_data_short_5.tsv
+## 10...-10
+cut -f 1,12-34,53-73,94-114,135-155,176-196,217-237,258-278,299-319,340-360,381-401,422-442,463-483,494-510 merged_data.tsv > merged_data_short_10.tsv
 ```
 &nbsp;
 &nbsp;
