@@ -217,6 +217,13 @@ cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 &nbsp;
 &nbsp;
 ## Run Random Forest analyses ```notebooks/Random_forest_HAMBI```
+### Sequence -20...20: 150 most important features
+### Sequence -5...5: All features
+```
+cd /scratch/project_2006608/Methylation/HAMBI_data
+# List of patterns to match against column names
+cut -f 1,17-27,58-68,99-109,140-150,181-191,222-232,263-273,304-314,345-355,386-396,427-437,468-478,494-510 merged_data.tsv > merged_data_short.tsv
+```
 &nbsp;
 &nbsp;
 &nbsp;
