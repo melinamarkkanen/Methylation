@@ -12,6 +12,16 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(dplyr)
 ```
+
+# Colors
+```{r}
+cols <- c(
+  "#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF", "#800000", "#008000",
+  "#000080", "#808000", "#800080", "#008080", "#FF4500", "#2E8B57", "#4682B4", "#DAA520",
+  "#FF1493", "#9ACD32", "#8A2BE2", "#5F9EA0", "#D2691E", "#DC143C", "#B8860B", "#32CD32",
+  "#FFD700", "#20B2AA", "#FF6347", "#4169E1", "#8B4513", "#6A5ACD", "#FF7F50", "#2F4F4F")
+```
+
 # Feature Importance
 ```{r}
 feature_importance <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/feature_importance.txt")
@@ -41,8 +51,18 @@ ggsave(filename = "plots/feature_importance.png",
 # Analysis of Kaiju results
 ```{r}
 kaiju_summary <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/kaiju_summary.tsv")
+
+# Into numeric
+kaiju_summary$percent <- as.numeric(kaiju_summary$percent)
+
 # Remove extra column headers
 kaiju_summary <- kaiju_summary[- grep("sample", kaiju_summary$sample),]
 # Top % 0.1?
-kaiju_summary_filt <- kaiju_summary %>% filter(percent > 0.1)
+kaiju_summary_filt <- kaiju_summary %>% filter(percent > 1)
+```
+## Plot
+```{r}
+p <- ggplot(kaiju_summary_filt, aes(x = sample, y = percent, fill = taxon_name)) + 
+  geom_bar(stat = "identity")
+p
 ```

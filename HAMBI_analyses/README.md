@@ -236,26 +236,53 @@ cut -f 1,12-34,53-73,94-114,135-155,176-196,217-237,258-278,299-319,340-360,381-
 
 ## UMAP
 ### Build MAGs according to contigs clustered by UMAP
+#### Get contigs
 ```
-# Get contigs
 cd ../src
-./HAMBI_get_contigs_for_MAGs.sh C2
+./HAMBI_get_contigs_for_MAGs.sh C1A
+```
 
-# Check lengths
-cd HAMBI_data/MAGs/C2/bcAd1023T--bcAd1023T_contigs
-module load seqkit/2.5.1
-seqkit fx2tab --length --name --header-line *.fasta > lengths.txt
+#### Combine small contigs sample-wise
+```
+cd /scratch/project_2006608/Methylation/HAMBI_data/MAGs
+# Check samples
+ls */*contigs/
+# Check contig lengths
+tail -n 50 C1*/C1*txt
+# Combine
+## C1A
+cat C1A/bcAd1046T--bcAd1046T_contigs/*fasta > C1A/bcAd1046T--bcAd1046T_contigs/bcAd1046T--bcAd1046T_C1A.fasta
+cat C1A/bcAd1063T--bcAd1063T_contigs/*fasta > C1A/bcAd1063T--bcAd1063T_contigs/bcAd1063T--bcAd1063T_C1A.fasta
 
-# Combine contigs if needed
-## C1
-cd bcAd1023T--bcAd1023T_contigs
-cat *l.fasta > all.fasta
+## C1B
+cat C1B/bcAd1037T--bcAd1037T_contigs/*fasta > C1B/bcAd1037T--bcAd1037T_contigs/bcAd1037T--bcAd1037T_C1B.fasta
+cat C1B/bcAd1039T--bcAd1039T_contigs/*fasta > C1B/bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C1B.fasta
 
-cd bcAd1039T--bcAd1039T_contigs
-cat *l.fasta > all.fasta
+## C1C
+cat C1C/bcAd1046T--bcAd1046T_contigs/*fasta > C1C/bcAd1046T--bcAd1046T_contigs/bcAd1046T--bcAd1046T_C1C.fasta
+cat C1C/bcAd1063T--bcAd1063T_contigs/*fasta > C1C/bcAd1063T--bcAd1063T_contigs/bcAd1063T--bcAd1063T_C1C.fasta
+
+## C1D
+cat C1D/bcAd1037T--bcAd1037T_contigs/*fasta > C1D/bcAd1037T--bcAd1037T_contigs/bcAd1037T--bcAd1037T_C1D.fasta
+cat C1D/bcAd1039T--bcAd1039T_contigs/*fasta > C1D/bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C1D.fasta
+
+## C1E
+cat C1E/bcAd1046T--bcAd1046T_contigs/*fasta > C1E/bcAd1046T--bcAd1046T_contigs/bcAd1046T--bcAd1046T_C1E.fasta
+cat C1E/bcAd1063T--bcAd1063T_contigs/*fasta > C1E/bcAd1063T--bcAd1063T_contigs/bcAd1063T--bcAd1063T_C1E.fasta
+
+## C1F
+cat C1F/bcAd1039T--bcAd1039T_contigs/*fasta > C1F/bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C1F.fasta
+```
 
 
-# Run CheckM2
+
+#### Run CheckM2
+````
+# Create sample list
+cd /scratch/project_2006608/Methylation/HAMBI_data/MAGs/C1A
+ls -d *contigs/ | sed 's/_contigs\///g' > sample_names.txt
+
+
 # Set the variable
 sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p sample_names.txt)
 
@@ -267,16 +294,23 @@ apptainer exec --bind $PWD:$PWD,$TMPDIR:/scratch/project_2006608/Methylation/tmp
         --output-directory $sample"_CheckM2_out" --extension fasta --threads 6 --force \
         --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
 
+# Summarize
+cat HAMBI_data/MAGs/C1A/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C1B/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C1C/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C1D/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C1E/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C1F/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+```
 
-# Individually:
-cd bcAd1039T--bcAd1039T_contigs
-apptainer exec --bind $PWD:$PWD,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input bcAd1039T--bcAd1039T_Paracoccus.fasta \
-        --output-directory bcAd1039T--bcAd1039T_CheckM2_out_Paracoccus --extension fasta --threads 6 --force \
-        --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
 
 
 # Run GTDB-Tk
-# Set the variable
+```
+# Go to folder
+cd /scratch/project_2006608/Methylation/HAMBI_data/MAGs/C1A
+
+# Set variable
 sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p sample_names.txt)
 
 # Load the environment and variables
@@ -288,38 +322,11 @@ gtdbtk classify_wf --genome_dir $sample"_contigs" -x fasta \
         --out_dir $sample"_GTDB_out" --skip_ani_screen --cpus $SLURM_CPUS_PER_TASK
 
 cat *GTDB_out/g*tsv | cut -f 1,5
-
-# Individually
-gtdbtk classify_wf --genome_dir bcAd1046T--bcAd1046T_contigs -x fasta \
-        --out_dir bcAd1046T--bcAd1046T_GTDB_out --skip_ani_screen --cpus $SLURM_CPUS_PER_TASK
-
-gtdbtk classify_wf --genome_dir bcAd1046T--bcAd1046T_contigs -x fa --out_dir bcAd1046T--bcAd1046T_GTDB_out --skip_ani_screen --cpus $SLURM_CPUS_PER_TASK
-
-
-# Plasmid predition (geNomad)
-
-## Contig names
-cd /scratch/project_2006608/Methylation/HAMBI_data/MAGs/C1
-ls *contigs/*.fasta > contig_names.txt
-
-# Set the variables
-contig=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt)
-contigShort=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt | sed 's/^[^/]*\//g')
-
-# Set DB path
-export DB_PATH=/scratch/project_2006608/sul4_project/db/genomad_db
-
-# Run
-apptainer exec --bind $PWD:$PWD,$DB_PATH:$DB_PATH \
-        /projappl/project_2006608/containers/genomad:1.8.0.sif genomad end-to-end --cleanup --splits 8 $contig geNomad_out/$contigShort $DB_PATH
-
-cat geNomad_out/*_summary/*plasmid_summary* | grep -v "seq_name" | cut -f 1 | sort | uniq
-
-# Transfer the plasmid sequences (according to geNomad) for Web BLAST:
-#geNomad_out/bcAd1063T--bcAd1063T_ptg000203l_summary/bcAd1063T--bcAd1063T_ptg000203l_plasmid.fna
-
-# Or if no plasmid predicted then just *_contigs/
 ```
+
+
+
+
 
 ## Creating sequence logos (sinteractive session)
 ```
