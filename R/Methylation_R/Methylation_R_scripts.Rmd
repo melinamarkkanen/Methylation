@@ -39,10 +39,10 @@ p <- ggplot(df, aes(x=Features, y=Accuracy.Test)) + ggtitle("Feature Importance"
     plot.title = element_text(size = 34),
     axis.title = element_text(size = 34),
     axis.text = element_text(size = 28))
-p1 <- p + geom_hline(yintercept=value_h, linetype="dashed", color = "red", size = 2) +
+p1 <- p + geom_hline(yintercept=value_h, linetype="dashed", color = "red", linewidth = 2) +
   geom_text(aes(230, value_h, label = "All features", vjust = - 1),
             color = "red", family = "Palatino", size = 10)
-p2 <- p1 + geom_vline(xintercept=value_v, linetype="dotdash", color = "blue", size = 1)
+p2 <- p1 + geom_vline(xintercept=value_v, linetype="dotdash", color = "blue", linewidth = 1)
 p2
 
 ggsave(filename = "plots/feature_importance.png",
@@ -52,17 +52,70 @@ ggsave(filename = "plots/feature_importance.png",
 ```{r}
 kaiju_summary <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/kaiju_summary.tsv")
 
+# Remove extra column headers
+kaiju_summary <- kaiju_summary[- grep("sample", kaiju_summary$sample),]
+
 # Into numeric
 kaiju_summary$percent <- as.numeric(kaiju_summary$percent)
 
-# Remove extra column headers
-kaiju_summary <- kaiju_summary[- grep("sample", kaiju_summary$sample),]
-# Top % 0.1?
+# Top % 1?
 kaiju_summary_filt <- kaiju_summary %>% filter(percent > 1)
+
+# Do some editing for plotting
+kaiju_summary_filt$sample <- gsub("bcAd1023T--bcAd1023T", "bcAd1023T", kaiju_summary_filt$sample)
+kaiju_summary_filt$sample <- gsub("bcAd1037T--bcAd1037T", "bcAd1037T", kaiju_summary_filt$sample)
+kaiju_summary_filt$sample <- gsub("bcAd1039T--bcAd1039T", "bcAd1039T", kaiju_summary_filt$sample)
+kaiju_summary_filt$sample <- gsub("bcAd1046T--bcAd1046T", "bcAd1046T", kaiju_summary_filt$sample)
+kaiju_summary_filt$sample <- gsub("bcAd1063T--bcAd1063T", "bcAd1063T", kaiju_summary_filt$sample)
+
+# Add sample info
+kaiju_summary_filt$sample_info <- ifelse(kaiju_summary_filt$sample == "bcAd1023T", "High", "Low")
+
+kaiju_summary_filt <- kaiju_summary_filt %>%
+  mutate(sample_info = case_when(
+    sample == "bcAd1023T" ~ "Tetracycline: 0.2, 15 ªC, rep-5 (bcAd1023T)",
+    sample == "bcAd1037T" ~ "Sulfonamide: 20, 25 ªC, rep-3 (bcAd1037T)",
+    sample == "bcAd1039T" ~ "Sulfonamide: 20, 25 ªC, rep-4 (bcAd1039T)",
+    sample == "bcAd1046T" ~ "Tetracycline: 0.02, 37 ªC, rep-3 (bcAd1046T)",
+    sample == "bcAd1063T" ~ "no ab, 7 ªC, rep-3 (bcAd1063T)",
+  ))
+kaiju_summary_filt$sample_info = factor(kaiju_summary_filt$sample_info, 
+                                        levels=c("Tetracycline: 0.2, 15 ªC, rep-5 (bcAd1023T)",
+                                                  "Sulfonamide: 20, 25 ªC, rep-3 (bcAd1037T)",
+                                                  "Sulfonamide: 20, 25 ªC, rep-4 (bcAd1039T)",
+                                                  "Tetracycline: 0.02, 37 ªC, rep-3 (bcAd1046T)",
+                                                  "no ab, 7 ªC, rep-3 (bcAd1063T)"))
 ```
 ## Plot
 ```{r}
+cols <- c("#34495E","#3498DB", "#87F28A", "#F1C40F", "#9B59B6", "#1ABC9C","#E74C3C", 
+          "black", "#FFB6B0", "#8C510A", "#808000", "#00FFFF", "#FF00FF", "grey")
+
+kaiju_summary_filt$taxon_name <- factor(kaiju_summary_filt$taxon_name, 
+                                        levels=c('Acinetobacter', 'Aeromonas', 'Agrobacterium',
+                                                 'Azorhizobium', 'Azospirillum', 'Citrobacter',
+                                                 'Elizabethkingia', 'Enterococcus', 'Kluyvera',
+                                                 'Paracoccus', 'Pseudomonas', 'Sphingobacterium',
+                                                 'Sphingobium', 'cannot be assigned to a (non-viral) genus'))
+  
 p <- ggplot(kaiju_summary_filt, aes(x = sample, y = percent, fill = taxon_name)) + 
-  geom_bar(stat = "identity")
+  geom_bar(stat = "identity") + theme_minimal() + 
+  ggtitle("Bacterial composition, HAMBI dataset (Kaiju)") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,100)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(face = "italic", size = 30),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        strip.text = element_text(size = 18),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_blank(),
+        plot.title = element_text(size = 30)) + 
+  scale_fill_manual(values=c(cols)) + 
+  facet_grid(~sample_info, space = "free", scale = "free", 
+             labeller = label_wrap_gen(width=16), switch = "both")
 p
+
+ggsave(filename = "plots/kaiju.png",
+       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
 ```

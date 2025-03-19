@@ -248,30 +248,23 @@ cd /scratch/project_2006608/Methylation/HAMBI_data/MAGs
 # Check samples
 ls */*contigs/
 # Check contig lengths
-tail -n 50 C1*/C1*txt
+tail -n 50 C2*/C2*txt
 # Combine
-## C1A
-cat C1A/bcAd1046T--bcAd1046T_contigs/*fasta > C1A/bcAd1046T--bcAd1046T_contigs/bcAd1046T--bcAd1046T_C1A.fasta
-cat C1A/bcAd1063T--bcAd1063T_contigs/*fasta > C1A/bcAd1063T--bcAd1063T_contigs/bcAd1063T--bcAd1063T_C1A.fasta
+## C2A
+cat C2A/bcAd1037T--bcAd1037T_contigs/*fasta > C2A/bcAd1037T--bcAd1037T_contigs/bcAd1037T--bcAd1037T_C2A.fasta
+cat C2A/bcAd1063T--bcAd1063T_contigs/*fasta > C2A/bcAd1063T--bcAd1063T_contigs/bcAd1063T--bcAd1063T_C2A.fasta
 
-## C1B
-cat C1B/bcAd1037T--bcAd1037T_contigs/*fasta > C1B/bcAd1037T--bcAd1037T_contigs/bcAd1037T--bcAd1037T_C1B.fasta
-cat C1B/bcAd1039T--bcAd1039T_contigs/*fasta > C1B/bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C1B.fasta
+## C2B
+cat C2B/bcAd1039T--bcAd1039T_contigs/*fasta > C2B/bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C2B.fasta
 
-## C1C
-cat C1C/bcAd1046T--bcAd1046T_contigs/*fasta > C1C/bcAd1046T--bcAd1046T_contigs/bcAd1046T--bcAd1046T_C1C.fasta
-cat C1C/bcAd1063T--bcAd1063T_contigs/*fasta > C1C/bcAd1063T--bcAd1063T_contigs/bcAd1063T--bcAd1063T_C1C.fasta
+## C2C
+cat C2C/bcAd1023T--bcAd1023T_contigs/*l.fasta > C2C/bcAd1023T--bcAd1023T_contigs/bcAd1023T--bcAd1023T_C2C.fasta
+cat C2C/bcAd1037T--bcAd1037T_contigs/*fasta > C2C/bcAd1037T--bcAd1037T_contigs/bcAd1037T--bcAd1037T_C2C.fasta
+cat C2C/bcAd1039T--bcAd1039T_contigs/*fasta > C2C/bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C2C.fasta
 
-## C1D
-cat C1D/bcAd1037T--bcAd1037T_contigs/*fasta > C1D/bcAd1037T--bcAd1037T_contigs/bcAd1037T--bcAd1037T_C1D.fasta
-cat C1D/bcAd1039T--bcAd1039T_contigs/*fasta > C1D/bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C1D.fasta
-
-## C1E
-cat C1E/bcAd1046T--bcAd1046T_contigs/*fasta > C1E/bcAd1046T--bcAd1046T_contigs/bcAd1046T--bcAd1046T_C1E.fasta
-cat C1E/bcAd1063T--bcAd1063T_contigs/*fasta > C1E/bcAd1063T--bcAd1063T_contigs/bcAd1063T--bcAd1063T_C1E.fasta
-
-## C1F
-cat C1F/bcAd1039T--bcAd1039T_contigs/*fasta > C1F/bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C1F.fasta
+## C2D
+cat C2D/bcAd1023T--bcAd1023T_contigs/*.fasta > C2D/bcAd1023T--bcAd1023T_contigs/bcAd1023T--bcAd1023T_C2D.fasta
+cat C2D/bcAd1039T--bcAd1039T_contigs/*fasta > C2D/bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C2D.fasta
 ```
 
 
@@ -279,7 +272,7 @@ cat C1F/bcAd1039T--bcAd1039T_contigs/*fasta > C1F/bcAd1039T--bcAd1039T_contigs/b
 #### Run CheckM2
 ````
 # Create sample list
-cd /scratch/project_2006608/Methylation/HAMBI_data/MAGs/C1A
+cd /scratch/project_2006608/Methylation/HAMBI_data/MAGs/C2A
 ls -d *contigs/ | sed 's/_contigs\///g' > sample_names.txt
 
 
@@ -295,12 +288,10 @@ apptainer exec --bind $PWD:$PWD,$TMPDIR:/scratch/project_2006608/Methylation/tmp
         --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
 
 # Summarize
-cat HAMBI_data/MAGs/C1A/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
-cat HAMBI_data/MAGs/C1B/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
-cat HAMBI_data/MAGs/C1C/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
-cat HAMBI_data/MAGs/C1D/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
-cat HAMBI_data/MAGs/C1E/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
-cat HAMBI_data/MAGs/C1F/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C2A/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C2B/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C2C/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C2D/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
 ```
 
 
