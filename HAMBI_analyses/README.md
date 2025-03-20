@@ -326,6 +326,35 @@ gtdbtk classify_wf --genome_dir $sample"_contigs" -x fasta \
 cat *GTDB_out/g*tsv | cut -f 1,5
 ```
 
+### Check if the contig length matters in clustering in UMAP
+```
+# Load
+module load seqkit/2.5.1
+
+cd /scratch/project_2006608/Methylation/HAMBI_data/metagenomic_assembly
+
+# Set environmental variable
+sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p sample_names.txt)
+
+# Run
+seqkit fx2tab --length --name --header-line $sample".fasta" > $sample"_lengths.txt"
+
+# Add sample name in the front 
+sed -i -e 's/^/bcAd1023T--bcAd1023T_/' bcAd1023T--bcAd1023T_lengths.txt
+sed -i -e 's/^/bcAd1037T--bcAd1037T_/' bcAd1037T--bcAd1037T_lengths.txt
+sed -i -e 's/^/bcAd1039T--bcAd1039T_/' bcAd1039T--bcAd1039T_lengths.txt
+sed -i -e 's/^/bcAd1046T--bcAd1046T_/' bcAd1046T--bcAd1046T_lengths.txt
+sed -i -e 's/^/bcAd1063T--bcAd1063T_/' bcAd1063T--bcAd1063T_lengths.txt
+
+# Extract those that are in notebooks/UMAP_HAMBI_top150_features/top150_contigs.txt
+cd /scratch/project_2006608/Methylation/notebooks/UMAP_HAMBI_top150_features
+cat ../../HAMBI_data/metagenomic_assembly/*_lengths.txt | grep -f top150_contigs.txt > top150_contigs_lengths.txt
+
+# Reorder to match
+awk 'NR==FNR {order[$1]=NR; next} {print order[$1], $0}' top150_contigs.txt top150_contigs_lengths.txt | sort -n | cut -d' ' -f2- > tmp
+tr ' ' '\t' < tmp > top150_contigs_lengths.tsv
+sed -i '1s/^/contig\tcontig_length\n/' top150_contigs_lengths.tsv
+```
 
 
 
