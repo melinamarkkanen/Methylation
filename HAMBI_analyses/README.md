@@ -248,7 +248,7 @@ cd /scratch/project_2006608/Methylation/HAMBI_data/MAGs
 # Check samples
 ls */*contigs/
 # Check contig lengths
-tail -n 50 C4*/C4*txt
+tail -n 100 C5*/C5*txt
 # Combine
 ## C4
 cat C4/bcAd1023T--bcAd1023T_contigs/*fasta > C4/bcAd1023T--bcAd1023T_contigs/bcAd1023T--bcAd1023T_C4.fasta
@@ -296,12 +296,12 @@ apptainer exec --bind $PWD:$PWD,$TMPDIR:/scratch/project_2006608/Methylation/tmp
         --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
 
 # Summarize
-cat HAMBI_data/MAGs/C7/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C5/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
 ```
 
 #### Check if plasmid or ARGs
 ```
-cat HAMBI_labels.txt | grep -f C7_id.txt | grep -v "chromoso" | cut -f 1,9
+cat HAMBI_labels.txt | grep -f C5_id.txt | grep -v "chromoso" | cut -f 1,9
 cat *res* | grep -f C7_id.txt | cut -f 1-4
 ```
 
