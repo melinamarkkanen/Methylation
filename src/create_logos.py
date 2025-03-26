@@ -11,7 +11,7 @@ import pandas as pd
 import numpy as np
 from scipy.stats import entropy
 import matplotlib.pyplot as plt
-from scoring_matrices import parse_gff
+from scoring_matrices_HAMBI import parse_gff
 import argparse
 
 def set_up_logger():

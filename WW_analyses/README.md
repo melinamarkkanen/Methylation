@@ -51,16 +51,63 @@ less EFF1_contigs.fasta | grep ">" | wc -l
 &nbsp;
 &nbsp;
 &nbsp;
-## UMAP
-&nbsp;
-&nbsp;
-&nbsp;
-## Random Forest Classifier
-&nbsp;
-&nbsp;
-&nbsp;
-## Sequence logos vs. MultiMotifMaker
-&nbsp;
-&nbsp;
-&nbsp;
-## MultiMotifMaker of clustered contigs
+## Create scoring matrices and flattened feature matrices
+### Position Weight Matrices (PWM) 
+- to filter data, the methylation types that have less than **100** !! detected sites are filled with 0 matrices which increased the models performance
+- the scoring matrices are then flattened to feature matrices. The flattened feature matrices are then used to train the random forest model to predict the taxonomic classification of the contigs. 
+```
+# Generate the matrices (interactive session)
+module load python-data
+cd /scratch/project_2006608/Methylation
+python3 src/scoring_matrices_WW.py WW_data/EFF1_contigs WW_data/EFF1_matrices   # repeat for all samples
+...
+```
+
+## Create merged_data_EFF1.tsv
+(## Create merged_data_WW.tsv)
+```
+# Combine modification types
+cd WW_data/EFF1_matrices/flattened
+
+# Add shared row names
+sed -i -e 's/^/EFF1_/' m4C.tsv
+
+# Remove extra contig names
+cut -f 2-  m6A.tsv > tmp && mv tmp m6A.tsv
+cut -f 2-  modified_base.tsv > tmp && mv tmp modified_base.tsv
+# Paste
+paste m4C.tsv modified_base.tsv m6A.tsv > EFF1_concat_matrices.tsv
+
+*************
+# Combine all
+cd WW_data
+cat EFF1_matrices/flattened/EFF1_concat_matrices.tsv EFF2_matrices/flattened/EFF2_concat_matrices.tsv EFF3_matrices/flattened/EFF3_concat_matrices.tsv INF1_matrices/flattened/INF1_concat_matrices.tsv INF2_matrices/flattened/INF2_concat_matrices.tsv INF3_matrices/flattened/INF3_concat_matrices.tsv SLU1_matrices/flattened/SLU1_concat_matrices.tsv SLU2_matrices/flattened/SLU2_concat_matrices.tsv SLU3_matrices/flattened/SLU3_concat_matrices.tsv > merged_data_WW.tsv
+*************
+
+# Check number of columns
+awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
+# 494
+
+# Check row names
+less EFF1_concat_matrices.tsv | cut -f 1 | head
+
+# Remove the contig_id col from merged_data.tsv
+cut -f 2- EFF1_concat_matrices.tsv > tmp && mv tmp EFF1_concat_matrices.tsv
+
+# Add the final column headers
+## *This is just given now based on previous analyses, could be a function to make it*
+
+# The Common_id etc starts at 494-
+cat header.tsv | cut -f 1-493 > tmp
+cat tmp EFF1_concat_matrices.tsv > temp_EFF1_concat_matrices.tsv && mv temp_EFF1_concat_matrices.tsv EFF1_concat_matrices.tsv
+
+# Check again
+less EFF1_concat_matrices.tsv  | cut -f 1 | head
+
+# Check number of cols
+awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
+
+# There are still empty columns in the end, remove them
+cut -f 1-510 EFF1_concat_matrices.tsv > tmp && mv tmp EFF1_concat_matrices.tsv
+```
+

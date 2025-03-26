@@ -153,7 +153,7 @@ cp bcAd1023T--bcAd1023T_*gff bcAd1023T--bcAd1023T
 # Generate the matrices (interactive session)
 module load python-data
 cd /scratch/project_2006608/Methylation
-python3 src/scoring_matrices.py HAMBI_data/contigs/bcAd1023T--bcAd1023T HAMBI_data/bcAd1023T_matrices
+python3 src/scoring_matrices_HAMBI.py HAMBI_data/contigs/bcAd1023T--bcAd1023T HAMBI_data/bcAd1023T_matrices
 
 # Clean subfolders
 cd /scratch/project_2006608/Methylation/HAMBI_data/contigs
