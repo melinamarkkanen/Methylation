@@ -69,14 +69,20 @@ python3 src/scoring_matrices_WW.py WW_data/EFF1_contigs WW_data/EFF1_matrices   
 # Combine modification types
 cd WW_data/EFF1_matrices/flattened
 
+# make copies of the .tsv files....
+cp m6A.tsv cp_m6A.tsv
+cp m4C.tsv cp_m4C.tsv
+cp modified_base.tsv cp_modified_base.tsv
+
 # Add shared row names
-sed -i -e 's/^/EFF1_/' m4C.tsv
+less m4C.tsv | wc -l
+yes "EFF1" | head -n 60373 > sample
 
 # Remove extra contig names
 cut -f 2-  m6A.tsv > tmp && mv tmp m6A.tsv
 cut -f 2-  modified_base.tsv > tmp && mv tmp modified_base.tsv
 # Paste
-paste m4C.tsv modified_base.tsv m6A.tsv > EFF1_concat_matrices.tsv
+paste m4C.tsv modified_base.tsv m6A.tsv sample > EFF1_concat_matrices.tsv
 
 *************
 # Combine all
@@ -91,23 +97,19 @@ awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
 # Check row names
 less EFF1_concat_matrices.tsv | cut -f 1 | head
 
-# Remove the contig_id col from merged_data.tsv
-cut -f 2- EFF1_concat_matrices.tsv > tmp && mv tmp EFF1_concat_matrices.tsv
-
 # Add the final column headers
 ## *This is just given now based on previous analyses, could be a function to make it*
 
 # The Common_id etc starts at 494-
-cat header.tsv | cut -f 1-493 > tmp
+cat ../../header.tsv | cut -f 1-493 > tmp
 cat tmp EFF1_concat_matrices.tsv > temp_EFF1_concat_matrices.tsv && mv temp_EFF1_concat_matrices.tsv EFF1_concat_matrices.tsv
+
+# add header 'sample' as the last column name
 
 # Check again
 less EFF1_concat_matrices.tsv  | cut -f 1 | head
 
 # Check number of cols
 awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
-
-# There are still empty columns in the end, remove them
-cut -f 1-510 EFF1_concat_matrices.tsv > tmp && mv tmp EFF1_concat_matrices.tsv
 ```
 
