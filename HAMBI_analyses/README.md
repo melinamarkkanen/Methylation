@@ -358,6 +358,17 @@ cat ../../HAMBI_data/contigs/HAMBI_mod_counts.txt | grep -f top150_contigs.txt >
 awk 'NR==FNR {order[$1]=NR; next} {print order[$1], $0}' top150_contigs.txt top150_contigs_mod_counts.txt | sort -n | cut -d' ' -f2- > tmp
 tr ' ' '\t' < tmp > top150_contigs_mod_counts.tsv
 sed -i '1s/^/contig\tmod_count\n/' top150_contigs_mod_counts.tsv
+
+
+# Same for data with all features
+# Extract those that are in HAMBI_data/metagenomic_assembly/contig_IDs.txt
+cd /scratch/project_2006608/Methylation/HAMBI_data/metagenomic_assembly
+cat ../../HAMBI_data/contigs/HAMBI_mod_counts.txt | grep -f contig_IDs.txt > contigs_mod_counts.txt
+
+# Reorder to match
+awk 'NR==FNR {order[$1]=NR; next} {print order[$1], $0}' contig_IDs.txt contigs_mod_counts.txt | sort -n | cut -d' ' -f2- > tmp
+tr ' ' '\t' < tmp > contigs_mod_counts.tsv
+sed -i '1s/^/contig\tmod_count\n/' contigs_mod_counts.tsv
 ```
 
 
