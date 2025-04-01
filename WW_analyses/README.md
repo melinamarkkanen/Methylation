@@ -53,13 +53,15 @@ less EFF1_contigs.fasta | grep ">" | wc -l
 &nbsp;
 ## Create scoring matrices and flattened feature matrices
 ### Position Weight Matrices (PWM) 
-- to filter data, the methylation types that have less than **100** !! detected sites are filled with 0 matrices which increased the models performance
+- to filter data, the methylation types that have less than **100** or **200** !! detected sites are filled with 0 matrices which increased the models performance
 - the scoring matrices are then flattened to feature matrices. The flattened feature matrices are then used to train the random forest model to predict the taxonomic classification of the contigs. 
 ```
 # Generate the matrices (interactive session)
 module load python-data
 cd /scratch/project_2006608/Methylation
-python3 src/scoring_matrices_WW.py WW_data/EFF1_contigs WW_data/EFF1_matrices   # repeat for all samples
+python3 src/scoring_matrices_WW.py WW_data/EFF1_contigs WW_data/EFF1_matrices_top20
+python3 src/scoring_matrices_WW.py WW_data/EFF1_contigs WW_data/EFF1_matrices_top100
+python3 src/scoring_matrices_WW.py WW_data/EFF1_contigs WW_data/EFF1_matrices_top200
 ...
 ```
 
@@ -111,5 +113,11 @@ less EFF1_concat_matrices.tsv  | cut -f 1 | head
 
 # Check number of cols
 awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
+# Rename according to included modifications
+mv EFF1_concat_matrices.tsv EFF1_concat_matrices_top100.tsv
 ```
 
+## Analyse by sample in Jupiter
+## Extract clusters
+### eg.: ./WW_get_contigs_for_MAGs.sh <sample> <cluster> <above>
+./WW_get_contigs_for_MAGs.sh EFF1 C1 100
