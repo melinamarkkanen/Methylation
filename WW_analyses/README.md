@@ -59,9 +59,7 @@ less EFF1_contigs.fasta | grep ">" | wc -l
 # Generate the matrices (interactive session)
 module load python-data
 cd /scratch/project_2006608/Methylation
-python3 src/scoring_matrices_WW.py WW_data/EFF1_contigs WW_data/EFF1_matrices_top20
 python3 src/scoring_matrices_WW.py WW_data/EFF1_contigs WW_data/EFF1_matrices_top100
-python3 src/scoring_matrices_WW.py WW_data/EFF1_contigs WW_data/EFF1_matrices_top200
 ...
 ```
 
@@ -85,12 +83,6 @@ cut -f 2-  m6A.tsv > tmp && mv tmp m6A.tsv
 cut -f 2-  modified_base.tsv > tmp && mv tmp modified_base.tsv
 # Paste
 paste m4C.tsv modified_base.tsv m6A.tsv sample > EFF1_concat_matrices.tsv
-
-*************
-# Combine all
-cd WW_data
-cat EFF1_matrices/flattened/EFF1_concat_matrices.tsv EFF2_matrices/flattened/EFF2_concat_matrices.tsv EFF3_matrices/flattened/EFF3_concat_matrices.tsv INF1_matrices/flattened/INF1_concat_matrices.tsv INF2_matrices/flattened/INF2_concat_matrices.tsv INF3_matrices/flattened/INF3_concat_matrices.tsv SLU1_matrices/flattened/SLU1_concat_matrices.tsv SLU2_matrices/flattened/SLU2_concat_matrices.tsv SLU3_matrices/flattened/SLU3_concat_matrices.tsv > merged_data_WW.tsv
-*************
 
 # Check number of columns
 awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
