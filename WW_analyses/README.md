@@ -108,8 +108,17 @@ awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
 # Rename according to included modifications
 mv EFF1_concat_matrices.tsv EFF1_concat_matrices_top100.tsv
 ```
+## Let's create mod count data also for the WW data set
+```
+cd src/
+./WW_count_gff_lines.sh EFF1
+sed -i '1i contig\tmod_count' EFF1_mod_counts.txt
+```
+
 
 ## Analyse by sample in Jupiter
 ## Extract clusters
 ### eg.: ./WW_get_contigs_for_MAGs.sh <sample> <cluster> <above>
+```
 ./WW_get_contigs_for_MAGs.sh EFF1 C1 100
+```

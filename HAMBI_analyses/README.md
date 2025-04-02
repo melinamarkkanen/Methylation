@@ -255,13 +255,18 @@ cat C10/bcAd1023T--bcAd1023T_contigs/*fasta > C10/bcAd1023T--bcAd1023T_contigs/b
 cat C10/bcAd1039T--bcAd1039T_contigs/*fasta > C10/bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C10.fasta
 
 # Remove these:
-bcAd1023T--bcAd1023T_ptg000004c
-bcAd1037T--bcAd1037T_ptg000007c
-bcAd1039T--bcAd1039T_ptg000001c
+bcAd1023T--bcAd1023T_ptg000007c
+bcAd1023T--bcAd1023T_ptg000008l
+bcAd1037T--bcAd1037T_ptg000008c
+bcAd1039T--bcAd1039T_ptg000024c
+bcAd1046T--bcAd1046T_ptg000003c
+bcAd1063T--bcAd1063T_ptg000008c
 
-seqkit grep -v -n -f list.txt bcAd1023T--bcAd1023T_contigs/bcAd1023T--bcAd1023T_C10.fasta > tmp && mv tmp bcAd1023T--bcAd1023T_contigs/bcAd1023T--bcAd1023T_C10.fasta
-
-seqkit grep -v -n -f list.txt bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C10.fasta > tmp && mv tmp bcAd1039T--bcAd1039T_contigs/bcAd1039T--bcAd1039T_C10.fasta
+seqkit grep -v -n -f list.txt bcAd1023T--bcAd1023T_contigs/all.fasta > tmp && mv tmp bcAd1023T--bcAd1023T_contigs/all.fasta
+seqkit grep -v -n -f list.txt bcAd1037T--bcAd1037T_contigs/all.fasta > tmp && mv tmp bcAd1037T--bcAd1037T_contigs/all.fasta
+seqkit grep -v -n -f list.txt bcAd1039T--bcAd1039T_contigs/all.fasta > tmp && mv tmp bcAd1039T--bcAd1039T_contigs/all.fasta
+seqkit grep -v -n -f list.txt bcAd1046T--bcAd1046T_contigs/all.fasta > tmp && mv tmp bcAd1046T--bcAd1046T_contigs/all.fasta
+seqkit grep -v -n -f list.txt bcAd1063T--bcAd1063T_contigs/all.fasta > tmp && mv tmp bcAd1063T--bcAd1063T_contigs/all.fasta
 ```
 
 
