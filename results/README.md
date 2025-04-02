@@ -121,12 +121,50 @@
 | 250      | 1.0            | 0.870787      | 0.89102   | 0.870787 | 0.857286 |
 | All      | 1.0            | 0.870786      | 0.893405  | 0.870786 | 0.858709 |
 
+## Random Forest **Fewer data**:
+### Above 50 lines in .gff
+#### Number of Taxa: 11
+| Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
+|-----------------------|-----|----------|----------|----------|----------|
+| **Domain to Species** | 1.0 | 0.884353 | 0.863946 | 0.884353 | 0.869720 |
+| **Domain to Genus**   | 1.0 | 0.884353 | 0.863946 | 0.884353 | 0.869720 |
+| **Domain to Family**  | 1.0 | 0.918367 | 0.896655 | 0.918367 | 0.903183 |
+| **Domain to Order**   | 1.0 | 0.905405 | 0.911239 | 0.905405 | 0.895936 |
+| **Domain to Class**   | 1.0 | 0.953020 | 0.953301 | 0.953020 | 0.951368 |
+| **Domain to Phylum**  | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
 
+### Above 100 lines in .gff
+#### Number of Taxa: 10
+| Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
+|-----------------------|-----|----------|----------|----------|----------|
+| **Domain to Species** | 1.0 | 0.946902 | 0.950707 | 0.946902 | 0.944577 |
+| **Domain to Genus**   | 1.0 | 0.946902 | 0.950707 | 0.946902 | 0.944577 |
+| **Domain to Family**  | 1.0 | 0.955752 | 0.954380 | 0.955752 | 0.951657 |
+| **Domain to Order**   | 1.0 | 0.931034 | 0.884082 | 0.931034 | 0.905217 |
+| **Domain to Class**   | 1.0 | 0.948275 | 0.951259 | 0.948275 | 0.943871 |
+| **Domain to Phylum**  | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
 
+### Above 200 lines in .gff
+#### Number of Taxa: 6
+| Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
+|-----------------------|-----|----------|----------|----------|----------|
+| **Domain to Species** | 1.0 | 0.987654 | 0.989711 | 0.987654 | 0.986980 |
+| **Domain to Genus**   | 1.0 | 0.987654 | 0.989711 | 0.987654 | 0.986980 |
+| **Domain to Family**  | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
+| **Domain to Order**   | 1.0 | 0.965517 | 0.969172 | 0.965517 | 0.961190 |
+| **Domain to Class**   | 1.0 | 0.977528 | 0.978076 | 0.977528 | 0.976262 |
+| **Domain to Phylum**  | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
 
-
-
-
+### Above 500 lines in .gff
+#### Number of Taxa: 4
+| Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
+|-----------------------|-----|----------|----------|----------|----------|
+| **Domain to Species** | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
+| **Domain to Genus**   | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
+| **Domain to Family**  | 1.0 | 0.984615 | 0.985164 | 0.984615 | 0.984643 |
+| **Domain to Order**   | 1.0 | 0.984615 | 0.985164 | 0.984615 | 0.984643 |
+| **Domain to Class**   | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
+| **Domain to Phylum**  | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
 
 
 

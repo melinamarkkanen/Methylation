@@ -31,7 +31,7 @@ df$Features <- as.numeric(df$Features)
 value_h <- feature_importance[grep("All", feature_importance$Features), ]
 value_h = print(value_h["Accuracy.Test"][ ,])
 
-value_v <- 70
+value_v <- 150
 
 p <- ggplot(df, aes(x=Features, y=Accuracy.Test)) + ggtitle("Feature Importance") +
   geom_line() + theme_bw() +
