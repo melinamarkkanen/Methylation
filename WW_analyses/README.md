@@ -53,7 +53,7 @@ less EFF1_contigs.fasta | grep ">" | wc -l
 &nbsp;
 ## Create scoring matrices and flattened feature matrices
 ### Position Weight Matrices (PWM) 
-- to filter data, the methylation types that have less than **100** or **200** !! detected sites are filled with 0 matrices which increased the models performance
+- to filter data, the methylation types that have less than **100**!! detected sites are filled with 0 matrices which increased the models performance
 - the scoring matrices are then flattened to feature matrices. The flattened feature matrices are then used to train the random forest model to predict the taxonomic classification of the contigs. 
 ```
 # Generate the matrices (interactive session)
@@ -76,37 +76,45 @@ cp modified_base.tsv cp_modified_base.tsv
 
 # Add shared row names
 less m4C.tsv | wc -l
-yes "EFF1" | head -n 60373 > sample
+#yes "EFF1" | head -n 60373 > sample
+yes "INF1" | head -n 64737 > sample
 
 # Remove extra contig names
 cut -f 2-  m6A.tsv > tmp && mv tmp m6A.tsv
 cut -f 2-  modified_base.tsv > tmp && mv tmp modified_base.tsv
 # Paste
-paste m4C.tsv modified_base.tsv m6A.tsv sample > EFF1_concat_matrices.tsv
+#paste m4C.tsv modified_base.tsv m6A.tsv sample > EFF1_concat_matrices.tsv
+paste m4C.tsv modified_base.tsv m6A.tsv sample > INF1_concat_matrices.tsv
 
 # Check number of columns
-awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
+#awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
+awk -F'\t' '{print NF; exit}' INF1_concat_matrices.tsv
 # 494
 
 # Check row names
-less EFF1_concat_matrices.tsv | cut -f 1 | head
+#less EFF1_concat_matrices.tsv | cut -f 1 | head
+less INF1_concat_matrices.tsv | cut -f 1 | head
 
 # Add the final column headers
 ## *This is just given now based on previous analyses, could be a function to make it*
 
 # The Common_id etc starts at 494-
 cat ../../header.tsv | cut -f 1-493 > tmp
-cat tmp EFF1_concat_matrices.tsv > temp_EFF1_concat_matrices.tsv && mv temp_EFF1_concat_matrices.tsv EFF1_concat_matrices.tsv
+#cat tmp EFF1_concat_matrices.tsv > temp_EFF1_concat_matrices.tsv && mv temp_EFF1_concat_matrices.tsv EFF1_concat_matrices.tsv
+cat tmp INF1_concat_matrices.tsv > temp_INF1_concat_matrices.tsv && mv temp_INF1_concat_matrices.tsv INF1_concat_matrices.tsv
 
 # add header 'sample' as the last column name
 
 # Check again
-less EFF1_concat_matrices.tsv  | cut -f 1 | head
+#less EFF1_concat_matrices.tsv  | cut -f 1 | head
+less INF1_concat_matrices.tsv  | cut -f 1 | head
 
 # Check number of cols
-awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
+#awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
+awk -F'\t' '{print NF; exit}' INF1_concat_matrices.tsv
 # Rename according to included modifications
-mv EFF1_concat_matrices.tsv EFF1_concat_matrices_top100.tsv
+#mv EFF1_concat_matrices.tsv EFF1_concat_matrices_top100.tsv
+mv INF1_concat_matrices.tsv INF1_concat_matrices_top100.tsv
 ```
 ## Let's create mod count data also for the WW data set
 ```
@@ -114,11 +122,36 @@ cd src/
 ./WW_count_gff_lines.sh EFF1
 sed -i '1i contig\tmod_count' EFF1_mod_counts.txt
 ```
+## Create ARG annottaions to be visualized in UMAP
+### WW_blastn_resfinder.sh
+```
+# Load the tools
+module load biokit
+
+# Go to dir
+cd /scratch/project_2006608/Methylation/HAMBI_data/metagenomic_assembly
+
+# Set variable
+sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p ../sample_names.txt)
+
+# Run
+blastn -query EFF1_contigs.fasta \
+        -subject ../../db/resfinder_db/all.fsa \
+        -out EFF1_resfinder_out.txt -outfmt 6 \
+		-perc_identity 90 -max_target_seqs 1
+```
+## Filter & count ARGs / contig
+```
+cd src/
+./WW_count_ARGs.sh EFF1
+```
+
+
 
 
 ## Analyse by sample in Jupiter
 ## Extract clusters
 ### eg.: ./WW_get_contigs_for_MAGs.sh <sample> <cluster> <above>
 ```
-./WW_get_contigs_for_MAGs.sh EFF1 C1 100
+./WW_get_contigs_for_MAGs.sh EFF1 C1
 ```
