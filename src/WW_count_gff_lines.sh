@@ -15,3 +15,5 @@ for c in $contigs; do
 done
 
 paste -d "\t" contig_names.txt mod_counts.txt > $sample"_mod_counts.txt"
+
+sed -i '1i contig\tmod_count' $sample"_mod_counts.txt"
