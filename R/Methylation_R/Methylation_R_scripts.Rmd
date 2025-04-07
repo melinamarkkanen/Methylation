@@ -119,3 +119,10 @@ p
 ggsave(filename = "plots/kaiju.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
 ```
+
+# HiFi MAG Pipeline results
+```{r}
+# Load data
+hifi_MAG_pipeline_results <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/hifi_MAG_pipeline_results.txt", row.names=1)
+
+```

@@ -148,15 +148,46 @@ sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p ../sample_names.txt)
 blastn -query EFF1_contigs.fasta \
         -subject ../../db/resfinder_db/all.fsa \
         -out EFF1_resfinder_out.txt -outfmt 6 \
-		-perc_identity 90 -max_target_seqs 1
+		-perc_identity 90 -max_target_seqs 5
 ```
 ## Filter & count ARGs / contig
 ```
+cp EFF1_resfinder_out.txt raw_EFF1_resfinder_out.txt
+
+##### First manually (set # and then remove those lines) check hits that are duplicates
+
+sed -i '/^#/d' EFF1_resfinder_out.txt
+sed -i '/^#/d' EFF2_resfinder_out.txt
+sed -i '/^#/d' EFF3_resfinder_out.txt
+
+# Then run
 cd src/
 ./WW_count_ARGs.sh EFF1
 ```
 
+## Attach ARG names
+```
+# Extract columns
+cut -f 1-2 EFF1_resfinder_out.txt > ARG_names.txt
+# Remove the accession
+sed -i 's/\(.*_.*\)_.*$/\1/' ARG_names.txt
+# Check those that have multiple
+cut -f 1 ARG_names.txt | sort | uniq -d
 
+##### Manually fix those contigs that have multiple
+
+# Add contig names of those where there is no ARG
+cut -f 1 ARG_names.txt > contig_ARG_names.txt
+grep -v -f contig_ARG_names.txt contig_names.txt > remaining_contig_names.txt
+cat ARG_names.txt remaining_contig_names.txt > EFF1_ARG_names.txt
+sed -i '1i contig\tARG_name' EFF1_ARG_names.txt
+```
+
+## Attach contig lengths
+```
+module load seqkit/2.5.1
+seqkit fx2tab --length --name --header-line EFF1_contigs.fasta > EFF1_contigs_lengths.txt
+```
 
 
 ## Analyse by sample in Jupiter
@@ -164,6 +195,12 @@ cd src/
 ### eg.: ./WW_get_contigs_for_MAGs.sh <sample> <cluster> <above>
 ```
 ./WW_get_contigs_for_MAGs.sh EFF1 C1
+```
+
+## Check ARGs in HiFi MAG Pipeline results
+```
+nano search.txt # (contig names excel)
+grep -f search.txt EFF1_resfinder_out.txt
 ```
 
 
