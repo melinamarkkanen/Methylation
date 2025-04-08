@@ -162,10 +162,11 @@ hifi_MAG_pipeline_stats <- hifi_MAG_pipeline_results %>%
 MAGs_with_ARGs <- hifi_MAG_pipeline_results %>%
   filter(ARG != "NA")
 
-# erm(F) hosts
+# MAGs with any ARGs
 MAGs_with_ARGs <- hifi_MAG_pipeline_results %>%
   filter(ARG != "NA")
 
-MAGs_with_ARGs <- hifi_MAG_pipeline_results %>%
+# erm(F) hosts
+MAGs_with_erm <- hifi_MAG_pipeline_results %>%
   filter(grepl("erm", ARG))
 ```
