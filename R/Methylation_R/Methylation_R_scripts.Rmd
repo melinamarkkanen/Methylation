@@ -125,4 +125,47 @@ ggsave(filename = "plots/kaiju.png",
 # Load data
 hifi_MAG_pipeline_results <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/hifi_MAG_pipeline_results.txt", row.names=1)
 
+# List High-quality MAGs
+HQ_MAGs <- hifi_MAG_pipeline_results %>%
+  filter(Completeness >= 90 & Contamination <= 5)
+
+# Filter those that have ARGs
+HQ_MAGs_with_ARGs <- HQ_MAGs %>%
+  filter(ARG != "NA")
+
+# Count HQ MAGs/sample
+HQ_MAG_count_sample <- HQ_MAGs %>% count(Sample)
+
+# Count HQ MAGs/taxa
+HQ_MAG_count_species <- HQ_MAGs %>% count(species)
+HQ_MAG_count_genus <- HQ_MAGs %>% count(genus)
+HQ_MAG_count_class <- HQ_MAGs %>% count(class)
+HQ_MAG_count_phylum <- HQ_MAGs %>% count(phylum)
+
+# Count HQ MAGs/taxa/Sample
+HQ_MAG_count_species_sample <- HQ_MAGs %>% count(species, Sample)
+HQ_MAG_count_genus_sample <- HQ_MAGs %>% count(genus, Sample)
+HQ_MAG_count_class_sample <- HQ_MAGs %>% count(class, Sample)
+HQ_MAG_count_phylum_sample <- HQ_MAGs %>% count(phylum, Sample)
+
+# Get statistics
+hifi_MAG_pipeline_stats <- hifi_MAG_pipeline_results %>%
+  summarize(mean_contigs = mean(Contig_Number),
+            mean_completeness = mean(Completeness),
+            mean_contamination = mean(Contamination),
+            max_completeness = max(Completeness),
+            min_completeness = min(Completeness),
+            max_contamination = max(Contamination),
+            min_contamination = min(Contamination))
+
+# Filter those that have ARGs (all MAGs)
+MAGs_with_ARGs <- hifi_MAG_pipeline_results %>%
+  filter(ARG != "NA")
+
+# erm(F) hosts
+MAGs_with_ARGs <- hifi_MAG_pipeline_results %>%
+  filter(ARG != "NA")
+
+MAGs_with_ARGs <- hifi_MAG_pipeline_results %>%
+  filter(grepl("erm", ARG))
 ```

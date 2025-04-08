@@ -152,6 +152,8 @@ blastn -query EFF1_contigs.fasta \
 ```
 ## Filter & count ARGs / contig
 ```
+awk '$4 >= 100' EFF1_resfinder_out.txt" > tmp && mv tmp EFF1_resfinder_out.txt
+
 cp EFF1_resfinder_out.txt raw_EFF1_resfinder_out.txt
 
 ##### First manually (set # and then remove those lines) check hits that are duplicates
@@ -159,6 +161,8 @@ cp EFF1_resfinder_out.txt raw_EFF1_resfinder_out.txt
 sed -i '/^#/d' EFF1_resfinder_out.txt
 sed -i '/^#/d' EFF2_resfinder_out.txt
 sed -i '/^#/d' EFF3_resfinder_out.txt
+
+sed -i '/^#/d' INF2_resfinder_out.txt
 
 # Then run
 cd src/
