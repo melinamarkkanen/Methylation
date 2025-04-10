@@ -354,6 +354,49 @@ p
 
 ggsave(filename = "plots/MAGs_species.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+
+# Pie chart
+MAG_count_phylum_sample_INF <- MAG_count_phylum_sample[grepl("INF", MAG_count_phylum_sample$Sample), ]
+MAG_count_phylum_sample_EFF <- MAG_count_phylum_sample[grepl("EFF", MAG_count_phylum_sample$Sample), ]
+MAG_count_phylum_sample_SLU <- MAG_count_phylum_sample[grepl("SLU", MAG_count_phylum_sample$Sample), ]
+
+# Colors
+cols <- c("Acidobacteriota"	= "#d1495b","Actinobacteriota" = "#edb183","Armatimonadota"	= "#c0caad","Bacteroidota"	= "#ffb400",
+"Caldisericota"	= "#f28500","Campylobacterota"	= "#a593e0","Chloroflexota"	= "#70c1b3","Cloacimonadota"	= "#547aa5",
+"Desulfobacterota"	= "#5e4fa2","Desulfobacterota_G"	= "#3b528b","Firmicutes"	= "#abdda4","Firmicutes_A"	= "#66c2a5",
+"Firmicutes_B"	= "#3288bd","Firmicutes_G"	= "#1b9e77","Halobacteriota"	= "#e7298a","Hydrogenedentota"	= "#e6ab02",
+"JAFGOL01"	= "#a6761d","Methanobacteriota_B"	= "#666666","Micrarchaeota"	= "#f0027f","Myxococcota"	= "#bf5b17",
+"Nanoarchaeota"	= "#984ea3","Patescibacteria"	= "#ff7f00","Planctomycetota"	= "#a6cee3","Proteobacteria"	= "#1f78b4",
+"Ratteibacteria" =	"#b2df8a","Thermoplasmatota" =	"#cab2d6","Thermotogota"	= "#fb9a99","Verrucomicrobiota" =	"#33a02c")
+
+#p <- ggplot(MAG_count_phylum_sample_INF, aes(x = "", y = n, fill = phylum)) +
+#p <- ggplot(MAG_count_phylum_sample_EFF, aes(x = "", y = n, fill = phylum)) +
+p <- ggplot(MAG_count_phylum_sample_SLU, aes(x = "", y = n, fill = phylum)) +
+  geom_col() + scale_fill_manual(values = c(cols)) +
+  #ggtitle("Influent") +
+  #ggtitle("Effluent") +
+  ggtitle("Sludge") +
+  theme_minimal() +
+  theme(text = element_text(family = "Palatino"),
+        panel.background = element_blank(),
+        plot.background = element_blank(),
+        panel.grid = element_blank(),
+        axis.title = element_blank(),
+        axis.text = element_text(size = 20),
+        plot.title = element_text(size = 30, hjust = 0.5),
+        legend.text = element_text(size = 20),
+        legend.title = element_blank()) +
+  coord_polar(theta = "y")
+p
+
+ggsave(filename = "plots/MAGs_pie_INF.png",
+       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+
+ggsave(filename = "plots/MAGs_pie_EFF.png",
+       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+
+ggsave(filename = "plots/MAGs_pie_SLU.png",
+       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
 ```
 
 # Plot HiFi MAG Pipeline results
@@ -368,7 +411,11 @@ long_MAG_counts <- melt(setDT(MAG_counts), id.vars = c("Sample"), variable.name 
 colnames(long_MAG_counts) <- c("sample", "MAGs", "count")
 
 # Colors
-cols <- c("#87bbda", "#0540a0")
+#cols <- c("#87bbda", "#0540a0")
+
+cols <- c("#17b2c2", "#47ecfd", "#29b3fc", "#f9e30a", "#fcf0a0", "#eac51e","#e38236","#fec191", "#daa187")
+
+#cols <- c("EFF1" = "#17b2c2", "EFF2" = "#47ecfd", "EFF3" = "#29b3fc","INF1" = "#f9e30a", "INF2" = "#fcf0a0", "INF3" = "#eac51e","SLU1" = "#e38236", "SLU2" = "#fec191", "SLU3" = "#daa187")
 
 # Reorder
 long_MAG_counts$sample <- factor(long_MAG_counts$sample,
@@ -397,15 +444,35 @@ long_MAG_counts$ARGs[long_MAG_counts$ARGs == 0] <- ' '
 # Plot
 p <- ggplot(long_MAG_counts, aes(x = sample, y = count, fill = MAGs, label = ARGs)) + 
   geom_bar(stat = "identity", alpha = 0.5) + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  geom_text(size = 10, position = position_stack(vjust = .5), color = "red", family = "Courier",
-            #data = long_MAG_counts[long_MAG_counts$ARGs > 0,]
-            ) +
+  geom_text(size = 10, position = position_stack(vjust = .5), color = "red", family = "Courier",) +
   ggtitle("Number of MAGs by HiFi MAG Pipeline") +  theme_minimal() +
   scale_y_continuous(expand = c(0,0)) +
   theme(
         text = element_text(family = "Palatino"),
         legend.text = element_text(size = 30),
         legend.title = element_blank(),
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_text(size = 24, face = "bold"),
+        plot.title = element_text(size = 30))
+p
+
+
+p <- ggplot(long_MAG_counts, aes(x = sample, y = count, fill = interaction(sample, MAGs), label = ARGs)) + 
+  geom_bar(stat = "identity") +
+  geom_text(size = 10, position = position_stack(vjust = .5), color = "red", family = "Palatino") +
+  theme_minimal() +
+  scale_fill_manual(values = c(EFF1.HQ_MAGs = "#17b2c2", EFF2.HQ_MAGs = "#47ecfd", EFF3.HQ_MAGs = "#29b3fc",
+                               EFF1.other_MAGs = "#98e6ee", EFF2.other_MAGs = "#bff8fe", EFF3.other_MAGs = "#b7e0f6",
+                               INF1.HQ_MAGs = "#f9e30a", INF2.HQ_MAGs = "#fcf0a0", INF3.HQ_MAGs = "#eac51e",
+                               INF1.other_MAGs = "#fef174", INF2.other_MAGs = "#f9f5de", INF3.other_MAGs = "#f0de8e",
+                               SLU1.HQ_MAGs = "#e38236", SLU2.HQ_MAGs = "#fec191", SLU3.HQ_MAGs = "#daa187",
+                               SLU1.other_MAGs = "#e5aa7c", SLU2.other_MAGs = "#ffdcc0", SLU3.other_MAGs = "#dbbeb1")) +
+  ggtitle("Number of MAGs by HiFi MAG Pipeline") +  theme_minimal() +
+  scale_y_continuous(expand = c(0,0)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.position = "none",
         axis.title = element_blank(),
         axis.text.y = element_text(size = 30),
         axis.text.x = element_text(size = 24, face = "bold"),
