@@ -74,6 +74,7 @@ cd WW_data/EFF3_matrices/flattened
 cd WW_data/EFF2_matrices/flattened
 cd WW_data/INF2_matrices/flattened
 cd WW_data/INF3_matrices/flattened
+cd WW_data/SLU2_matrices/flattened
 
 # make copies of the .tsv files....
 cp m6A.tsv cp_m6A.tsv
@@ -88,7 +89,8 @@ less m4C.tsv | wc -l
 #yes "EFF3" | head -n 54829 > sample
 #yes "EFF2" | head -n 59694 > sample
 #yes "INF2" | head -n 62223 > sample
-yes "INF3" | head -n 62794 > sample
+#yes "INF3" | head -n 62794 > sample
+yes "SLU2" | head -n 76128 > sample
 
 # Remove extra contig names
 cut -f 2-  m6A.tsv > tmp && mv tmp m6A.tsv
@@ -100,7 +102,8 @@ cut -f 2-  modified_base.tsv > tmp && mv tmp modified_base.tsv
 #paste m4C.tsv modified_base.tsv m6A.tsv sample > EFF3_concat_matrices.tsv
 #paste m4C.tsv modified_base.tsv m6A.tsv sample > EFF2_concat_matrices.tsv
 #paste m4C.tsv modified_base.tsv m6A.tsv sample > INF2_concat_matrices.tsv
-paste m4C.tsv modified_base.tsv m6A.tsv sample > INF3_concat_matrices.tsv
+#paste m4C.tsv modified_base.tsv m6A.tsv sample > INF3_concat_matrices.tsv
+paste m4C.tsv modified_base.tsv m6A.tsv sample > SLU2_concat_matrices.tsv
 
 # Check number of columns
 #awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
@@ -110,6 +113,7 @@ paste m4C.tsv modified_base.tsv m6A.tsv sample > INF3_concat_matrices.tsv
 #awk -F'\t' '{print NF; exit}' EFF2_concat_matrices.tsv
 #awk -F'\t' '{print NF; exit}' INF2_concat_matrices.tsv
 awk -F'\t' '{print NF; exit}' INF3_concat_matrices.tsv
+awk -F'\t' '{print NF; exit}' SLU2_concat_matrices.tsv
 # 494
 
 # Check row names
@@ -119,7 +123,8 @@ awk -F'\t' '{print NF; exit}' INF3_concat_matrices.tsv
 #less EFF3_concat_matrices.tsv | cut -f 1 | head
 #less EFF2_concat_matrices.tsv | cut -f 1 | head
 #less INF2_concat_matrices.tsv | cut -f 1 | head
-less INF3_concat_matrices.tsv | cut -f 1 | head
+#less INF3_concat_matrices.tsv | cut -f 1 | head
+less SLU2_concat_matrices.tsv | cut -f 1 | head
 
 # Add the final column headers
 ## *This is just given now based on previous analyses, could be a function to make it*
@@ -132,7 +137,8 @@ cat ../../header.tsv | cut -f 1-493 > tmp
 #cat tmp EFF3_concat_matrices.tsv > temp_EFF3_concat_matrices.tsv && mv temp_EFF3_concat_matrices.tsv EFF3_concat_matrices.tsv
 #cat tmp EFF2_concat_matrices.tsv > temp_EFF2_concat_matrices.tsv && mv temp_EFF2_concat_matrices.tsv EFF2_concat_matrices.tsv
 #cat tmp INF2_concat_matrices.tsv > temp_INF2_concat_matrices.tsv && mv temp_INF2_concat_matrices.tsv INF2_concat_matrices.tsv
-cat tmp INF3_concat_matrices.tsv > temp_INF3_concat_matrices.tsv && mv temp_INF3_concat_matrices.tsv INF3_concat_matrices.tsv
+#cat tmp INF3_concat_matrices.tsv > temp_INF3_concat_matrices.tsv && mv temp_INF3_concat_matrices.tsv INF3_concat_matrices.tsv
+cat tmp SLU2_concat_matrices.tsv > temp_SLU2_concat_matrices.tsv && mv temp_SLU2_concat_matrices.tsv SLU2_concat_matrices.tsv
 
 # add header 'sample' as the last column name
 
@@ -143,7 +149,8 @@ cat tmp INF3_concat_matrices.tsv > temp_INF3_concat_matrices.tsv && mv temp_INF3
 #less EFF3_concat_matrices.tsv  | cut -f 1 | head
 #less EFF2_concat_matrices.tsv  | cut -f 1 | head
 #less INF2_concat_matrices.tsv  | cut -f 1 | head
-less INF3_concat_matrices.tsv  | cut -f 1 | head
+#less INF3_concat_matrices.tsv  | cut -f 1 | head
+less SLU2_concat_matrices.tsv  | cut -f 1 | head
 
 # Check number of cols
 #awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
@@ -152,7 +159,8 @@ less INF3_concat_matrices.tsv  | cut -f 1 | head
 #awk -F'\t' '{print NF; exit}' EFF3_concat_matrices.tsv
 #awk -F'\t' '{print NF; exit}' EFF2_concat_matrices.tsv
 #awk -F'\t' '{print NF; exit}' INF2_concat_matrices.tsv
-awk -F'\t' '{print NF; exit}' INF3_concat_matrices.tsv
+#awk -F'\t' '{print NF; exit}' INF3_concat_matrices.tsv
+awk -F'\t' '{print NF; exit}' SLU2_concat_matrices.tsv
 
 # Rename according to included modifications
 #mv EFF1_concat_matrices.tsv EFF1_concat_matrices_top100.tsv
@@ -161,7 +169,8 @@ awk -F'\t' '{print NF; exit}' INF3_concat_matrices.tsv
 #mv EFF3_concat_matrices.tsv EFF3_concat_matrices_top100.tsv
 #mv EFF2_concat_matrices.tsv EFF2_concat_matrices_top100.tsv
 #mv INF2_concat_matrices.tsv INF2_concat_matrices_top100.tsv
-mv INF3_concat_matrices.tsv INF3_concat_matrices_top100.tsv
+#mv INF3_concat_matrices.tsv INF3_concat_matrices_top100.tsv
+mv SLU2_concat_matrices.tsv SLU2_concat_matrices_top100.tsv
 ```
 ## Let's create mod count data also for the WW data set
 ```
