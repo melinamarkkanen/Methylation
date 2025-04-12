@@ -19,3 +19,7 @@ done
 
 # Check lengths
 seqkit fx2tab --length --name --header-line WW_data/MAGs/$sample/$cluster/*_contigs/*.fasta >> WW_data/MAGs/$sample/$cluster/$cluster"_lengths.txt"
+
+# Combine contigs
+cat WW_data/MAGs/$sample/$cluster/above100_contigs/*.fasta > WW_data/MAGs/$sample/$cluster/above100_contigs/all.fasta
+cp WW_data/MAGs/$sample/$cluster/above100_contigs/all.fasta WW_data/MAGs/$sample/$cluster/above100_contigs/all.fa
