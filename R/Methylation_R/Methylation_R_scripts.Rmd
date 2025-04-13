@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(dplyr)
 library(data.table)
+library(tidyr)
+library(phyloseq)
 ```
 
 # Colors
@@ -483,8 +485,178 @@ ggsave(filename = "plots/Pipeline_MAGs.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
 ```
 
+# Kaiju, WW data
+```{r}
+WW_kaiju_summary <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/WW_kaiju_summary.tsv")
 
+# Into numeric
+WW_kaiju_summary$percent <- as.numeric(WW_kaiju_summary$percent)
 
+# Top % 1?
+#WW_kaiju_summary_filt <- WW_kaiju_summary %>% filter(percent > 1)
+WW_kaiju_summary_filt <- WW_kaiju_summary %>% filter(percent > 2)
+```
+## Plot
+```{r}
+cols <- c("#34495E","#87F28A", "#F1C40F", "#9B59B6", "#1ABC9C","#E74C3C", 
+          "#FFB6B0", "#8C510A", "#808000", "#00FFFF", "#FF00FF", "#E67E22", "#16A085",
+          "#2980B9", "#D35400", "#f6b178", "grey", "#605c5a", "black")
 
+WW_kaiju_summary_filt$taxon_name <- factor(WW_kaiju_summary_filt$taxon_name, 
+                                        levels=c("Methylotenera", "Rhodoferax", "Arcobacter", "Acinetobacter", "Flavobacterium", "Aliarcobacter", "Acidovorax", "Lactococcus", "Aeromonas", "Bacteroides", "Candidatus Cloacimonas", "Anaerolinea", "Methanothrix", "Petrimonas", "Brevefilum", "Pelolinea", "Viruses", "cannot be assigned to a (non-viral) genus", "unclassified"))
+  
+p <- ggplot(WW_kaiju_summary_filt, aes(x = sample, y = percent, fill = taxon_name)) + 
+  geom_bar(stat = "identity") + theme_minimal() + 
+  ggtitle("Bacterial composition, WW dataset (Kaiju)") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,100)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(face = "italic", size = 30),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        strip.text = element_text(size = 18),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_text(size = 20),
+        plot.title = element_text(size = 30)) + 
+  scale_fill_manual(values=c(cols))
+p
 
+ggsave(filename = "plots/WW_kaiju.png",
+       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+```
 
+# Sylph
+```{r}
+# Load data
+Sylph_HiFi_merged <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/Sylph_HiFi_merged.txt", row.names=1)
+
+# Tax table
+tax_table0 <- data.frame("rownames" = rownames(Sylph_HiFi_merged))
+tax_table <- separate(tax_table0, rownames, 
+                       into = c("domain", "phylum", "class", "order", "family", "genus", "species", "strain"), sep = "\\|",
+                       fill = "right", remove = TRUE)
+tax_table$domain <- gsub("d__", "", tax_table$domain)
+tax_table$phylum <- gsub("p__", "", tax_table$phylum)
+tax_table$class <- gsub("c__", "", tax_table$class)
+tax_table$order <- gsub("o__", "", tax_table$order)
+tax_table$family <- gsub("f__", "", tax_table$family)
+tax_table$genus <- gsub("g__", "", tax_table$genus)
+tax_table$species <- gsub("s__", "", tax_table$species)
+tax_table$strain <- gsub("t__", "", tax_table$strain)
+
+# Otu table
+OTU_table = Sylph_HiFi_merged
+rownames(OTU_table) <- 1:nrow(Sylph_HiFi_merged)
+rownames(OTU_table) <- paste0("sp", rownames(OTU_table))
+
+# Sample data
+metadata <- data.frame("sample_type" = rep(c("effluent", "influent", "sludge"), each = 3),
+                       "sample" = colnames(OTU_table))
+rownames(metadata) <- colnames(OTU_table)
+meta <- sample_data(metadata)
+
+# Phyloseq
+OTU = otu_table(OTU_table, taxa_are_rows = TRUE)
+tax_table_matrix <- as.matrix(tax_table)
+TAX = tax_table(tax_table_matrix)
+
+PHY <- phyloseq(OTU, TAX, meta)
+
+# Subset
+PHY_bac <- subset_taxa(PHY, domain == "Bacteria")
+PHY_bac_genus <- tax_glom(PHY_bac, taxrank = "genus")
+```
+
+# Plot ordination
+```{r}
+# Perform PCoA
+ord_PHY_bac_genus <- ordinate(PHY_bac_genus, method = "PCoA", distance = "bray")
+
+cols <- c("#17b2c2", "#47ecfd", "#29b3fc", "#f9e30a", "#fcf0a0", "#eac51e","#e38236","#fec191", "#daa187")
+
+# Plot the PCoA
+p <- plot_ordination(PHY_bac_genus, ord_PHY_bac_genus, color = "sample") + 
+  geom_point(size = 4) +
+  theme_minimal() +
+  theme(legend.title = element_blank(),
+        legend.text = element_text(size = 24),
+        text = element_text(family = "Palatino"),
+        plot.title = element_text(size = 30),
+        axis.text = element_text(size = 24),
+        axis.title = element_text(size = 24, face = "bold")) +
+  ggtitle("PCoA of Bray-Curtis Distance") + scale_color_manual(values = c(cols))
+p
+
+ggsave(filename = "plots/WW_sylph_ord.png",
+       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+```
+
+# Plot bars
+```{r}
+cols <- c("#34495E","#87F28A", "#F1C40F", "#9B59B6", "#1ABC9C","#E74C3C", 
+          "#FFB6B0", "#8C510A", "#808000", "#00FFFF", "#FF00FF", "#E67E22", "#16A085",
+          "#2980B9", "#D35400", "#f6b178", "grey", "#605c5a", "black")
+
+top_n <- 15
+
+PHY_bac_genus_rel <- transform_sample_counts(PHY_bac_genus, function(x) x / sum(x))
+
+# Get total abundance for each taxon
+taxa_sums_total <- taxa_sums(PHY_bac_genus_rel)
+top_taxa <- names(sort(taxa_sums_total, decreasing = TRUE))[1:top_n]
+
+# Subset the phyloseq object to keep only those taxa
+PHY_bac_genus_rel_top <- prune_taxa(top_taxa, PHY_bac_genus_rel)
+
+p <- plot_bar(PHY_bac_genus_rel_top, fill = "genus") + 
+  geom_bar(stat = "identity") + theme_minimal() + 
+  ggtitle("15 most abundant genera, WW dataset (Sylph)") +
+  scale_y_continuous(expand = c(0,0)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(face = "italic", size = 30),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        strip.text = element_text(size = 18),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_blank(),
+        plot.title = element_text(size = 30)) + 
+  scale_fill_manual(values=c(cols))
+p
+
+ggsave(filename = "plots/WW_sylph_top15.png",
+       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+```
+
+# Try those > 10 % 
+```{r}
+cols <- c("#34495E","#87F28A", "#F1C40F", "#080bf0", "#605c5a", "#1ABC9C","#E74C3C", 
+          "#FFB6B0", "#c9f063",  "#8C510A", "#808000", "#00FFFF", "#FF00FF", "#E67E22", "#16A085",
+          "#2980B9", "#D35400", "#f6b178", "#7304b6", "#A3E4D7", "#C0392B", "#04b627", "#AF7AC5", "black")
+
+PHY_bac_genus_rel <- transform_sample_counts(PHY_bac_genus, function(x) x / sum(x))
+
+# Get total relative abundance for each taxon across all samples
+PHY_bac_genus_rel_total_abund <- taxa_sums(PHY_bac_genus_rel)
+
+PHY_bac_genus_rel_filtered <- prune_taxa(PHY_bac_genus_rel_total_abund > 0.1, PHY_bac_genus_rel)
+
+p <- plot_bar(PHY_bac_genus_rel_filtered, fill = "genus") + 
+  geom_bar(stat = "identity") + theme_minimal() + 
+  ggtitle("Most abundant genera (>10 %), WW dataset (Sylph)") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,1)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(face = "italic", size = 20),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        strip.text = element_text(size = 18),
+        axis.text.y = element_text(size = 20),
+        axis.text.x = element_text(size = 20),
+        plot.title = element_text(size = 30)) + 
+  scale_fill_manual(values=c(cols))
+p
+
+ggsave(filename = "plots/WW_sylph_>10.png",
+       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+```

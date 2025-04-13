@@ -270,23 +270,170 @@ grep -f search.txt EFF1_resfinder_out.txt
 nano EFF2_lista.txt
 
 for i in $(less EFF2_lista.txt);do grep -A 1 -f <(echo "$i") EFF2_contigs.fasta > "EFF2_"$i".fasta";done
+for i in $(less INF1_lista.txt);do grep -A 1 -f <(echo "$i") INF1_contigs.fasta > "INF1_"$i".fasta";done
+for i in $(less INF3_lista.txt);do grep -A 1 -f <(echo "$i") INF3_contigs.fasta > "INF3_"$i".fasta";done
+for i in $(less SLU1_lista.txt);do grep -A 1 -f <(echo "$i") SLU1_contigs.fasta > "SLU1_"$i".fasta";done
+for i in $(less SLU2_lista.txt);do grep -A 1 -f <(echo "$i") SLU2_contigs.fasta > "SLU2_"$i".fasta";done
+for i in $(less SLU3_lista.txt);do grep -A 1 -f <(echo "$i") SLU3_contigs.fasta > "SLU3_"$i".fasta";done
 
 # Run Bakta
 WW_bakta.sh
 
 # Get locations of erm(F)_3 based on bakta and then ResFinder 
-cd /scratch/project_2006608/Methylation/WW_data/erm_F
+cd /scratch/project_2006608/Methylation/WW_data/erm_F_UMAP
 cat *_bakta_out/*l.tsv | grep "erm(F)" > erm_F_location.txt
-#cat *_bakta_out/*c.tsv | grep "erm(F)" >> erm_F_location.txt
 
+# Tidy
 awk '{print $1,$3,$4}' erm_F_location.txt > tmp && mv tmp erm_F_location.txt
 sed -i 's/ /\t/g' erm_F_location.txt
 
+# Check if we have all erm(F) location
+cut -f1 erm_F_location.txt | sort > ID_erm_F_location.txt
+
+sed 's/^[A-Z][A-Z][A-Z][0-9]_//g' contig_names.txt | sort > sorted_contig_names.txt
+comm -3 sorted_contig_names.txt ID_erm_F_location.txt > non_matching.txt
+
+        s1.ctg015106l (duplicated)
+s2862.ctg004065l (-> BLAST) # 78468   79266
+s31155.ctg040907l (-> BLAST) # 20099   20898
+        s37987.ctg058715l (duplicated)
+        s3.ctg008624l (duplicated)
+        s4.ctg007717l (duplicated)
+        s4.ctg054975l (duplicated)
+        s4.ctg055934l (duplicated)
+s4.ctg060290l (-> BLAST) # 24349   25073
+s854.ctg000934l (-> BLAST) # 100396  101192
+s8619.ctg012505l (-> BLAST) # 24847   25648
+
 # Blastn in interactive
+blastn -query SLU1_s8619.ctg012505l.fasta \
+        -subject ../../db/resfinder_db/all.fsa \
+        -out SLU1_s8619.ctg012505l_resfinder_out.txt -outfmt 6
 
-# Manually add the locations from blast results to erm_F_location.txt
+# Fix the duplicates so that there is the start of the first aand end of the second
 
-# extract perhaps 5000 bp?
+cd src/
+./WW_get_regions.sh ../WW_data/erm_F_UMAP/erm_F_location.txt
+
+# replace negative with one
+cd /scratch/project_2006608/Methylation/WW_data/erm_F_UMAP
+less erm_F_location_flanking.txt | grep "-"
+
+sed -i 's/-[0-9][0-9][0-9]/1/g' erm_F_location_flanking.txt
+sed -i 's/-[0-9][0-9]/1/g' erm_F_location_flanking.txt
+less erm_F_location_flanking.txt | grep "-"
+
+rm startFlank.txt
+rm endFlank.txt
+
+# Create new accession list
+cut -f 1 erm_F_location_flanking.txt  > updated_contig_names.txt
+less updated_contig_names.txt | sort | uniq > tmp && mv tmp updated_contig_names.txt
+
+mkdir extracted_data
+
+cd src
+./WW_extract_regions.sh
+
+# Run Bakta for extracted_data/
+src/WW_bakta.sh
+
+
+# Proovframe
+cd extracted_data
+mkdir proovframe
+
+# gather
+cat *bakta_out/*.fna > proovframe/all_erm_F.fasta
+cat *bakta_out/*l.faa > proovframe/reference_proteins.faa
+
+module load cdhit/4.8.1
+cd-hit -i proovframe/reference_proteins.faa -o proovframe/reference_proteins_proovframe.faa -c 0.90
+
+module load diamond/2.0.15
+/projappl/project_2006608/proovframe/bin/proovframe map -a proovframe/reference_proteins_proovframe.faa -o proovframe/raw-seqs.tsv proovframe/all_erm_F.fasta
+
+/projappl/project_2006608/proovframe/bin/proovframe fix proovframe/all_erm_F.fasta proovframe/raw-seqs.tsv -o proovframe/erm_F_proovframe.fasta
+
+# chgeck lenghths
+seqkit fx2tab --length --header-line --name proovframe/erm_F_proovframe.fasta > proovframe/erm_F_proovframe_lengths.txt
+
+cd proovframe
+seqretsplit erm_F_proovframe.fasta
+
+
+# Run Bakta for extracted_data/
+src/WW_bakta.sh
+
+export SING_IMAGE=/projappl/project_2006608/containers/clinker-py:0.0.27.sif
+apptainer_wrapper exec clinker filt_clinker_in/*.gff3 \
+	-p filt_erm_F_UMAP_clinker.html \
+	-o filt_erm_F_UMAP_clinker \
+	-j $SLURM_CPUS_PER_TASK
+
+
+# Manually delete irrelevatnt or similar?
+s4.ctg054887l
+s4.ctg010166l
+s4.ctg029731l
+s4.ctg037799l
+s37987.ctg058715l
+s4.ctg052345l
+s4.ctg071650l
+s22979.ctg033358l
+s4.ctg000209l
+s6474.ctg009302l
+s4.ctg070925l
+s3.ctg053122l
+s4.ctg025384l
+s14999.ctg021421l
+s4.ctg049745l
+s4.ctg058357l
+s1.ctg056374l
+s1.ctg053661l
+s1.ctg028931l
+s4.ctg070413l
+s4.ctg061900l
+s4.ctg070966l
+s4.ctg060290l
+s3.ctg032770l
+s36085.ctg053718l
+s4.ctg039112l
+s1.ctg054652l
+s1.ctg005613l
+s4.ctg002005l
+s29850.ctg043846l
+s1.ctg014953l
+s3.ctg020519l
+s4.ctg008364l
+s3.ctg024443l
+s1.ctg038683l
+s3.ctg009156l
+s1.ctg016354l
+s9662.ctg013976l
+s4.ctg017149l
+s1.ctg003992l
+s3.ctg056747l
+s3.ctg030960l
+s4.ctg031768l
+s3.ctg023144l
+s35546.ctg052216l
+s3.ctg008684l
+s3996.ctg005390l
+s28016.ctg030850l
+s22590.ctg032742l
+s4.ctg024145l
+s14622.ctg020871l
+
+
+
+
+
+
+
+
+
+
 
 # cluster to remove redundancy
 
