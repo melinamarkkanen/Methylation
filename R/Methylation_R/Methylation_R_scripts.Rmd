@@ -91,35 +91,36 @@ kaiju_summary_filt$sample_info = factor(kaiju_summary_filt$sample_info,
 ```
 ## Plot
 ```{r}
-cols <- c("#34495E","#3498DB", "#87F28A", "#F1C40F", "#9B59B6", "#1ABC9C","#E74C3C", 
-          "black", "#FFB6B0", "#8C510A", "#808000", "#00FFFF", "#FF00FF", "grey")
+cols <- c("#34495E", "#800080", "#3bccf7", "#9ACD32", "#8B4513", "#00FF00", "#E74C3C", "black", "#DAA520", "#800000", "#000080", "#4682B4", "#008080", "grey")
+
+kaiju_summary_filt[kaiju_summary_filt == "cannot be assigned to a (non-viral) genus"] <- "unknown"
 
 kaiju_summary_filt$taxon_name <- factor(kaiju_summary_filt$taxon_name, 
                                         levels=c('Acinetobacter', 'Aeromonas', 'Agrobacterium',
                                                  'Azorhizobium', 'Azospirillum', 'Citrobacter',
                                                  'Elizabethkingia', 'Enterococcus', 'Kluyvera',
                                                  'Paracoccus', 'Pseudomonas', 'Sphingobacterium',
-                                                 'Sphingobium', 'cannot be assigned to a (non-viral) genus'))
-  
+                                                 'Sphingobium', 'unknown'))
+
 p <- ggplot(kaiju_summary_filt, aes(x = sample, y = percent, fill = taxon_name)) + 
-  geom_bar(stat = "identity") + theme_minimal() + 
-  ggtitle("Bacterial composition, HAMBI dataset (Kaiju)") +
+  geom_bar(stat = "identity", alpha = 0.85) + theme_minimal() + 
+  ggtitle("Bacterial composition, HAMBI data,\nAbundance > 1 % (Kaiju)") +
   scale_y_continuous(expand = c(0,0), limits = c(0,100)) +
   theme(
         text = element_text(family = "Palatino"),
-        legend.text = element_text(face = "italic", size = 30),
+        legend.text = element_text(size = 20, face = "italic"),
         legend.title = element_blank(),
         axis.title = element_blank(),
         strip.text = element_text(size = 18),
         axis.text.y = element_text(size = 30),
         axis.text.x = element_blank(),
-        plot.title = element_text(size = 30)) + 
+        plot.title = element_text(size = 30, face = "bold")) + 
   scale_fill_manual(values=c(cols)) + 
   facet_grid(~sample_info, space = "free", scale = "free", 
              labeller = label_wrap_gen(width=16), switch = "both")
 p
 
-ggsave(filename = "plots/kaiju.png",
+ggsave(filename = "plots/HAMBI_kaiju.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
 ```
 
@@ -277,13 +278,13 @@ ggsave(filename = "plots/HQ_MAGs_species.png",
 ## Phylum
 p <- ggplot(MAG_count_phylum_sample, aes(x = phylum, y = n, fill = Sample)) + 
   geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  ggtitle("All MAGs by HiFi MAG Pipeline (phylum)") +
+  ggtitle("MAGs by HiFi MAG Pipeline (phylum)") +
   scale_y_continuous(expand = c(0,0)
                      #, limits = c(0,50)
                      ) +
   theme(
         text = element_text(family = "Palatino"),
-        legend.text = element_text(size = 30),
+        legend.text = element_text(size = 20),
         legend.title = element_blank(),
         axis.title = element_blank(),
         axis.text.y = element_text(size = 30),
@@ -298,7 +299,7 @@ ggsave(filename = "plots/MAGs_phylum.png",
 ## Class
 p <- ggplot(MAG_count_class_sample, aes(x = class, y = n, fill = Sample)) + 
   geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  ggtitle("All MAGs by HiFi MAG Pipeline (class)") +
+  ggtitle("MAGs by HiFi MAG Pipeline (class)") +
   scale_y_continuous(expand = c(0,0)
                      #, limits = c(0,50)
                      ) +
@@ -319,7 +320,7 @@ ggsave(filename = "plots/MAGs_class.png",
 ## Genus
 p <- ggplot(MAG_count_genus_sample, aes(x = genus, y = n, fill = Sample)) + 
   geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  ggtitle("All MAGs by HiFi MAG Pipeline (genus)") +
+  ggtitle("MAGs by HiFi MAG Pipeline (genus)") +
   scale_y_continuous(expand = c(0,0)
                      #, limits = c(0,45)
                      ) +
@@ -340,7 +341,7 @@ ggsave(filename = "plots/MAGs_genus.png",
 ## Species
 p <- ggplot(MAG_count_species_sample, aes(x = species, y = n, fill = Sample)) + 
   geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  ggtitle("All MAGs by HiFi MAG Pipeline (species)") +
+  ggtitle("MAGs by HiFi MAG Pipeline (species)") +
   scale_y_continuous(expand = c(0,0)
                      #, limits = c(0,50)
                      ) +
@@ -356,37 +357,42 @@ p
 
 ggsave(filename = "plots/MAGs_species.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
-
+```
 # Pie chart
+```{r}
 MAG_count_phylum_sample_INF <- MAG_count_phylum_sample[grepl("INF", MAG_count_phylum_sample$Sample), ]
 MAG_count_phylum_sample_EFF <- MAG_count_phylum_sample[grepl("EFF", MAG_count_phylum_sample$Sample), ]
 MAG_count_phylum_sample_SLU <- MAG_count_phylum_sample[grepl("SLU", MAG_count_phylum_sample$Sample), ]
 
 # Colors
-cols <- c("Acidobacteriota"	= "#d1495b","Actinobacteriota" = "#edb183","Armatimonadota"	= "#c0caad","Bacteroidota"	= "#ffb400",
-"Caldisericota"	= "#f28500","Campylobacterota"	= "#a593e0","Chloroflexota"	= "#70c1b3","Cloacimonadota"	= "#547aa5",
-"Desulfobacterota"	= "#5e4fa2","Desulfobacterota_G"	= "#3b528b","Firmicutes"	= "#abdda4","Firmicutes_A"	= "#66c2a5",
-"Firmicutes_B"	= "#3288bd","Firmicutes_G"	= "#1b9e77","Halobacteriota"	= "#e7298a","Hydrogenedentota"	= "#e6ab02",
-"JAFGOL01"	= "#a6761d","Methanobacteriota_B"	= "#666666","Micrarchaeota"	= "#f0027f","Myxococcota"	= "#bf5b17",
-"Nanoarchaeota"	= "#984ea3","Patescibacteria"	= "#ff7f00","Planctomycetota"	= "#a6cee3","Proteobacteria"	= "#1f78b4",
-"Ratteibacteria" =	"#b2df8a","Thermoplasmatota" =	"#cab2d6","Thermotogota"	= "#fb9a99","Verrucomicrobiota" =	"#33a02c")
+cols <- c("Acidobacteriota"	= "#e6194b","Actinobacteriota" = "#3cb44b","Armatimonadota"	= "#ffe119","Bacteroidota"	= "#808000", 
+          "Bdellovibrionota" = "#7b68ee", "Cyanobacteria" = "#1f78b4",
+          "Caldisericota"	= "#f28500","Campylobacterota"	= "#911eb4","Chloroflexota"	= "#46f0f0","Cloacimonadota"	= "#f032e6",
+          "Nitrospirota" = "#ae7e8e", "Omnitrophota" = "#beebec",
+          "Desulfobacterota"	= "#5e4fa2","Desulfobacterota_G"	= "#000080","Firmicutes"	= "#abdda4","Firmicutes_A"	= "#66c2a5",
+          "Firmicutes_B"	= "#33a02c","Firmicutes_G"	= "#aaffc3","Halobacteriota"	= "#e6beff","Hydrogenedentota"	= "#e6ab02",
+          "JAFGOL01"	= "#a6761d","Methanobacteriota_B"	= "#666666","Micrarchaeota"	= "#f0027f","Myxococcota"	= "#808080",
+          "Nanoarchaeota"	= "#ffd8b1","Patescibacteria"	= "#fffac8","Planctomycetota"	= "#a6cee3","Proteobacteria"	= "#1e90ff",
+          "Ratteibacteria" =	"#800000","Thermoplasmatota" =	"black","Thermotogota"	= "#fb9a99","Verrucomicrobiota" =	"#fabebe")
 
-#p <- ggplot(MAG_count_phylum_sample_INF, aes(x = "", y = n, fill = phylum)) +
+
+p <- ggplot(MAG_count_phylum_sample_INF, aes(x = "", y = n, fill = phylum)) +
 #p <- ggplot(MAG_count_phylum_sample_EFF, aes(x = "", y = n, fill = phylum)) +
-p <- ggplot(MAG_count_phylum_sample_SLU, aes(x = "", y = n, fill = phylum)) +
+#p <- ggplot(MAG_count_phylum_sample_SLU, aes(x = "", y = n, fill = phylum)) +
   geom_col() + scale_fill_manual(values = c(cols)) +
-  #ggtitle("Influent") +
+  ggtitle("Influent") +
   #ggtitle("Effluent") +
-  ggtitle("Sludge") +
+  #ggtitle("Sludge") +
   theme_minimal() +
   theme(text = element_text(family = "Palatino"),
         panel.background = element_blank(),
         plot.background = element_blank(),
         panel.grid = element_blank(),
         axis.title = element_blank(),
-        axis.text = element_text(size = 20),
-        plot.title = element_text(size = 30, hjust = 0.5),
-        legend.text = element_text(size = 20),
+        axis.text = element_blank(),
+        plot.title = element_text(size = 30, hjust = 0.5, vjust = -0.5),
+        legend.position = "bottom",
+        legend.text = element_text(size = 20, face = "italic"),
         legend.title = element_blank()) +
   coord_polar(theta = "y")
 p
@@ -493,32 +499,52 @@ WW_kaiju_summary <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles
 WW_kaiju_summary$percent <- as.numeric(WW_kaiju_summary$percent)
 
 # Top % 1?
-#WW_kaiju_summary_filt <- WW_kaiju_summary %>% filter(percent > 1)
-WW_kaiju_summary_filt <- WW_kaiju_summary %>% filter(percent > 2)
+WW_kaiju_summary_filt <- WW_kaiju_summary %>% filter(percent > 1)
+#WW_kaiju_summary_filt <- WW_kaiju_summary %>% filter(percent > 2)
 ```
 ## Plot
 ```{r}
-cols <- c("#34495E","#87F28A", "#F1C40F", "#9B59B6", "#1ABC9C","#E74C3C", 
-          "#FFB6B0", "#8C510A", "#808000", "#00FFFF", "#FF00FF", "#E67E22", "#16A085",
-          "#2980B9", "#D35400", "#f6b178", "grey", "#605c5a", "black")
+unique(WW_kaiju_summary_filt$taxon_name)
+WW_kaiju_summary_filt[WW_kaiju_summary_filt == "cannot"] <- "unknown"
+unique(WW_kaiju_summary_filt$taxon_name)
+
+cols <- c("#FF6B6B", "#1ABC9C", "#000080", "#F5F5DC", "#34495E", "#6C5CE7", "#3294c1", "#B8E986", "#5d7b65",
+          "#7FDBFF", "#800080", "#a40500", "#87F28A", "#F1C40F", "#9B59B6", "#1cb9be","#E74C3C", 
+          "#FFB6B0", "#8C510A", "#808000", "#00FFFF", "#FF00FF",
+          "#2980B9", "#D35400", "#f6b178", "black", "grey", "#605c5a")
 
 WW_kaiju_summary_filt$taxon_name <- factor(WW_kaiju_summary_filt$taxon_name, 
-                                        levels=c("Methylotenera", "Rhodoferax", "Arcobacter", "Acinetobacter", "Flavobacterium", "Aliarcobacter", "Acidovorax", "Lactococcus", "Aeromonas", "Bacteroides", "Candidatus Cloacimonas", "Anaerolinea", "Methanothrix", "Petrimonas", "Brevefilum", "Pelolinea", "Viruses", "cannot be assigned to a (non-viral) genus", "unclassified"))
-  
+                                        levels=c("Methylotenera","Rhodoferax","Pseudomonas","Acidovorax","Acinetobacter",
+                                          "Hyphomicrobium","Flavobacterium","Arcobacter","Aliarcobacter","Lactococcus","Aeromonas",
+                                          "Bacteroides","Moraxella","Blautia","Faecalibacterium","Phocaeicola","Candidatus Cloacimonas",
+                                          "Anaerolinea","Methanothrix","Petrimonas","Brevefilum","Proteiniphilum","Pelolinea",
+                                          "Syntrophus","Tenuifilum","Viruses","unknown","unclassified"))
+
+# reorder samples
+WW_kaiju_summary_filt$type <- WW_kaiju_summary_filt$sample
+WW_kaiju_summary_filt$type <- str_sub(WW_kaiju_summary_filt$type, end = -2)
+order <- c("INF", "EFF", "SLU")
+WW_kaiju_summary_filt$type <- factor(WW_kaiju_summary_filt$type, levels = order)
+WW_kaiju_summary_filt = WW_kaiju_summary_filt[order(WW_kaiju_summary_filt$type), ]
+rownames(WW_kaiju_summary_filt) <- 1:nrow(WW_kaiju_summary_filt)
+
+WW_kaiju_summary_filt$sample <- factor(WW_kaiju_summary_filt$sample, levels = unique(WW_kaiju_summary_filt$sample))
+
 p <- ggplot(WW_kaiju_summary_filt, aes(x = sample, y = percent, fill = taxon_name)) + 
   geom_bar(stat = "identity") + theme_minimal() + 
-  ggtitle("Bacterial composition, WW dataset (Kaiju)") +
+  ggtitle("Bacterial composition, WW data,\nAbundance > 1 % (Kaiju)") +
   scale_y_continuous(expand = c(0,0), limits = c(0,100)) +
   theme(
         text = element_text(family = "Palatino"),
-        legend.text = element_text(face = "italic", size = 30),
+        legend.text = element_text(face = "italic", size = 20),
         legend.title = element_blank(),
         axis.title = element_blank(),
         strip.text = element_text(size = 18),
         axis.text.y = element_text(size = 30),
         axis.text.x = element_text(size = 20),
         plot.title = element_text(size = 30)) + 
-  scale_fill_manual(values=c(cols))
+  scale_fill_manual(values=c(cols)) +
+  facet_grid(~type, scales = "free_x", space = "free_x", labeller = labeller(type = function(x) rep("", length(x))))
 p
 
 ggsave(filename = "plots/WW_kaiju.png",
@@ -572,11 +598,11 @@ PHY_bac_genus <- tax_glom(PHY_bac, taxrank = "genus")
 # Perform PCoA
 ord_PHY_bac_genus <- ordinate(PHY_bac_genus, method = "PCoA", distance = "bray")
 
-cols <- c("#17b2c2", "#47ecfd", "#29b3fc", "#f9e30a", "#fcf0a0", "#eac51e","#e38236","#fec191", "#daa187")
+cols <- c("#17b2c2", "#47ecfd", "#29b3fc", "#f9e30a", "#fcf0a0", "#eac51e","#7c4107","#c89b6d", "#cc7442")
 
 # Plot the PCoA
 p <- plot_ordination(PHY_bac_genus, ord_PHY_bac_genus, color = "sample") + 
-  geom_point(size = 4) +
+  geom_point(size = 6) +
   theme_minimal() +
   theme(legend.title = element_blank(),
         legend.text = element_text(size = 24),
@@ -627,12 +653,12 @@ p
 ggsave(filename = "plots/WW_sylph_top15.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
 ```
-
 # Try those > 10 % 
 ```{r}
-cols <- c("#34495E","#87F28A", "#F1C40F", "#080bf0", "#605c5a", "#1ABC9C","#E74C3C", 
-          "#FFB6B0", "#c9f063",  "#8C510A", "#808000", "#00FFFF", "#FF00FF", "#E67E22", "#16A085",
-          "#2980B9", "#D35400", "#f6b178", "#7304b6", "#A3E4D7", "#C0392B", "#04b627", "#AF7AC5", "black")
+cols <- c("#F5F5DC", "#34495E", "#5d7b65", "#c9f7d1", "#D35400", "#a40500", "#c9f063", "#E74C3C",
+          "#A3E4D7", "#cfb189", "#3294c1", "#c1a3c0", "#7FDBFF", "#FF6B6B",
+          "#808000","#1ABC9C", "#584691", "#1cb9be", "#1f8d28", "#808000",
+          "#fe7fca", "#6698f5", "#FFB6B0", "#F1C40F", "#f6b178")
 
 PHY_bac_genus_rel <- transform_sample_counts(PHY_bac_genus, function(x) x / sum(x))
 
@@ -641,9 +667,30 @@ PHY_bac_genus_rel_total_abund <- taxa_sums(PHY_bac_genus_rel)
 
 PHY_bac_genus_rel_filtered <- prune_taxa(PHY_bac_genus_rel_total_abund > 0.1, PHY_bac_genus_rel)
 
-p <- plot_bar(PHY_bac_genus_rel_filtered, fill = "genus") + 
+# Reorder sample names
+# Reorder sample_type with custom levels
+sample_data(PHY_bac_genus_rel_filtered)$sample_type <- factor(sample_data(PHY_bac_genus_rel_filtered)$sample_type,
+                                       levels = c("influent", "effluent", "sludge"))
+
+# Function to remove border color
+plot_bar_2 <-  function (PHY_bac_genus_rel_filtered, x = "sample", y = "Abundance", fill = NULL, title = NULL, facet_grid = NULL, border_color = NA) 
+{
+  mdf = psmelt(PHY_bac_genus_rel_filtered)
+  p = ggplot(mdf, aes_string(x = x, y = y, fill = fill))
+  p = p + geom_bar(stat = "identity", position = "stack",  color = border_color)
+  p = p + theme(axis.text.x = element_text(angle = -90, hjust = 0))
+  if (!is.null(facet_grid)) {
+    p <- p + facet_grid(facet_grid)
+  }
+  if (!is.null(title)) {
+    p <- p + ggtitle(title)
+  }
+  return(p)
+}
+
+p <- plot_bar_2(PHY_bac_genus_rel_filtered, fill = "genus") + 
   geom_bar(stat = "identity") + theme_minimal() + 
-  ggtitle("Most abundant genera (>10 %), WW dataset (Sylph)") +
+  ggtitle("Bacterial composition, WW data,\nAbundance > 10 % (Sylph)") +
   scale_y_continuous(expand = c(0,0), limits = c(0,1)) +
   theme(
         text = element_text(family = "Palatino"),
@@ -654,9 +701,61 @@ p <- plot_bar(PHY_bac_genus_rel_filtered, fill = "genus") +
         axis.text.y = element_text(size = 20),
         axis.text.x = element_text(size = 20),
         plot.title = element_text(size = 30)) + 
-  scale_fill_manual(values=c(cols))
+  scale_fill_manual(values=c(cols)) + 
+  facet_grid(~sample_type, scales = "free_x", space = "free_x", labeller = labeller(sample_type = function(x) rep("", length(x))))
 p
 
 ggsave(filename = "plots/WW_sylph_>10.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+```
+
+# Only Bacteroidota
+```{r}
+##### Pitää miettiä
+PHY_bac_genus <- tax_glom(PHY_bac, taxrank = "genus")
+PHY_bac_genus_Bacteroidota <- subset_taxa(PHY_bac_genus, phylum == "Bacteroidota")
+
+#PHY_bac_genus_Bacteroidota_rel <- transform_sample_counts(PHY_bac_genus_Bacteroidota, function(x) x / sum(x))
+
+# Reorder sample_type with custom levels
+sample_data(PHY_bac_genus_Bacteroidota)$sample_type <- factor(sample_data(PHY_bac_genus_Bacteroidota)$sample_type,
+                                       levels = c("influent", "effluent", "sludge"))
+
+cols <- c("#F5F5DC", "#34495E", "#5d7b65", "#c9f7d1", "#D35400", "#a40500", "#c9f063", "#E74C3C",
+          "#A3E4D7", "#cfb189", "#3294c1", "#c1a3c0", "#7FDBFF", "#FF6B6B",
+          "#808000","#1ABC9C", "#584691", "#1cb9be", "#1f8d28", "#808000",
+          "#fe7fca", "#6698f5", "#FFB6B0", "#F1C40F", "#f6b178")
+
+p <- plot_bar_2(PHY_bac_genus_Bacteroidota, fill = "class") + 
+  geom_bar(stat = "identity") + theme_minimal() + 
+  ggtitle("Bacteroidota composition, WW data (Sylph)") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,1)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(face = "italic", size = 20),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        strip.text = element_text(size = 18),
+        axis.text.y = element_text(size = 20),
+        axis.text.x = element_text(size = 20),
+        plot.title = element_text(size = 30)) + 
+  scale_fill_manual(values=c(cols)) + 
+  facet_grid(~sample_type, scales = "free_x", space = "free_x", labeller = labeller(sample_type = function(x) rep("", length(x))))
+p
+```
+
+# Diversity of Bacteroidia across samples
+```{r}
+PHY_bac_genus <- tax_glom(PHY_bac, taxrank = "genus")
+PHY_bac_genus_Bacteroidota <- subset_taxa(PHY_bac_genus, phylum == "Bacteroidota")
+PHY_bac_genus_Bacteroidota <- prune_taxa(taxa_sums(PHY_bac_genus_Bacteroidota) > 0, PHY_bac_genus_Bacteroidota)
+
+PHY_bac_genus_Bacteroidota_rel <- transform_sample_counts(PHY_bac_genus_Bacteroidota, function(x) x / sum(x))
+
+# Get total relative abundance for each taxon across all samples
+PHY_bac_genus_rel_total_abund <- taxa_sums(PHY_bac_genus_rel)
+
+PHY_bac_genus_rel_filtered <- prune_taxa(PHY_bac_genus_rel_total_abund > 0.1, PHY_bac_genus_rel)
+
+div <- plot_richness(PHY_bac_genus_Bacteroidota, x = sample)
 ```
