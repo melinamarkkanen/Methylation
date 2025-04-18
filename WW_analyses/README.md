@@ -377,3 +377,36 @@ s4.ctg054887l
 ...
 ```
 
+### Sylph
+```
+# head -n 1 Sylph_HiFi_merged.txt > Sylph_HiFi_merged_genus.txt (?)
+awk '$1 ~ "clade_name" || $1 ~ "g__" {print $0}' Sylph_HiFi_merged.txt | grep -v "|t__" | grep -v "|s__"  > Sylph_HiFi_merged_genus_full.txt
+```
+
+### geNomad for ermF contigs
+```
+apptainer exec --bind $PWD:$PWD,$DB_PATH:$DB_PATH \
+        /projappl/project_2006608/containers/genomad:1.8.0.sif genomad end-to-end \
+	--cleanup --splits 8 $contig geNomad_out/$contig".fasta" $DB_PATH
+```
+
+
+### fARGene analysis
+```
+# Go to dir
+cd /scratch/project_2006608/Methylation/WW_data
+
+# Export program
+export PATH="/projappl/project_2006608/containers/fargene/bin:$PATH"
+
+# Set temp dir
+export TMPDIR="/scratch/project_2006608/Methylation/tmp_dir"
+
+# Run
+fargene -i fARGene_in/*.fasta \
+        --hmm-model /scratch/project_2006608/Methylation/db/fargene/fargene_analysis/models/aminoglycoside_model_i.hmm \
+        --score 100 \
+        -o fARGene_aminoglycoside_model_i_out -p $SLURM_CPUS_PER_TASK \
+```
+
+## Prepare results for UMAP
