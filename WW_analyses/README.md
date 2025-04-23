@@ -276,6 +276,7 @@ for i in $(less SLU1_lista.txt);do grep -A 1 -f <(echo "$i") SLU1_contigs.fasta 
 for i in $(less SLU2_lista.txt);do grep -A 1 -f <(echo "$i") SLU2_contigs.fasta > "SLU2_"$i".fasta";done
 for i in $(less SLU3_lista.txt);do grep -A 1 -f <(echo "$i") SLU3_contigs.fasta > "SLU3_"$i".fasta";done
 
+
 # Run Bakta
 WW_bakta.sh
 
@@ -370,7 +371,6 @@ apptainer_wrapper exec clinker filt_clinker_in/*.gff3 \
 	-p filt_erm_F_UMAP_clinker.html \
 	-o filt_erm_F_UMAP_clinker \
 	-j $SLURM_CPUS_PER_TASK
-
 
 # Manually delete irrelevatnt or similar?
 s4.ctg054887l

@@ -189,9 +189,9 @@
 
 ## Wastewater
 ### Number of contigs and analyzed for methylation
-| sample | contigs | .gff files | after filtering |
-|--------|---------|------------|-----------------|
-| EFF1   | 60537   | 60374      | ?               |
+| sample | contigs | .gff files | after filtering 50 lines in .gff |
+|--------|---------|------------|----------------------------------|
+| EFF1   | 60537   | 60374      | 60373                            |
 | EFF2   | 59860   | 59697      |                 |
 | EFF3   | 54991   | 54838      |                 |
 | INF1   | 65422   | 64745      |                 |
