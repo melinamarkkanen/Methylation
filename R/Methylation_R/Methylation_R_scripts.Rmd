@@ -15,6 +15,7 @@ library(data.table)
 library(tidyr)
 library(phyloseq)
 library(stringr)
+library(eulerr)
 ```
 
 # Colors
@@ -917,28 +918,132 @@ fargene = fargene[order(fargene$type), ]
 fargene$sample <- factor(fargene$sample, levels = unique(fargene$sample))
 
 
-cols <- c("#fabefa", "#d86950", "#ef360c", "#a27faf", "#c308a4", "#f7b2a5", "#c62204",
+cols <- c("#fabefa", "#d86950", "#ef360c", "#a27faf", "#c308a4", "#f7b2a5",
           "#04c60a", "#1e7e21", "#779e78", "black", "#66e4e4", "#25a5a5", "#e8db16",
           "#1656e8", "navyblue", "#86a4eb", "#5b48d8", "#146eb4",  "#6f87f3", "#85baec", "#04bdfe", "#0d68c2")
 
-p <- ggplot(fargene, aes(fill=class, y=value, x=type)) + 
-    geom_bar(position="dodge", stat="identity") +
+p <- ggplot(fargene, aes(fill=class, y=value, x=sample)) + 
+    geom_bar(stat="identity") +
     scale_y_continuous(expand = c(0,0)) +
     scale_fill_manual(values = c(cols)) +
     theme_minimal() +
     theme(text = element_text(family = "Palatino"),
           legend.title = element_blank(),
+          legend.text = element_text(size = 18),
+          strip.text = element_blank(),
           axis.title = element_blank(),
-          plot.title = element_text(size = 20, face = "bold"),
-          axis.text = element_text(size = 20, face = "bold")) + 
-  ggtitle("fARGene results")
+          plot.title = element_text(size = 30, face = "bold", hjust = 0.5),
+          axis.text = element_text(size = 20)) + 
+  ggtitle("fARGene results") + facet_grid(~type, scale = "free", space = "free")
 p
 
 ggsave(filename = "plots/WW_fARGene.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
 ```
 
+# Number of ARG MAGs by methylation & HiFi MAG Pipeline
+## Venn Diagram
+```{r}
+# https://jolars.github.io/eulerr/reference/plot.euler.html
+ARG_MAGs <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/ARG_MAGs.txt")
+ARG_MAGs$Methylation_based_analysis <- as.numeric(ARG_MAGs$Methylation_based_analysis)
+ARG_MAGs$HiFi_MAG_Pipeline <- as.numeric(ARG_MAGs$HiFi_MAG_Pipeline)
 
+INF_MAGs <- subset(ARG_MAGs, sample_type == "influent")
+EFF_MAGs <- subset(ARG_MAGs, sample_type == "effluent")
+SLU_MAGs <- subset(ARG_MAGs, sample_type == "dried sludge")
+
+fit <- euler(c('A' = sum(INF_MAGs$Methylation_based_analysis),
+               'B' = sum(INF_MAGs$HiFi_MAG_Pipeline), 'A&B' = sum(rowSums(INF_MAGs[,2:3]) > 1)))
+
+png("plots/INF_venn.png",width=3.25,height=3.25,units="in",res=1500)
+plot(fit, main = "Influent",
+     fills = list(fill = c("#f9e30a", "#fcf0a0")), 
+     alpha = 0.5, edges = FALSE, quantities = TRUE,
+     labels = list(font = 0.75, cex = 0.60, cex.lab=0.5, 
+                   labels = c("Methylation based analysis", "HiFi MAG Pipeline")))
+dev.off()
+
+fit <- euler(c('A' = sum(EFF_MAGs$Methylation_based_analysis),
+               'B' = sum(EFF_MAGs$HiFi_MAG_Pipeline), 'A&B' = sum(rowSums(EFF_MAGs[,2:3]) > 1)))
+
+png("plots/EFF_venn.png",width=3.25,height=3.25,units="in",res=1500)
+plot(fit, main = "Effluent",
+     fills = list(fill = c("#29b3fc", "#47ecfd")), 
+     alpha = 0.5, edges = FALSE, quantities = TRUE,
+     labels = list(font = 0.75, cex = 0.60, cex.lab=0.5, 
+                   labels = c("Methylation based analysis", "HiFi MAG Pipeline")))
+dev.off()
+
+fit <- euler(c('A' = sum(SLU_MAGs$Methylation_based_analysis),
+               'B' = sum(SLU_MAGs$HiFi_MAG_Pipeline), 'A&B' = sum(rowSums(SLU_MAGs[,2:3]) > 1)))
+
+png("plots/SLU_venn.png",width=3.25,height=3.25,units="in",res=1500)
+plot(fit, main = "Dried sludge",
+     fills = list(fill = c("#e38236", "#fec191")), 
+     alpha = 0.5, edges = FALSE, quantities = TRUE,
+     labels = list(font = 0.75, cex = 0.60, cex.lab=0.5, 
+                   labels = c("Methylation based analysis", "HiFi MAG Pipeline")))
+dev.off()
+
+#plot(euler(ARG_MAGs, by = list(sample_type)), legend = TRUE)
+```
+# Number of ARG MAGs by methylation & HiFi MAG Pipeline
+## Barplot
+```{r}
+ARG_MAGs_counts <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/ARG_MAG_counts.txt")
+ARG_MAGs_counts$Methylation_based_analysis <- as.numeric(ARG_MAGs_counts$Methylation_based_analysis)
+ARG_MAGs_counts$HiFi_MAG_Pipeline <- as.numeric(ARG_MAGs_counts$HiFi_MAG_Pipeline)
+
+ARG_MAGs_counts_long <- melt(setDT(ARG_MAGs_counts), id.vars = c("sample"), variable.name = "Methylation_based_analysis")
+ARG_MAGs_counts_long$sample_type <- ARG_MAGs_counts_long$sample
+ARG_MAGs_counts_long$sample_type <- gsub("[0-9]", "", ARG_MAGs_counts_long$sample_type)
+ARG_MAGs_counts_long$sample_type <- gsub("INF", "influent", ARG_MAGs_counts_long$sample_type)
+ARG_MAGs_counts_long$sample_type <- gsub("EFF", "effluent", ARG_MAGs_counts_long$sample_type)
+ARG_MAGs_counts_long$sample_type <- gsub("SLU", "dried sludge", ARG_MAGs_counts_long$sample_type)
+
+colnames(ARG_MAGs_counts_long) <- c("sample", "Method", "count", "sample_type")
+
+df <- ARG_MAGs_counts_long[1:18,]
+df$count <- as.integer(df$count)
+
+df$sample <- factor(df$sample, levels=c("INF1", "INF2", "INF3",
+                                          "EFF1", "EFF2", "EFF3",
+                                          "SLU1", "SLU2", "SLU3"))
+
+p <- ggplot(df, aes(x = sample, y = count, fill = interaction(sample, Method))) + 
+  geom_bar(stat = "identity", position = "dodge") + theme_bw() +
+  scale_y_continuous(labels = scales::number_format(accuracy = 1), expand = c(0,0), limits = c(0,10.75)) +
+  scale_fill_manual(values = c(
+        EFF1.Methylation_based_analysis = "#29b3fc", 
+        EFF2.Methylation_based_analysis = "#29b3fc", 
+        EFF3.Methylation_based_analysis = "#29b3fc",
+        EFF1.HiFi_MAG_Pipeline = "#b7e0f6", EFF2.HiFi_MAG_Pipeline = "#b7e0f6", EFF3.HiFi_MAG_Pipeline = "#b7e0f6",
+        INF1.Methylation_based_analysis = "#f9e30a",
+        INF2.Methylation_based_analysis = "#f9e30a",
+        INF3.Methylation_based_analysis = "#f9e30a",
+        INF1.HiFi_MAG_Pipeline = "#f9f5de", INF2.HiFi_MAG_Pipeline = "#f9f5de", INF3.HiFi_MAG_Pipeline = "#f9f5de",
+        SLU1.Methylation_based_analysis = "#daa187",
+        SLU2.Methylation_based_analysis = "#daa187",
+        SLU3.Methylation_based_analysis = "#daa187",
+        SLU1.HiFi_MAG_Pipeline = "#ffdcc0", SLU2.HiFi_MAG_Pipeline = "#ffdcc0", SLU3.HiFi_MAG_Pipeline = "#ffdcc0")) +
+  ggtitle("Number of bins with ARGs") +  theme_minimal() +
+  theme(text = element_text(family = "Palatino"),
+        legend.position = "none",
+        strip.text = element_text(size = 34, face = "bold"),
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 28),
+        axis.text.x = element_text(size = 36, angle = 90, hjust = 1, color = "white"),
+        plot.title = element_text(size = 40, vjust = 0.5, hjust = 0.5)) + 
+  facet_grid(~factor(sample_type, levels=c('influent', 'effluent', 'dried sludge')), space = "free", scales = "free")
+p
+
+ggsave(filename = "plots/ARG_MAGs_bar_plot.png",
+       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+
+ggsave(filename = "plots/ARG_MAGs_bar_plot.svg",
+       width = 16, height = 13, dpi = 300, units = "in", device='svg', scale = 1)
+```
 
 
 

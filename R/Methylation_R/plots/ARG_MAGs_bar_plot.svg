@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   class="svglite"
+   width="1152.00pt"
+   height="936.00pt"
+   viewBox="0 0 1152.00 936.00"
+   version="1.1"
+   id="svg73"
+   sodipodi:docname="ARG_MAGs_bar_plot.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   inkscape:export-filename="ARG_MAGs_bar_plot.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview73"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="pt"
+     inkscape:zoom="0.26368134"
+     inkscape:cx="900.70842"
+     inkscape:cy="756.59507"
+     inkscape:window-width="1104"
+     inkscape:window-height="736"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg73" />
+  <defs
+     id="defs1">
+    <style
+       type="text/css"
+       id="style1"><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  ]]></style>
+  </defs>
+  <rect
+     width="100%"
+     height="100%"
+     style="stroke: none; fill: none;"
+     id="rect1" />
+  <defs
+     id="defs2">
+    <clipPath
+       id="cpMC4wMHwxMTUyLjAwfDAuMDB8OTM2LjAw">
+      <rect
+         x="0.00"
+         y="0.00"
+         width="1152.00"
+         height="936.00"
+         id="rect2" />
+    </clipPath>
+  </defs>
+  <g
+     clip-path="url(#cpMC4wMHwxMTUyLjAwfDAuMDB8OTM2LjAw)"
+     id="g2" />
+  <defs
+     id="defs3">
+    <clipPath
+       id="cpMzguNDJ8NDA0LjEzfDkxLjI0fDgzOC43MA==">
+      <rect
+         x="38.42"
+         y="91.24"
+         width="365.71"
+         height="747.46"
+         id="rect3" />
+    </clipPath>
+  </defs>
+  <g
+     clip-path="url(#cpMzguNDJ8NDA0LjEzfDkxLjI0fDgzOC43MA==)"
+     id="g19">
+    <polyline
+       points="38.42,751.79 404.13,751.79 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline3" />
+    <polyline
+       points="38.42,577.96 404.13,577.96 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline4" />
+    <polyline
+       points="38.42,404.13 404.13,404.13 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline5" />
+    <polyline
+       points="38.42,230.30 404.13,230.30 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline6" />
+    <polyline
+       points="38.42,838.70 404.13,838.70 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline7" />
+    <polyline
+       points="38.42,664.87 404.13,664.87 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline8" />
+    <polyline
+       points="38.42,491.04 404.13,491.04 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline9" />
+    <polyline
+       points="38.42,317.21 404.13,317.21 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline10" />
+    <polyline
+       points="38.42,143.39 404.13,143.39 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline11" />
+    <polyline
+       points="106.99,838.70 106.99,91.24 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline12" />
+    <polyline
+       points="221.28,838.70 221.28,91.24 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline13" />
+    <polyline
+       points="335.56,838.70 335.56,91.24 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline14" />
+    <rect
+       x="55.56"
+       y="630.11"
+       width="51.43"
+       height="208.59"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F9E30A;"
+       id="rect14" />
+    <rect
+       x="169.85"
+       y="560.57"
+       width="51.43"
+       height="278.13"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F9E30A;"
+       id="rect15" />
+    <rect
+       x="284.13"
+       y="491.04"
+       width="51.43"
+       height="347.66"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F9E30A;"
+       id="rect16" />
+    <rect
+       x="106.99"
+       y="838.70"
+       width="51.43"
+       height="0.00"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F9F5DE;"
+       id="rect17" />
+    <rect
+       x="221.28"
+       y="838.70"
+       width="51.43"
+       height="0.00"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F9F5DE;"
+       id="rect18" />
+    <rect
+       x="335.56"
+       y="838.70"
+       width="51.43"
+       height="0.00"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F9F5DE;"
+       id="rect19" />
+  </g>
+  <g
+     clip-path="url(#cpMC4wMHwxMTUyLjAwfDAuMDB8OTM2LjAw)"
+     id="g20" />
+  <defs
+     id="defs20">
+    <clipPath
+       id="cpNDA5LjYxfDc3NS4zM3w5MS4yNHw4MzguNzA=">
+      <rect
+         x="409.61"
+         y="91.24"
+         width="365.71"
+         height="747.46"
+         id="rect20" />
+    </clipPath>
+  </defs>
+  <g
+     clip-path="url(#cpNDA5LjYxfDc3NS4zM3w5MS4yNHw4MzguNzA=)"
+     id="g36">
+    <polyline
+       points="409.61,751.79 775.33,751.79 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline20" />
+    <polyline
+       points="409.61,577.96 775.33,577.96 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline21" />
+    <polyline
+       points="409.61,404.13 775.33,404.13 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline22" />
+    <polyline
+       points="409.61,230.30 775.33,230.30 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline23" />
+    <polyline
+       points="409.61,838.70 775.33,838.70 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline24" />
+    <polyline
+       points="409.61,664.87 775.33,664.87 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline25" />
+    <polyline
+       points="409.61,491.04 775.33,491.04 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline26" />
+    <polyline
+       points="409.61,317.21 775.33,317.21 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline27" />
+    <polyline
+       points="409.61,143.39 775.33,143.39 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline28" />
+    <polyline
+       points="478.18,838.70 478.18,91.24 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline29" />
+    <polyline
+       points="592.47,838.70 592.47,91.24 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline30" />
+    <polyline
+       points="706.76,838.70 706.76,91.24 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline31" />
+    <rect
+       x="426.76"
+       y="769.17"
+       width="51.43"
+       height="69.53"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #29B3FC;"
+       id="rect31" />
+    <rect
+       x="541.04"
+       y="630.11"
+       width="51.43"
+       height="208.59"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #29B3FC;"
+       id="rect32" />
+    <rect
+       x="655.33"
+       y="769.17"
+       width="51.43"
+       height="69.53"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #29B3FC;"
+       id="rect33" />
+    <rect
+       x="478.18"
+       y="838.70"
+       width="51.43"
+       height="0.00"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #B7E0F6;"
+       id="rect34" />
+    <rect
+       x="592.47"
+       y="699.64"
+       width="51.43"
+       height="139.06"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #B7E0F6;"
+       id="rect35" />
+    <rect
+       x="706.76"
+       y="838.70"
+       width="51.43"
+       height="0.00"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #B7E0F6;"
+       id="rect36" />
+  </g>
+  <g
+     clip-path="url(#cpMC4wMHwxMTUyLjAwfDAuMDB8OTM2LjAw)"
+     id="g37" />
+  <defs
+     id="defs37">
+    <clipPath
+       id="cpNzgwLjgxfDExNDYuNTJ8OTEuMjR8ODM4Ljcw">
+      <rect
+         x="780.81"
+         y="91.24"
+         width="365.71"
+         height="747.46"
+         id="rect37" />
+    </clipPath>
+  </defs>
+  <g
+     clip-path="url(#cpNzgwLjgxfDExNDYuNTJ8OTEuMjR8ODM4Ljcw)"
+     id="g53">
+    <polyline
+       points="780.81,751.79 1146.52,751.79 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline37" />
+    <polyline
+       points="780.81,577.96 1146.52,577.96 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline38" />
+    <polyline
+       points="780.81,404.13 1146.52,404.13 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline39" />
+    <polyline
+       points="780.81,230.30 1146.52,230.30 "
+       style="stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline40" />
+    <polyline
+       points="780.81,838.70 1146.52,838.70 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline41" />
+    <polyline
+       points="780.81,664.87 1146.52,664.87 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline42" />
+    <polyline
+       points="780.81,491.04 1146.52,491.04 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline43" />
+    <polyline
+       points="780.81,317.21 1146.52,317.21 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline44" />
+    <polyline
+       points="780.81,143.39 1146.52,143.39 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline45" />
+    <polyline
+       points="849.38,838.70 849.38,91.24 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline46" />
+    <polyline
+       points="963.66,838.70 963.66,91.24 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline47" />
+    <polyline
+       points="1077.95,838.70 1077.95,91.24 "
+       style="stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;"
+       id="polyline48" />
+    <rect
+       x="797.95"
+       y="282.45"
+       width="51.43"
+       height="556.25"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #DAA187;"
+       id="rect48" />
+    <rect
+       x="912.23"
+       y="143.39"
+       width="51.43"
+       height="695.31"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #DAA187;"
+       id="rect49" />
+    <rect
+       x="1026.52"
+       y="282.45"
+       width="51.43"
+       height="556.25"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #DAA187;"
+       id="rect50" />
+    <rect
+       x="849.38"
+       y="630.11"
+       width="51.43"
+       height="208.59"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFDCC0;"
+       id="rect51" />
+    <rect
+       x="963.66"
+       y="630.11"
+       width="51.43"
+       height="208.59"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFDCC0;"
+       id="rect52" />
+    <rect
+       x="1077.95"
+       y="630.11"
+       width="51.43"
+       height="208.59"
+       style="stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #FFDCC0;"
+       id="rect53" />
+  </g>
+  <g
+     clip-path="url(#cpMC4wMHwxMTUyLjAwfDAuMDB8OTM2LjAw)"
+     id="g54" />
+  <defs
+     id="defs54">
+    <clipPath
+       id="cpMzguNDJ8NDA0LjEzfDQ5LjgxfDkxLjI0">
+      <rect
+         x="38.42"
+         y="49.81"
+         width="365.71"
+         height="41.43"
+         id="rect54" />
+    </clipPath>
+  </defs>
+  <g
+     clip-path="url(#cpMzguNDJ8NDA0LjEzfDQ5LjgxfDkxLjI0)"
+     id="g55"
+     transform="translate(-1.893333,41.653326)">
+    <text
+       x="221.28"
+       y="82.139999"
+       text-anchor="middle"
+       style="font-weight:bold;font-size:34px;font-family:Palatino;fill:#1a1a1a"
+       textLength="126.48"
+       lengthAdjust="spacingAndGlyphs"
+       id="text54">influent</text>
+  </g>
+  <g
+     clip-path="url(#cpMC4wMHwxMTUyLjAwfDAuMDB8OTM2LjAw)"
+     id="g56"
+     transform="translate(-1.893333,41.653326)" />
+  <defs
+     id="defs56">
+    <clipPath
+       id="cpNDA5LjYxfDc3NS4zM3w0OS44MXw5MS4yNA==">
+      <rect
+         x="409.61"
+         y="49.81"
+         width="365.71"
+         height="41.43"
+         id="rect56" />
+    </clipPath>
+  </defs>
+  <g
+     clip-path="url(#cpNDA5LjYxfDc3NS4zM3w0OS44MXw5MS4yNA==)"
+     id="g57"
+     transform="translate(-1.893333,41.653326)">
+    <text
+       x="592.46997"
+       y="82.139999"
+       text-anchor="middle"
+       style="font-weight:bold;font-size:34px;font-family:Palatino;fill:#1a1a1a"
+       textLength="124.03"
+       lengthAdjust="spacingAndGlyphs"
+       id="text56">effluent</text>
+  </g>
+  <g
+     clip-path="url(#cpMC4wMHwxMTUyLjAwfDAuMDB8OTM2LjAw)"
+     id="g58"
+     transform="translate(-1.893333,41.653326)" />
+  <defs
+     id="defs58">
+    <clipPath
+       id="cpNzgwLjgxfDExNDYuNTJ8NDkuODF8OTEuMjQ=">
+      <rect
+         x="780.81"
+         y="49.81"
+         width="365.71"
+         height="41.43"
+         id="rect58" />
+    </clipPath>
+  </defs>
+  <g
+     clip-path="url(#cpNzgwLjgxfDExNDYuNTJ8NDkuODF8OTEuMjQ=)"
+     id="g59"
+     transform="translate(-1.893333,41.653326)">
+    <text
+       x="963.65997"
+       y="82.139999"
+       text-anchor="middle"
+       style="font-weight:bold;font-size:34px;font-family:Palatino;fill:#1a1a1a"
+       textLength="195.42"
+       lengthAdjust="spacingAndGlyphs"
+       id="text58">dried sludge</text>
+  </g>
+  <g
+     clip-path="url(#cpMC4wMHwxMTUyLjAwfDAuMDB8OTM2LjAw)"
+     id="g73">
+    <text
+       x="33.49"
+       y="848.41"
+       text-anchor="end"
+       style="font-size: 28.00px;fill: #4D4D4D; font-family: &quot;Palatino&quot;;"
+       textLength="14.00px"
+       lengthAdjust="spacingAndGlyphs"
+       id="text68">0</text>
+    <text
+       x="33.49"
+       y="674.58"
+       text-anchor="end"
+       style="font-size: 28.00px;fill: #4D4D4D; font-family: &quot;Palatino&quot;;"
+       textLength="14.00px"
+       lengthAdjust="spacingAndGlyphs"
+       id="text69">2</text>
+    <text
+       x="33.49"
+       y="500.76"
+       text-anchor="end"
+       style="font-size: 28.00px;fill: #4D4D4D; font-family: &quot;Palatino&quot;;"
+       textLength="14.00px"
+       lengthAdjust="spacingAndGlyphs"
+       id="text70">5</text>
+    <text
+       x="33.49"
+       y="326.93"
+       text-anchor="end"
+       style="font-size: 28.00px;fill: #4D4D4D; font-family: &quot;Palatino&quot;;"
+       textLength="14.00px"
+       lengthAdjust="spacingAndGlyphs"
+       id="text71">8</text>
+    <text
+       x="33.49"
+       y="153.10"
+       text-anchor="end"
+       style="font-size: 28.00px;fill: #4D4D4D; font-family: &quot;Palatino&quot;;"
+       textLength="28.01px"
+       lengthAdjust="spacingAndGlyphs"
+       id="text72">10</text>
+    <text
+       x="592.47"
+       y="38.78"
+       text-anchor="middle"
+       style="font-size:40px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
+       textLength="484.15px"
+       lengthAdjust="spacingAndGlyphs"
+       id="text73"><tspan
+         sodipodi:role="line"
+         id="tspan73">Number of MAGs with ARGs</tspan></text>
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;opacity:0.700183;fill:#000000;fill-rule:evenodd;stroke-width:0"
+     x="78.019989"
+     y="866.71155"
+     id="text74"><tspan
+       sodipodi:role="line"
+       id="tspan74"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0"
+       x="78.019989"
+       y="866.71155">INF1</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;opacity:0.700183;fill:#000000;fill-rule:evenodd;stroke-width:0"
+     x="193.47227"
+     y="867.16943"
+     id="text74-8"><tspan
+       sodipodi:role="line"
+       id="tspan75"
+       x="193.47227"
+       y="867.16943">INF2</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;opacity:0.700183;fill:#000000;fill-rule:evenodd;stroke-width:0"
+     x="310.86563"
+     y="867.43188"
+     id="text74-8-7"><tspan
+       sodipodi:role="line"
+       id="tspan76"
+       x="310.86563"
+       y="867.43188">INF3</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;opacity:0.700183;fill:#000000;fill-rule:evenodd;stroke-width:0"
+     x="453.86566"
+     y="866.47528"
+     id="text74-8-7-3"><tspan
+       sodipodi:role="line"
+       id="tspan77"
+       x="453.86566"
+       y="866.47528">EFF1</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;opacity:0.700183;fill:#000000;fill-rule:evenodd;stroke-width:0"
+     x="570.57562"
+     y="866.87018"
+     id="text74-8-7-3-4"><tspan
+       sodipodi:role="line"
+       id="tspan78"
+       x="570.57562"
+       y="866.87018">EFF2</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;opacity:0.700183;fill:#000000;fill-rule:evenodd;stroke-width:0"
+     x="680.28558"
+     y="866.79688"
+     id="text74-8-7-3-4-3"><tspan
+       sodipodi:role="line"
+       id="tspan79"
+       x="680.28558"
+       y="866.79688">EFF3</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;opacity:0.700183;fill:#000000;fill-rule:evenodd;stroke-width:0"
+     x="817.71893"
+     y="867.15356"
+     id="text74-8-7-3-4-3-8"><tspan
+       sodipodi:role="line"
+       id="tspan80"
+       x="817.71893"
+       y="867.15356">SLU1</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;opacity:0.700183;fill:#000000;fill-rule:evenodd;stroke-width:0"
+     x="930.74896"
+     y="867.15356"
+     id="text74-8-7-3-4-3-8-6"><tspan
+       sodipodi:role="line"
+       id="tspan81"
+       x="930.74896"
+       y="867.15356">SLU2</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;opacity:0.700183;fill:#000000;fill-rule:evenodd;stroke-width:0"
+     x="1045.4414"
+     y="867.3952"
+     id="text74-8-7-3-4-3-8-6-2"><tspan
+       sodipodi:role="line"
+       id="tspan82"
+       x="1045.4414"
+       y="867.3952">SLU3</tspan></text>
+  <rect
+     style="opacity:0.700183;fill:#000000;fill-rule:evenodd;stroke-width:0"
+     id="rect82"
+     width="38.773872"
+     height="33.927139"
+     x="364.25403"
+     y="886.98572" />
+  <rect
+     style="opacity:0.275556;fill:#666666;fill-rule:evenodd;stroke:#000000;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+     id="rect82-3"
+     width="38.773872"
+     height="33.927139"
+     x="630.28064"
+     y="887.20337" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;opacity:1;fill:#666666;fill-rule:evenodd;stroke-width:0"
+     x="683.29492"
+     y="912.24152"
+     id="text83"><tspan
+       sodipodi:role="line"
+       id="tspan83"
+       style="fill:#000000;stroke-width:0"
+       x="683.29492"
+       y="912.24152">HiFi MAG Pipeline</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Palatino;-inkscape-font-specification:'Palatino, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;opacity:1;fill:#1a1a1a;fill-rule:evenodd;stroke-width:0"
+     x="414.86749"
+     y="910.05042"
+     id="text83-3"><tspan
+       sodipodi:role="line"
+       id="tspan84"
+       x="414.86749"
+       y="910.05042">Methylation</tspan></text>
+</svg>
