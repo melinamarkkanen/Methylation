@@ -898,7 +898,7 @@ ggsave(filename = "plots/WW_sylph_Bacteroidales_family.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
 ```
 
-## fARGene
+## fARGene, REMOVE THE '_model'
 ```{r}
 fargene_counts <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/fargene_counts.tsv", row.names=1)
 
@@ -940,6 +940,7 @@ p
 ggsave(filename = "plots/WW_fARGene.png",
        width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
 ```
+
 
 # Number of ARG MAGs by methylation & HiFi MAG Pipeline
 ## Venn Diagram
