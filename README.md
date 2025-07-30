@@ -7,8 +7,8 @@
 ## Data
 ### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*doi*)
 #### PacBio HiFi metagenomic long-reads
-| Sample code | Sample | Description
-| -------------------- | ------------ |
+| Sample code | Sample | Description |
+| -------------------- | ------------ | ------------ |
 | bcAd1023T | tc_0.2_15_5  | 0.2 µg/ml tetracycline, 15 °C   |
 | bcAd1037T | su_20_25_3   | 20 µg/ml sulphamethazine, 25 °C |
 | bcAd1039T | su_20_25_4   | 20 µg/ml sulphamethazine, 25 °C |
