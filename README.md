@@ -5,29 +5,15 @@
 ## *Contents*
 
 ## Data
-### Wastewater
-#### PacBio HiFi metagenomic long-reads
-| Sample code | Sample |
-| ------------- | ------------- |
-| EFF1 | effluent |
-| EFF2 | effluent |
-| EFF3 | effluent |
-| INF1 | influent |
-| INF2 | influent |
-| INF3 | influent |
-| SLU1 | sludge |
-| SLU2 | sludge |
-| SLU3 | sludge |
-
 ### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*doi*)
 #### PacBio HiFi metagenomic long-reads
-| Sample code | Sample |
+| Sample code | Sample | Description
 | -------------------- | ------------ |
-| bcAd1023T--bcAd1023T | tc_0.2_15_5  |
-| bcAd1037T--bcAd1037T | su_20_25_3   |
-| bcAd1039T--bcAd1039T | su_20_25_4   |
-| bcAd1046T--bcAd1046T | tc_0.02_37_3 |
-| bcAd1063T--bcAd1063T | no_0_37_3    |
+| bcAd1023T | tc_0.2_15_5  | 0.2 µg/ml tetracycline, 15 °C   |
+| bcAd1037T | su_20_25_3   | 20 µg/ml sulphamethazine, 25 °C |
+| bcAd1039T | su_20_25_4   | 20 µg/ml sulphamethazine, 25 °C |
+| bcAd1046T | tc_0.02_37_3 | 0.02 µg/ml tetracycline, 37 °C  |
+| bcAd1063T | no_0_37_3    | no antibiotic, 37 °C            |
 
 ### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*doi*)
 #### Assemblies for available WGS data (n=18 strains)
@@ -71,3 +57,17 @@
 | HAMBI_2443 | *Paracoccus denitrificans* | chromosome |
 | HAMBI_2443 | *Paracoccus denitrificans* | plasmid unnamed1 |
 | HAMBI_2443 | *Paracoccus denitrificans* | plasmid unnamed2 |
+
+### Wastewater
+#### PacBio HiFi metagenomic long-reads
+| Sample code | Sample |
+| ------------- | ------------- |
+| EFF1 | effluent |
+| EFF2 | effluent |
+| EFF3 | effluent |
+| INF1 | influent |
+| INF2 | influent |
+| INF3 | influent |
+| SLU1 | sludge |
+| SLU2 | sludge |
+| SLU3 | sludge |
