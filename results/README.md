@@ -1,23 +1,17 @@
-# Jotain
+# Random Forest analysis
 &nbsp;
 ## HAMBI
 ### Number of contigs and analyzed for methylation
-| sample | contigs | .gff files | label 'NA' |
+| sample | contigs | GFF files | label 'NA' |
 |------------------------|-------|----------|-------------------|
-| bcAd1023T--bcAd1023T   | 305   | 300      | 90                |
-| bcAd1037T--bcAd1037T   | 336   | 327      | 123               |
-| bcAd1039T--bcAd1039T   | 713   | 698      | 171               |
-| bcAd1046T--bcAd1046T   | 263   | 262      | 159               |
-| bcAd1063T--bcAd1063T   | 373   | 364      | 126               |
-
-### Number of lines in .gff
-| All data | After filtering | Missing labels |
-|----------|-----------------|----------------|
-| 1951     | 1282            | 372
-
-
+| bcAd1023T   | 305   | 300      | 90                |
+| bcAd1037T   | 336   | 327      | 123               |
+| bcAd1039T   | 713   | 698      | 171               |
+| bcAd1046T   | 263   | 262      | 159               |
+| bcAd1063T   | 373   | 364      | 126               |
+&nbsp;
 ### Unique taxa
-|---------| All data | After filtering |
+|---------| All data | After filtering >50 |
 |---------|----------|-----------------|
 | Species |    15    | 11 |
 | Genus   |    15    | 11 |
@@ -25,38 +19,8 @@
 | Order   |    9     | 7  |
 | Class   |    3     | 2  |
 | Phylum  |    2     | 1  |
-
-|---------| Chrom data | After filtering |
-|---------|------------|-----------------|
-| Species |    15    | 12 |
-| Genus   |    15    | 12 |
-| Family  |    12    | 10 |
-| Order   |    9     | 8  |
-| Class   |    3     | 2  |
-| Phylum  |    2     | 1  |
-
-|---------| -10...10 | After filtering |
-|---------|------------|-----------------|
-| Species |        |  |
-| Genus   |        |  |
-| Family  |        |  |
-| Order   |        |  |
-| Class   |        |  |
-| Phylum  |        |  |
-
-|---------| -5...5 | After filtering |
-|---------|------------|-----------------|
-| Species |        |  |
-| Genus   |        |  |
-| Family  |        |  |
-| Order   |        |  |
-| Class   |        |  |
-| Phylum  |        |  |
-
-
-
-## Random Forest **All data**:
-### All features
+&nbsp;
+## Random Forest
 | Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
 |-----------------------|-----|----------|----------|----------|----------|
 | **Domain to Species** | 1.0 | 0.870786 | 0.893405 | 0.870786 | 0.858709 |
@@ -65,63 +29,8 @@
 | **Domain to Order**   | 1.0 | 0.866666 | 0.898901 | 0.866666 | 0.836683 |
 | **Domain to Class**   | 1.0 | 0.934065 | 0.936121 | 0.934065 | 0.930331 |
 | **Domain to Phylum**  | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
-
-## Random Forest **Chromosome data**:
-### All features
-| Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
-|-----------------------|----------|----------|----------|----------|----------|
-| **Domain to Species** | 0.752464 | 0.585152 | 0.700569 | 0.585152 | 0.618785 |
-| **Domain to Genus**   | 0.748083 | 0.606986 | 0.712237 | 0.606986 | 0.637655 |
-| **Domain to Family**  | 0.735229 | 0.698689 | 0.774919 | 0.698689 | 0.709561 |
-| **Domain to Order**   | 0.842794 | 0.782608 | 0.823232 | 0.782608 | 0.754668 |
-| **Domain to Class**   | 0.955240 | 0.913043 | 0.915420 | 0.913043 | 0.899911 |
-| **Domain to Phylum**  | 1.0      | 1.0      | 1.0      | 1.0      | 1.0      |
-
-## Random Forest **Shorter sequence window**:
-### -10...0...10
-| Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
-|-----------------------|-----|----------|----------|----------|----------|
-| **Domain to Species** | 0.761208 | 0.634241 |	0.772627 | 0.634241 | 0.669258 | 
-| **Domain to Genus**   | 0.761208 | 0.634241 |	0.772627 | 0.634241 | 0.669258 |
-| **Domain to Family**  | 0.759727 | 0.630350 |	0.776216 | 0.630350 | 0.662930 |
-| **Domain to Order**   | 0.834302 | 0.775193 | 0.809556 | 0.775193 | 0.744647 |
-| **Domain to Class**   | 0.943798 | 0.875968 | 0.886528 | 0.875968 | 0.856364 |
-| **Domain to Phylum**  | 1.0      | 1.0      | 1.0      | 1.0      | 1.0      |
-
-## Random Forest **Shorter sequence window**:
-### -5...0...5
-| Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
-|-----------------------|-----|----------|----------|----------|----------|
-| **Domain to Species** | 0.761208 | 0.630350 |	0.765167 | 0.630350 | 0.663529 |
-| **Domain to Genus**   | 0.761208 | 0.630350 |	0.765167 | 0.630350 | 0.663529 |
-| **Domain to Family**  | 0.759727 | 0.618677 |	0.753230 | 0.618677 | 0.646258 |
-| **Domain to Order**   | 0.834302 | 0.790697 |	0.817558 | 0.790697 | 0.767467 |
-| **Domain to Class**   | 0.943798 | 0.883720 |	0.888790 | 0.883720 | 0.868769 |
-| **Domain to Phylum**  | 1.0      | 1.0      | 1.0      | 1.0      | 1.0      |
-
-## Testing different number of features
-### All data
-| Features | Accuracy Train | Accuracy Test | Precision | Recall   | F1 Score |
-| -------- | -------------- | ------------- | --------- | -------- | -------- |
-| 1        | 0.522472       | 0.449438      | 0.474459  | 0.449438 | 0.40248  |
-| 3        | 1.0            | 0.662921      | 0.652217  | 0.662921 | 0.656572 |
-| 5        | 1.0            | 0.707865      | 0.709828  | 0.707865 | 0.708207 |
-| 10       | 1.0            | 0.848315      | 0.851571  | 0.848315 | 0.847413 |
-| 20       | 1.0            | 0.870787      | 0.872965  | 0.870787 | 0.867311 |
-| 50       | 1.0            | 0.882022      | 0.88702   | 0.882022 | 0.871105 |
-| 60       | 1.0            | 0.882022      | 0.900687  | 0.882022 | 0.86989  |
-| 70       | 1.0            | 0.893258      | 0.893939  | 0.893258 | 0.883861 |
-| 80       | 1.0            | 0.882022      | 0.877542  | 0.882022 | 0.870674 |
-| 90       | 1.0            | 0.88764       | 0.889939  | 0.88764  | 0.879    |
-| 100      | 1.0            | 0.870787      | 0.890658  | 0.870787 | 0.858113 |
-| 120      | 1.0            | 0.882022      | 0.898927  | 0.882022 | 0.867911 |
-| 150      | 1.0            | 0.893258      | 0.909739  | 0.893258 | 0.878497 |
-| 180      | 1.0            | 0.870787      | 0.898134  | 0.870787 | 0.855244 |
-| 200      | 1.0            | 0.848315      | 0.821896  | 0.848315 | 0.829591 |
-| 250      | 1.0            | 0.870787      | 0.89102   | 0.870787 | 0.857286 |
-| All      | 1.0            | 0.870786      | 0.893405  | 0.870786 | 0.858709 |
-
-## Random Forest **Fewer data**:
+&nbsp;
+## Random Forest **Exploring sufficient modification data amount**:
 ### Above 50 lines in .gff
 #### Number of Taxa: 11
 | Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
@@ -132,7 +41,7 @@
 | **Domain to Order**   | 1.0 | 0.905405 | 0.911239 | 0.905405 | 0.895936 |
 | **Domain to Class**   | 1.0 | 0.953020 | 0.953301 | 0.953020 | 0.951368 |
 | **Domain to Phylum**  | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
-
+&nbsp;
 ### Above 100 lines in .gff
 #### Number of Taxa: 10
 | Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
@@ -143,7 +52,7 @@
 | **Domain to Order**   | 1.0 | 0.931034 | 0.884082 | 0.931034 | 0.905217 |
 | **Domain to Class**   | 1.0 | 0.948275 | 0.951259 | 0.948275 | 0.943871 |
 | **Domain to Phylum**  | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
-
+&nbsp;
 ### Above 200 lines in .gff
 #### Number of Taxa: 6
 | Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
@@ -154,7 +63,7 @@
 | **Domain to Order**   | 1.0 | 0.965517 | 0.969172 | 0.965517 | 0.961190 |
 | **Domain to Class**   | 1.0 | 0.977528 | 0.978076 | 0.977528 | 0.976262 |
 | **Domain to Phylum**  | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
-
+&nbsp;
 ### Above 500 lines in .gff
 #### Number of Taxa: 4
 | Taxa level | Accuracy Train | Accuracy Test | Precision | Recall | F1 Score |
@@ -165,12 +74,11 @@
 | **Domain to Order**   | 1.0 | 0.984615 | 0.985164 | 0.984615 | 0.984643 |
 | **Domain to Class**   | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
 | **Domain to Phylum**  | 1.0 | 1.0      | 1.0      | 1.0      | 1.0      |
-
-
-
-
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
 ## Mapping samples bcAd1039, bcAd1046 and bcAd1063 to Paracoccus GCF_034627565.1_ASM3462756v1
-
 |  | bcAd1039 | bcAd1046 | bcAd1063 |
 | ------------------------------------- | -------- | -------- | -------- |
 | **Mapped Reads**                          | 15390    | 39375    | 82361    |
@@ -179,14 +87,10 @@
 | **Mean Gap-Compressed Sequence Identity** | 86.9052% | 96.1005% | 96.5226% |
 | **Max Mapped Read Length**                | 30408    | 38483    | 40843    |
 | **Mean Mapped Read Length**               | 2469.95  | 7279.94  | 8342.05  |
-
-
-
-
-
-
-
-
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
 ## Wastewater
 ### Number of contigs and analyzed for methylation
 | sample | contigs | .gff files | after filtering 50 lines in .gff |

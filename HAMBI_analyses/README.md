@@ -216,6 +216,7 @@ cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 ```
 &nbsp;
 &nbsp;
+######### REMOVE
 ## Run Random Forest analyses ```notebooks/Random_forest_HAMBI```
 ### Sequence -20...20: 150 most important features
 ### Sequence -5...5: All features
@@ -227,13 +228,11 @@ cut -f 1,17-27,58-68,99-109,140-150,181-191,222-232,263-273,304-314,345-355,386-
 ## 10...-10
 cut -f 1,12-34,53-73,94-114,135-155,176-196,217-237,258-278,299-319,340-360,381-401,422-442,463-483,494-510 merged_data.tsv > merged_data_short_10.tsv
 ```
+######### REMOVE
 &nbsp;
 &nbsp;
-&nbsp;
-
 ## Create Sequence logos
-
-
+######### REMOVE
 ## UMAP
 ### Build MAGs according to contigs clustered by UMAP
 #### Get contigs
