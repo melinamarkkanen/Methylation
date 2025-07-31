@@ -58,6 +58,47 @@
 | HAMBI_2443 | *Paracoccus denitrificans* | plasmid unnamed1 |
 | HAMBI_2443 | *Paracoccus denitrificans* | plasmid unnamed2 |
 
+| Strain ID | Species | Element |
+| ------------- | ------------- | ------------- |
+| HAMBI_0006 | *Pseudomonas_E putida* | chromosome |
+| HAMBI_0105 | *Agrobacterium tumefaciens* | chromosome 1 |
+| HAMBI_0105 | *Agrobacterium tumefaciens* | chromosome 2 |
+| HAMBI_0105 | *Agrobacterium tumefaciens* | plasmid|
+| HAMBI_0262 | *Brevundimonas bullata* | chromosome* |
+| HAMBI_0403 | *Comamonas testosteroni_C* | chromosome |
+| HAMBI_0403 | *Comamonas testosteroni_C* | plasmid|
+| HAMBI_1287 | *Citrobacter_B koseri* | chromosome |
+| HAMBI_1287 | *Citrobacter_B koseri* | plasmid1 |
+| HAMBI_1287 | *Citrobacter_B koseri* | plasmid2 |
+| HAMBI_1292 | *Morganella morganii* | chromosome |
+| HAMBI_1299 | *Kluyvera intermedia* | chromosome |
+| HAMBI_1299 | *Kluyvera intermedia* | plasmid|
+| HAMBI_1842 | *Sphingobium yanoikuyae* | chromosome |
+| HAMBI_1842 | *Sphingobium yanoikuyae* | plasmid1* |
+| HAMBI_1842 | *Sphingobium yanoikuyae* | plasmid2 |
+| HAMBI_1842 | *Sphingobium yanoikuyae* | plasmid3 |
+| HAMBI_1842 | *Sphingobium yanoikuyae* | plasmid4 |
+| HAMBI_1842 | *Sphingobium yanoikuyae* | plasmid5* |
+| HAMBI_1842 | *Sphingobium yanoikuyae* | plasmid6 |
+| HAMBI_1896 | *Sphingobacterium spiritivorum* | chromosome |
+| HAMBI_1972 | *Aeromonas caviae* | chromosome |
+| HAMBI_1977 | *Pseudomonas_E chlororaphis* | chromosome |
+| HAMBI_2159 | *Trinickia caryophylli* | chromosome1* |
+| HAMBI_2159 | *Trinickia caryophylli* | chromosome2* |
+| HAMBI_2160 | *Bordetella avium* | chromosome |
+| HAMBI_2164 | *Cupriavidus oxalaticus* | chromosome1 |
+| HAMBI_2164 | *Cupriavidus oxalaticus* | chromosome2 |
+| HAMBI_2443 | *Paracoccus denitrificans* | chromosome |
+| HAMBI_2443 | *Paracoccus denitrificans* | plasmid1 |
+| HAMBI_2443 | *Paracoccus denitrificans* | plasmid2 |
+| HAMBI_2494 | *Paraburkholderia kururiensis_A* | chromosome* |
+| HAMBI_2494 | *Paraburkholderia kururiensis_A* | plasmid* |
+| HAMBI_2659 | *Stenotrophomonas maltophilia* | chromosome |
+| HAMBI_3237 | *Microvirga lotononidis* | chromosome |
+| HAMBI_3237 | *Microvirga lotononidis* | plasmid1 |
+| HAMBI_3237 | *Microvirga lotononidis* | plasmid2 |
+| HAMBI_3237 | *Microvirga lotononidis* | plasmid3* |
+
 ### Wastewater
 #### PacBio HiFi metagenomic long-reads
 | Sample code | Sample |
