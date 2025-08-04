@@ -49,7 +49,7 @@ contig_id       d       p	c	o	f	g	s	element	str	All	Domain to species	Domain to 
 ---------------------------     -----------     --------------------    ------------------      -------------------	------------------	-------------	----------------------------	--------------	----------	--------------------------------	----------------------------	------------------	---------------------------	-------------------------	---------	-------------------------
 bcAd1023T--bcAd1023T_ptg000001l	Bacteria	Pseudomonadota	Gammaproteobacteria	Burkholderiales	Burkholderiaceae_B	Comamonas	Comamonas testosteroni_C	chromosome	HAMBI_0403	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas_Comamonas_testosteroni_C_chromosome_HAMBI_0403	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas_Comamonas_testosteroni_C	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B_Comamonas	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales_Burkholderiaceae_B	Bacteria_Pseudomonadota_Gammaproteobacteria_Burkholderiales	Bacteria_Pseudomonadota_Gammaproteobacteria	Bacteria_Pseudomonadota
 bcAd1023T--bcAd1023T_ptg000003l	Bacteria	Pseudomonadota	Gammaproteobacteria	Enterobacterales	Enterobacteriaceae	Kluyvera	Kluyvera intermedia	plasmid unnamed	HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia_plasmid_unnamed_HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales	Bacteria_Pseudomonadota_Gammaproteobacteria	Bacteria_Pseudomonadota
-…																																					
+…																		
 ```
 - count contigs missing values
 ```
@@ -91,10 +91,6 @@ create_file 669 16 "NA" "missing_values.txt"
 paste -d '\t' missing_IDs.txt missing_values.txt > missing_data.txt
 cat missing_data.txt >> HAMBI_labels.txt
 ```
-
-
-
-
 &nbsp;
 &nbsp;
 ## Methylation analysis of HAMBI community
@@ -133,10 +129,6 @@ snakemake --profile workflow/profile --use-envmodules --use-singularity \
 snakemake --profile workflow/profile --use-envmodules --use-singularity \
         --snakefile workflow/Snakefile_HAMBI_methylation_analysis --use-singularity --keep-going -np
 ```
-
-
-
-
 &nbsp;
 &nbsp;
 ## Create scoring matrices and flattened feature matrices
@@ -214,6 +206,8 @@ awk -F'\t' '{print NF; exit}' merged_data.tsv
 # There are still empty columns in the end, remove them
 cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 ```
+
+## Run ```notebooks/Random_Forest_analysis_HAMBI.ipynb```
 &nbsp;
 &nbsp;
 ######### REMOVE
@@ -228,18 +222,36 @@ cut -f 1,17-27,58-68,99-109,140-150,181-191,222-232,263-273,304-314,345-355,386-
 ## 10...-10
 cut -f 1,12-34,53-73,94-114,135-155,176-196,217-237,258-278,299-319,340-360,381-401,422-442,463-483,494-510 merged_data.tsv > merged_data_short_10.tsv
 ```
-######### REMOVE
 &nbsp;
 &nbsp;
 ## Create Sequence logos
 ######### REMOVE
+&nbsp;
+&nbsp;
 ## UMAP
+### Run ```notebooks/UMAP_analysis_HAMBI.ipynb```
+&nbsp;
+#### For visualization, obtain contig lengths and modification data amounts
+##### Contig lengths
+```
+cd /scratch/project_2006608/Methylation/HAMBI_data/metagenomic_assembly
+module load seqkit/2.5.1
+seqkit fx2tab --length --name --header-line $sample".fasta" > $sample"_lengths.txt"
+```
+##### Number of modified bases, run ```src/HAMBI_count_gff_lines.sh```
+##### Merge contigs_lengths.tsv & contigs_mod_counts.tsv with merged_data.tsv within ```notebooks/UMAP_analysis_HAMBI.ipynb```
+&nbsp;
+
 ### Build MAGs according to contigs clustered by UMAP
 #### Get contigs
 ```
 cd ../src
 ./HAMBI_get_contigs_for_MAGs.sh C1A
 ```
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
 
 #### Combine small contigs sample-wise
 ```
