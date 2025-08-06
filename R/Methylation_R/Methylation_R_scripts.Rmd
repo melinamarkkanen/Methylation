@@ -4,11 +4,11 @@ output: html_document
 date: "2025-03-12"
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 # Libraries
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(dplyr)
 library(data.table)
@@ -17,120 +17,134 @@ library(phyloseq)
 library(stringr)
 library(eulerr)
 ```
-
 # Colors
 ```{r}
 cols <- c(
-  "#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF", "#800000", "#008000",
-  "#000080", "#808000", "#800080", "#008080", "#FF4500", "#3bccf7", "#4682B4", "#DAA520",
-  "#FF1493", "#9ACD32", "#8A2BE2", "#5F9EA0", "#D2691E", "#DC143C", "#B8860B", "#32CD32",
-  "#FFD700", "#20B2AA", "#FF6347", "#4169E1", "#8B4513", "#6A5ACD", "#FF7F50", "#2F4F4F")
-
-cols <- c(
-"#FF0000", '#3cb44b', '#ffe119', '#4363d8', '#000000', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3')
-
-
-
+"NA" = "#FF0000", 
+"Citrobacter_B koseri" = "#3cb44b",
+"Pseudomonas_E putida" = "#ffe119",
+"Bordatella avium" = "#4363d8",
+"Microvirga lotononidis" = "#000000",
+"Paracoccus denitrificans" = "#911eb4",
+"Comomonas testosteroni_C" = "#46f0f0",
+"Pseudomonas_E chlororaphis" = "#f032e6",
+"Morganella morganii" = "#bcf60c",
+"Cupriavidus oxalaticus" = "#fabebe",
+"Sphingobium yanoikuyae" = "#008080",
+"Aeromonas caviae" = "#e6beff",
+"Agrobacterium tumefaciens" = "#9a6324",
+"Stenotrophomonas maltophilia" = "#fffac8",
+"Sphingobacterium spiritivorum" = "#800000",
+"Kluyvera intermedia" = "#aaffc3")
 ```
 
-# Feature Importance
+# Sylph synthetic community
 ```{r}
-feature_importance <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/feature_importance.txt")
-df <- feature_importance[rownames(feature_importance) != "All", ]
-df$Features <- as.numeric(df$Features)
+# Load data
+Sylph_HAMBI_merged <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/Sylph_HAMBI_merged_genus_full.txt", row.names=1)
 
-value_h <- feature_importance[grep("All", feature_importance$Features), ]
-value_h = print(value_h["Accuracy.Test"][ ,])
+# Tax table
+tax_table0 <- data.frame("rownames" = rownames(Sylph_HAMBI_merged))
+tax_table <- separate(tax_table0, rownames, 
+                       into = c("domain", "phylum", "class", "order", "family", "genus", "species", "strain"), sep = "\\|",
+                       fill = "right", remove = TRUE)
+tax_table$domain <- gsub("d__", "", tax_table$domain)
+tax_table$phylum <- gsub("p__", "", tax_table$phylum)
+tax_table$class <- gsub("c__", "", tax_table$class)
+tax_table$order <- gsub("o__", "", tax_table$order)
+tax_table$family <- gsub("f__", "", tax_table$family)
+tax_table$genus <- gsub("g__", "", tax_table$genus)
+tax_table$species <- gsub("s__", "", tax_table$species)
+tax_table$strain <- gsub("t__", "", tax_table$strain)
 
-value_v <- 150
+# Otu table
+OTU_table = Sylph_HAMBI_merged
+rownames(OTU_table) <- 1:nrow(Sylph_HAMBI_merged)
+rownames(OTU_table) <- paste0("sp", rownames(OTU_table))
 
-p <- ggplot(df, aes(x=Features, y=Accuracy.Test)) + ggtitle("Feature Importance") +
-  geom_line() + theme_bw() +
-  theme(text = element_text(family = "Palatino"),
-    plot.title = element_text(size = 34),
-    axis.title = element_text(size = 34),
-    axis.text = element_text(size = 28))
-p1 <- p + geom_hline(yintercept=value_h, linetype="dashed", color = "red", linewidth = 2) +
-  geom_text(aes(230, value_h, label = "All features", vjust = - 1),
-            color = "red", family = "Palatino", size = 10)
-p2 <- p1 + geom_vline(xintercept=value_v, linetype="dotdash", color = "blue", linewidth = 1)
-p2
+# Sample data
+metadata <- data.frame("sample" = colnames(OTU_table))
+rownames(metadata) <- colnames(OTU_table)
+meta <- sample_data(metadata)
 
-ggsave(filename = "plots/feature_importance.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+# Phyloseq
+OTU = otu_table(OTU_table, taxa_are_rows = TRUE)
+tax_table_matrix <- as.matrix(tax_table)
+TAX = tax_table(tax_table_matrix)
+
+PHY <- phyloseq(OTU, TAX, meta)
+
+PHY_genus <- tax_glom(PHY, taxrank = "genus")
 ```
-# Analysis of Kaiju results
+# Plot
 ```{r}
-kaiju_summary <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/kaiju_summary.tsv")
+cols <- c("NA" = "#FF0000", "Citrobacter_B" = "#3cb44b", "Pseudomonas_E" = "#ffe119", "Bordatella" = "#4363d8", "Microvirga" = "#000000", "Paracoccus" = "#911eb4", "Comomonas" = "#46f0f0", "Morganella" = "#bcf60c", "Cupriavidus" = "#fabebe", "Sphingobium" = "#008080", "Aeromonas" = "#e6beff", "Agrobacterium" = "#9a6324", "Stenotrophomonas" = "#fffac8", "Sphingobacterium" = "#800000", "Kluyvera" = "#aaffc3", "Acinetobacter" = "navyblue", "Azorhizobium" = "#3294c1", "Azospirillum" = "#D35400", "Chromobacterium" = "grey", "Elizabethkingia" = "#A3E4D7", "Enterococcus" = "orange", "Escherichia" = "#cfb189", "Hafnia" = "#29522F", "Listeria" = "#D1D19B", "Phyllobacteria" = "#74A172", "Staphylococcus" = "#F56782")
 
-# Remove extra column headers
-kaiju_summary <- kaiju_summary[- grep("sample", kaiju_summary$sample),]
+# Get total relative abundance for each taxon across all samples
+PHY_genus_total_abund <- taxa_sums(PHY_genus)
 
-# Into numeric
-kaiju_summary$percent <- as.numeric(kaiju_summary$percent)
+# Filter
+PHY_genus_filtered <- prune_taxa(PHY_genus_total_abund > 0.1, PHY_genus)
 
-# Top % 1?
-kaiju_summary_filt <- kaiju_summary %>% filter(percent > 1)
+# Function to remove border color
+plot_bar_2 <-  function (PHY_genus_filtered, x = "sample", y = "Abundance", fill = NULL, title = NULL, facet_grid = NULL, border_color = NA) 
+{
+  mdf = psmelt(PHY_genus_filtered)
+  p = ggplot(mdf, aes_string(x = x, y = y, fill = fill))
+  p = p + geom_bar(stat = "identity", position = "stack",  color = border_color)
+  p = p + theme(axis.text.x = element_text(angle = -90, hjust = 0))
+  if (!is.null(facet_grid)) {
+    p <- p + facet_grid(facet_grid)
+  }
+  if (!is.null(title)) {
+    p <- p + ggtitle(title)
+  }
+  return(p)
+}
 
-# Do some editing for plotting
-kaiju_summary_filt$sample <- gsub("bcAd1023T--bcAd1023T", "bcAd1023T", kaiju_summary_filt$sample)
-kaiju_summary_filt$sample <- gsub("bcAd1037T--bcAd1037T", "bcAd1037T", kaiju_summary_filt$sample)
-kaiju_summary_filt$sample <- gsub("bcAd1039T--bcAd1039T", "bcAd1039T", kaiju_summary_filt$sample)
-kaiju_summary_filt$sample <- gsub("bcAd1046T--bcAd1046T", "bcAd1046T", kaiju_summary_filt$sample)
-kaiju_summary_filt$sample <- gsub("bcAd1063T--bcAd1063T", "bcAd1063T", kaiju_summary_filt$sample)
-
-# Add sample info
-kaiju_summary_filt$sample_info <- ifelse(kaiju_summary_filt$sample == "bcAd1023T", "High", "Low")
-
-kaiju_summary_filt <- kaiju_summary_filt %>%
-  mutate(sample_info = case_when(
-    sample == "bcAd1023T" ~ "Tetracycline: 0.2, 15 ªC, rep-5 (bcAd1023T)",
-    sample == "bcAd1037T" ~ "Sulfonamide: 20, 25 ªC, rep-3 (bcAd1037T)",
-    sample == "bcAd1039T" ~ "Sulfonamide: 20, 25 ªC, rep-4 (bcAd1039T)",
-    sample == "bcAd1046T" ~ "Tetracycline: 0.02, 37 ªC, rep-3 (bcAd1046T)",
-    sample == "bcAd1063T" ~ "no ab, 7 ªC, rep-3 (bcAd1063T)",
-  ))
-kaiju_summary_filt$sample_info = factor(kaiju_summary_filt$sample_info, 
-                                        levels=c("Tetracycline: 0.2, 15 ªC, rep-5 (bcAd1023T)",
-                                                  "Sulfonamide: 20, 25 ªC, rep-3 (bcAd1037T)",
-                                                  "Sulfonamide: 20, 25 ªC, rep-4 (bcAd1039T)",
-                                                  "Tetracycline: 0.02, 37 ªC, rep-3 (bcAd1046T)",
-                                                  "no ab, 7 ªC, rep-3 (bcAd1063T)"))
-```
-## Plot
-```{r}
-cols <- c("#34495E", "#800080", "#3bccf7", "#9ACD32", "#8B4513", "#00FF00", "#E74C3C", "black", "#DAA520", "#800000", "#000080", "#4682B4", "#008080", "grey")
-
-kaiju_summary_filt[kaiju_summary_filt == "cannot be assigned to a (non-viral) genus"] <- "unknown"
-
-kaiju_summary_filt$taxon_name <- factor(kaiju_summary_filt$taxon_name, 
-                                        levels=c('Acinetobacter', 'Aeromonas', 'Agrobacterium',
-                                                 'Azorhizobium', 'Azospirillum', 'Citrobacter',
-                                                 'Elizabethkingia', 'Enterococcus', 'Kluyvera',
-                                                 'Paracoccus', 'Pseudomonas', 'Sphingobacterium',
-                                                 'Sphingobium', 'unknown'))
-
-p <- ggplot(kaiju_summary_filt, aes(x = sample, y = percent, fill = taxon_name)) + 
-  geom_bar(stat = "identity", alpha = 0.85) + theme_minimal() + 
-  ggtitle("Bacterial composition, HAMBI data,\nAbundance > 1 % (Kaiju)") +
-  scale_y_continuous(expand = c(0,0), limits = c(0,100)) +
+p <- plot_bar_2(PHY_genus_filtered, fill = "genus") + 
+  geom_bar(stat = "identity") + theme_minimal() + 
+  labs(title = "Bacterial composition",
+       subtitle = "Synthetic community (>1 % genera)",
+       y = "Relative abundance") +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_x_discrete(labels = c(
+    "bcAd1023T" = "0.2 µg/ml TC\n15 °C",
+    "bcAd1037T" = "20 µg/ml SMZ\n25 °C",
+    "bcAd1039T" = "20 µg/ml SMZ\n25 °C",
+    "bcAd1046T" = "0.02 µg/ml TC\n37 °C",
+    "bcAd1063T" = "no ab\n37 °C")) +
   theme(
         text = element_text(family = "Palatino"),
-        legend.text = element_text(size = 20, face = "italic"),
+        legend.text = element_text(face = "italic", size = 14, margin = margin(l = 7)),
         legend.title = element_blank(),
-        axis.title = element_blank(),
-        strip.text = element_text(size = 18),
-        axis.text.y = element_text(size = 30),
-        axis.text.x = element_blank(),
-        plot.title = element_text(size = 30, face = "bold")) + 
-  scale_fill_manual(values=c(cols)) + 
-  facet_grid(~sample_info, space = "free", scale = "free", 
-             labeller = label_wrap_gen(width=16), switch = "both")
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 14),
+        axis.text.y = element_text(size = 10),
+        axis.text.x = element_text(size = 10, hjust = 1, color = "black", vjust = 1, angle = 35),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 14)) + 
+  scale_fill_manual(values=c(cols))
 p
 
-ggsave(filename = "plots/HAMBI_kaiju.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+ggsave(filename = "plots/HAMBI_sylph_>1_percent.png",
+       width = 8, height = 6, dpi = 300, units = "in", device="png", scale = 1)
+
+ggsave(filename = "plots/HAMBI_sylph_>1_percent.svg", 
+       width = 8, height = 6, units = "in")
 ```
+
+
+
+
+
+
+
+
+
+
+
+
 
 # HiFi MAG Pipeline results
 ```{r}
@@ -223,7 +237,7 @@ p <- ggplot(HQ_MAG_count_phylum_sample, aes(x = phylum, y = n, fill = Sample)) +
 p
 
 ggsave(filename = "plots/HQ_MAGs_phylum.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 ## Class
 p <- ggplot(HQ_MAG_count_class_sample, aes(x = class, y = n, fill = Sample)) + 
@@ -241,7 +255,7 @@ p <- ggplot(HQ_MAG_count_class_sample, aes(x = class, y = n, fill = Sample)) +
 p
 
 ggsave(filename = "plots/HQ_MAGs_class.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 ## Genus
 p <- ggplot(HQ_MAG_count_genus_sample, aes(x = genus, y = n, fill = Sample)) + 
@@ -259,7 +273,7 @@ p <- ggplot(HQ_MAG_count_genus_sample, aes(x = genus, y = n, fill = Sample)) +
 p
 
 ggsave(filename = "plots/HQ_MAGs_genus.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 ## Species
 p <- ggplot(HQ_MAG_count_species_sample, aes(x = species, y = n, fill = Sample)) + 
@@ -277,7 +291,7 @@ p <- ggplot(HQ_MAG_count_species_sample, aes(x = species, y = n, fill = Sample))
 p
 
 ggsave(filename = "plots/HQ_MAGs_species.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
 # Plot HiFi MAG Pipeline results
@@ -302,7 +316,7 @@ p <- ggplot(MAG_count_phylum_sample, aes(x = phylum, y = n, fill = Sample)) +
 p
 
 ggsave(filename = "plots/MAGs_phylum.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 # MAGs/taxa/Sample
 ## Class
@@ -323,7 +337,7 @@ p <- ggplot(MAG_count_class_sample, aes(x = class, y = n, fill = Sample)) +
 p
 
 ggsave(filename = "plots/MAGs_class.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 # MAGs/taxa/Sample
 ## Genus
@@ -344,7 +358,7 @@ p <- ggplot(MAG_count_genus_sample, aes(x = genus, y = n, fill = Sample)) +
 p
 
 ggsave(filename = "plots/MAGs_genus.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 # MAGs/taxa/Sample
 ## Species
@@ -365,7 +379,7 @@ p <- ggplot(MAG_count_species_sample, aes(x = species, y = n, fill = Sample)) +
 p
 
 ggsave(filename = "plots/MAGs_species.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
 # Pie chart
@@ -408,13 +422,13 @@ p <- ggplot(MAG_count_phylum_sample_INF, aes(x = "", y = n, fill = phylum)) +
 p
 
 ggsave(filename = "plots/MAGs_pie_INF.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 ggsave(filename = "plots/MAGs_pie_EFF.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 ggsave(filename = "plots/MAGs_pie_SLU.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
 # Plot HiFi MAG Pipeline results
@@ -457,7 +471,7 @@ ARGs <- data.frame(sample = c("EFF1","EFF2","EFF3", "INF1","INF2","INF3","SLU1",
 
 long_MAG_counts$ARGs <- as.numeric(ARGs$ARGs)
 
-long_MAG_counts$ARGs[long_MAG_counts$ARGs == 0] <- ' '
+long_MAG_counts$ARGs[long_MAG_counts$ARGs == 0] <- " "
 
 # Plot
 p <- ggplot(long_MAG_counts, aes(x = sample, y = count, fill = MAGs, label = ARGs)) + 
@@ -498,7 +512,7 @@ p <- ggplot(long_MAG_counts, aes(x = sample, y = count, fill = interaction(sampl
 p
 
 ggsave(filename = "plots/Pipeline_MAGs.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
 # Kaiju, WW data
@@ -559,11 +573,11 @@ p <- ggplot(WW_kaiju_summary_filt, aes(x = sample, y = percent, fill = taxon_nam
 p
 
 #ggsave(filename = "plots/WW_kaiju.png",
-#       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+#       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 # Bacteroidota
 ```{r}
-WW_kaiju_summary_Bacteroidota <- WW_kaiju_summary[grepl('acteroid', WW_kaiju_summary$taxon_name), ]
+WW_kaiju_summary_Bacteroidota <- WW_kaiju_summary[grepl("acteroid", WW_kaiju_summary$taxon_name), ]
 
 # reorder samples
 WW_kaiju_summary_Bacteroidota$type <- WW_kaiju_summary_Bacteroidota$sample
@@ -658,7 +672,7 @@ p <- plot_ordination(PHY_bac_genus, ord_PHY_bac_genus, color = "sample") +
 p
 
 ggsave(filename = "plots/WW_sylph_ord.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
 # Plot bars, top15
@@ -695,7 +709,7 @@ p <- plot_bar(PHY_bac_genus_rel_top, fill = "genus") +
 p
 
 ggsave(filename = "plots/WW_sylph_top15.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
 # Try those > 10 % 
@@ -750,7 +764,7 @@ p <- plot_bar_2(PHY_bac_genus_rel_filtered, fill = "genus") +
 p
 
 ggsave(filename = "plots/WW_sylph_>10.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
 # Sylph ----- try again with genus data only
@@ -846,7 +860,7 @@ p <- plot_bar_2(PHY_genus_filtered, fill = "phylum") +
 p
 
 ggsave(filename = "plots/WW_sylph_>5_percent.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
 
@@ -901,10 +915,10 @@ p <- plot_bar_2(PHY_Bact, fill = "family") +
 p
 
 ggsave(filename = "plots/WW_sylph_Bacteroidales_family.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
-## fARGene, REMOVE THE '_model'
+## fARGene, REMOVE THE "_model"
 ```{r}
 fargene_counts <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/fargene_counts.tsv", row.names=1)
 
@@ -944,7 +958,7 @@ p <- ggplot(fargene, aes(fill=class, y=value, x=sample)) +
 p
 
 ggsave(filename = "plots/WW_fARGene.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
 
@@ -960,8 +974,8 @@ INF_MAGs <- subset(ARG_MAGs, sample_type == "influent")
 EFF_MAGs <- subset(ARG_MAGs, sample_type == "effluent")
 SLU_MAGs <- subset(ARG_MAGs, sample_type == "dried sludge")
 
-fit <- euler(c('A' = sum(INF_MAGs$Methylation_based_analysis),
-               'B' = sum(INF_MAGs$HiFi_MAG_Pipeline), 'A&B' = sum(rowSums(INF_MAGs[,2:3]) > 1)))
+fit <- euler(c("A" = sum(INF_MAGs$Methylation_based_analysis),
+               "B" = sum(INF_MAGs$HiFi_MAG_Pipeline), "A&B" = sum(rowSums(INF_MAGs[,2:3]) > 1)))
 
 png("plots/INF_venn.png",width=3.25,height=3.25,units="in",res=1500)
 plot(fit, main = "Influent",
@@ -971,8 +985,8 @@ plot(fit, main = "Influent",
                    labels = c("Methylation based analysis", "HiFi MAG Pipeline")))
 dev.off()
 
-fit <- euler(c('A' = sum(EFF_MAGs$Methylation_based_analysis),
-               'B' = sum(EFF_MAGs$HiFi_MAG_Pipeline), 'A&B' = sum(rowSums(EFF_MAGs[,2:3]) > 1)))
+fit <- euler(c("A" = sum(EFF_MAGs$Methylation_based_analysis),
+               "B" = sum(EFF_MAGs$HiFi_MAG_Pipeline), "A&B" = sum(rowSums(EFF_MAGs[,2:3]) > 1)))
 
 png("plots/EFF_venn.png",width=3.25,height=3.25,units="in",res=1500)
 plot(fit, main = "Effluent",
@@ -982,8 +996,8 @@ plot(fit, main = "Effluent",
                    labels = c("Methylation based analysis", "HiFi MAG Pipeline")))
 dev.off()
 
-fit <- euler(c('A' = sum(SLU_MAGs$Methylation_based_analysis),
-               'B' = sum(SLU_MAGs$HiFi_MAG_Pipeline), 'A&B' = sum(rowSums(SLU_MAGs[,2:3]) > 1)))
+fit <- euler(c("A" = sum(SLU_MAGs$Methylation_based_analysis),
+               "B" = sum(SLU_MAGs$HiFi_MAG_Pipeline), "A&B" = sum(rowSums(SLU_MAGs[,2:3]) > 1)))
 
 png("plots/SLU_venn.png",width=3.25,height=3.25,units="in",res=1500)
 plot(fit, main = "Dried sludge",
@@ -1042,18 +1056,115 @@ p <- ggplot(df, aes(x = sample, y = count, fill = interaction(sample, Method))) 
         axis.text.y = element_text(size = 28),
         axis.text.x = element_text(size = 36, angle = 90, hjust = 1, color = "white"),
         plot.title = element_text(size = 40, vjust = 0.5, hjust = 0.5)) + 
-  facet_grid(~factor(sample_type, levels=c('influent', 'effluent', 'dried sludge')), space = "free", scales = "free")
+  facet_grid(~factor(sample_type, levels=c("influent", "effluent", "dried sludge")), space = "free", scales = "free")
 p
 
 ggsave(filename = "plots/ARG_MAGs_bar_plot.png",
-       width = 16, height = 13, dpi = 300, units = "in", device='png', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 ggsave(filename = "plots/ARG_MAGs_bar_plot.svg",
-       width = 16, height = 13, dpi = 300, units = "in", device='svg', scale = 1)
+       width = 16, height = 13, dpi = 300, units = "in", device="svg", scale = 1)
 ```
 
 
 
+# Analysis of Kaiju results (Synthetic community)
+```{r}
+kaiju_summary <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/kaiju_summary.tsv")
+
+# Remove extra column headers
+kaiju_summary <- kaiju_summary[- grep("sample", kaiju_summary$sample),]
+
+# Into numeric
+kaiju_summary$percent <- as.numeric(kaiju_summary$percent)
+
+# Top % 1?
+kaiju_summary_filt <- kaiju_summary %>% filter(percent > 1)
+
+# Do some editing for plotting
+kaiju_summary_filt$sample <- gsub("bcAd1023T--bcAd1023T", "bcAd1023T", kaiju_summary_filt$sample)
+kaiju_summary_filt$sample <- gsub("bcAd1037T--bcAd1037T", "bcAd1037T", kaiju_summary_filt$sample)
+kaiju_summary_filt$sample <- gsub("bcAd1039T--bcAd1039T", "bcAd1039T", kaiju_summary_filt$sample)
+kaiju_summary_filt$sample <- gsub("bcAd1046T--bcAd1046T", "bcAd1046T", kaiju_summary_filt$sample)
+kaiju_summary_filt$sample <- gsub("bcAd1063T--bcAd1063T", "bcAd1063T", kaiju_summary_filt$sample)
+
+# Add sample info
+kaiju_summary_filt$sample_info <- ifelse(kaiju_summary_filt$sample == "bcAd1023T", "High", "Low")
+
+kaiju_summary_filt <- kaiju_summary_filt %>%
+  mutate(sample_info = case_when(
+    sample == "bcAd1023T" ~ "Tetracycline: 0.2, 15 ªC, rep-5 (bcAd1023T)",
+    sample == "bcAd1037T" ~ "Sulfonamide: 20, 25 ªC, rep-3 (bcAd1037T)",
+    sample == "bcAd1039T" ~ "Sulfonamide: 20, 25 ªC, rep-4 (bcAd1039T)",
+    sample == "bcAd1046T" ~ "Tetracycline: 0.02, 37 ªC, rep-3 (bcAd1046T)",
+    sample == "bcAd1063T" ~ "no ab, 37 ªC, rep-3 (bcAd1063T)",
+  ))
+kaiju_summary_filt$sample_info = factor(kaiju_summary_filt$sample_info, 
+                                        levels=c("Tetracycline: 0.2, 15 ªC, rep-5 (bcAd1023T)",
+                                                  "Sulfonamide: 20, 25 ªC, rep-3 (bcAd1037T)",
+                                                  "Sulfonamide: 20, 25 ªC, rep-4 (bcAd1039T)",
+                                                  "Tetracycline: 0.02, 37 ªC, rep-3 (bcAd1046T)",
+                                                  "no ab, 37 ªC, rep-3 (bcAd1063T)"))
+```
+## Plot
+```{r}
+cols <- c("#34495E", "#800080", "#3bccf7", "#9ACD32", "#8B4513", "#00FF00", "#E74C3C", "black", "#DAA520", "#800000", "#000080", "#4682B4", "#008080", "grey")
+
+kaiju_summary_filt[kaiju_summary_filt == "cannot be assigned to a (non-viral) genus"] <- "unknown"
+
+kaiju_summary_filt$taxon_name <- factor(kaiju_summary_filt$taxon_name, 
+                                        levels=c("Acinetobacter", "Aeromonas", "Agrobacterium",
+                                                 "Azorhizobium", "Azospirillum", "Citrobacter",
+                                                 "Elizabethkingia", "Enterococcus", "Kluyvera",
+                                                 "Paracoccus", "Pseudomonas", "Sphingobacterium",
+                                                 "Sphingobium", "unknown"))
+
+p <- ggplot(kaiju_summary_filt, aes(x = sample, y = percent, fill = taxon_name)) + 
+  geom_bar(stat = "identity", alpha = 0.85) + theme_minimal() + 
+  ggtitle("Bacterial composition, HAMBI data,\nAbundance > 1 % (Kaiju)") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,100)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(size = 20, face = "italic"),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        strip.text = element_text(size = 18),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_blank(),
+        plot.title = element_text(size = 30, face = "bold")) + 
+  scale_fill_manual(values=c(cols)) + 
+  facet_grid(~sample_info, space = "free", scale = "free", 
+             labeller = label_wrap_gen(width=16), switch = "both")
+p
+
+ggsave(filename = "plots/HAMBI_kaiju.png",
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
+```
 
 
+# Feature Importance
+```{r}
+feature_importance <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/feature_importance.txt")
+df <- feature_importance[rownames(feature_importance) != "All", ]
+df$Features <- as.numeric(df$Features)
 
+value_h <- feature_importance[grep("All", feature_importance$Features), ]
+value_h = print(value_h["Accuracy.Test"][ ,])
+
+value_v <- 150
+
+p <- ggplot(df, aes(x=Features, y=Accuracy.Test)) + ggtitle("Feature Importance") +
+  geom_line() + theme_bw() +
+  theme(text = element_text(family = "Palatino"),
+    plot.title = element_text(size = 34),
+    axis.title = element_text(size = 34),
+    axis.text = element_text(size = 28))
+p1 <- p + geom_hline(yintercept=value_h, linetype="dashed", color = "red", linewidth = 2) +
+  geom_text(aes(230, value_h, label = "All features", vjust = - 1),
+            color = "red", family = "Palatino", size = 10)
+p2 <- p1 + geom_vline(xintercept=value_v, linetype="dotdash", color = "blue", linewidth = 1)
+p2
+
+ggsave(filename = "plots/feature_importance.png",
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
+```
