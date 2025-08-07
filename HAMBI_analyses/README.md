@@ -2,6 +2,27 @@
 &nbsp;
 ## *Folder structure?*
 &nbsp;
+## Sylph
+```
+# Run Sylph 
+cd HAMBI_data/
+apptainer_wrapper exec sylph profile gtdb_database.syldb HiFi_fastq/*.hifi_reads.fastq.gz -t $SLURM_CPUS_PER_TASK > Sylph_out/Sylph_HAMBI.tsv
+
+# Run Sylph-tax
+apptainer_wrapper exec sylph-tax taxprof Sylph_out/Sylph_HAMBI.tsv -t GTDB_r214 -o Sylph_out/prefix_
+
+# Merge samples
+apptainer_wrapper exec sylph-tax merge *.sylphmpa --column relative_abundance -o Sylph_HAMBI_merged.txt
+
+# Get genus
+awk '$1 ~ "clade_name" || $1 ~ "g__" {print $0}' Sylph_HAMBI_merged.txt | grep -v "|t__" | grep -v "|s__"  > Sylph_HAMBI_merged_genus_full.txt
+
+# Edit
+sed -i 's/HiFi_fastq\///g' Sylph_HAMBI_merged_genus_full.txt
+sed -i 's/\.hifi_reads\.fastq\.gz//g' Sylph_HAMBI_merged_genus_full.txt
+sed -i 's/--bcAd10[0-9][0-9]T//g' Sylph_HAMBI_merged_genus_full.txt
+```
+&nbsp;
 ## Metagenome assemmbly of HAMBI community
 ### Creating database ```HAMBI_genomes.fasta``` for community members with WGS data
 ```

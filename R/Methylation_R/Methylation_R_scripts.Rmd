@@ -26,7 +26,7 @@ cols <- c(
 "Bordatella avium" = "#4363d8",
 "Microvirga lotononidis" = "#000000",
 "Paracoccus denitrificans" = "#911eb4",
-"Comomonas testosteroni_C" = "#46f0f0",
+"Comamonas testosteroni_C" = "#46f0f0",
 "Pseudomonas_E chlororaphis" = "#f032e6",
 "Morganella morganii" = "#bcf60c",
 "Cupriavidus oxalaticus" = "#fabebe",
@@ -78,13 +78,14 @@ PHY_genus <- tax_glom(PHY, taxrank = "genus")
 ```
 # Plot
 ```{r}
-cols <- c("NA" = "#FF0000", "Citrobacter_B" = "#3cb44b", "Pseudomonas_E" = "#ffe119", "Bordatella" = "#4363d8", "Microvirga" = "#000000", "Paracoccus" = "#911eb4", "Comomonas" = "#46f0f0", "Morganella" = "#bcf60c", "Cupriavidus" = "#fabebe", "Sphingobium" = "#008080", "Aeromonas" = "#e6beff", "Agrobacterium" = "#9a6324", "Stenotrophomonas" = "#fffac8", "Sphingobacterium" = "#800000", "Kluyvera" = "#aaffc3", "Acinetobacter" = "navyblue", "Azorhizobium" = "#3294c1", "Azospirillum" = "#D35400", "Chromobacterium" = "grey", "Elizabethkingia" = "#A3E4D7", "Enterococcus" = "orange", "Escherichia" = "#cfb189", "Hafnia" = "#29522F", "Listeria" = "#D1D19B", "Phyllobacteria" = "#74A172", "Staphylococcus" = "#F56782")
+cols <- c("NA" = "#FF0000", "Citrobacter_B" = "#3cb44b", "Pseudomonas_E" = "#f032e6", "Bordatella" = "#4363d8", "Microvirga" = "#000000", "Paracoccus" = "#911eb4", "Comamonas" = "#46f0f0", "Morganella" = "#bcf60c", "Cupriavidus" = "#fabebe", "Sphingobium" = "#008080", "Aeromonas" = "#e6beff", "Agrobacterium" = "#9a6324", "Stenotrophomonas" = "#fffac8", "Sphingobacterium" = "#800000", "Kluyvera" = "#aaffc3", "Acinetobacter" = "navyblue", "Azorhizobium" = "#3294c1", "Azospirillum" = "#D35400", "Chromobacterium" = "grey", "Elizabethkingia" = "#A3E4D7", "Enterococcus" = "orange", "Escherichia" = "#cfb189", "Hafnia" = "#29522F", "Listeria" = "#D1D19B", "Phyllobacteria" = "#74A172", "Staphylococcus" = "#F56782")
 
 # Get total relative abundance for each taxon across all samples
 PHY_genus_total_abund <- taxa_sums(PHY_genus)
 
 # Filter
-PHY_genus_filtered <- prune_taxa(PHY_genus_total_abund > 0.1, PHY_genus)
+#PHY_genus_filtered <- prune_taxa(PHY_genus_total_abund > 0.1, PHY_genus)
+PHY_genus_filtered = PHY_genus
 
 # Function to remove border color
 plot_bar_2 <-  function (PHY_genus_filtered, x = "sample", y = "Abundance", fill = NULL, title = NULL, facet_grid = NULL, border_color = NA) 
@@ -104,35 +105,147 @@ plot_bar_2 <-  function (PHY_genus_filtered, x = "sample", y = "Abundance", fill
 
 p <- plot_bar_2(PHY_genus_filtered, fill = "genus") + 
   geom_bar(stat = "identity") + theme_minimal() + 
-  labs(title = "Bacterial composition",
-       subtitle = "Synthetic community (>1 % genera)",
+  labs(title = "Bacterial composition (genus)",
+       subtitle = "Synthetic community",
        y = "Relative abundance") +
   scale_y_continuous(expand = c(0,0)) +
   scale_x_discrete(labels = c(
-    "bcAd1023T" = "0.2 µg/ml TC\n15 °C",
-    "bcAd1037T" = "20 µg/ml SMZ\n25 °C",
-    "bcAd1039T" = "20 µg/ml SMZ\n25 °C",
-    "bcAd1046T" = "0.02 µg/ml TC\n37 °C",
-    "bcAd1063T" = "no ab\n37 °C")) +
+    "bcAd1023T" = "bcAd1023\n0.2 µg/ml TC, 15 °C",
+    "bcAd1037T" = "bcAd1037\n20 µg/ml SMZ, 25 °C",
+    "bcAd1039T" = "bcAd1039\n20 µg/ml SMZ, 25 °C",
+    "bcAd1046T" = "bcAd1046\n0.02 µg/ml TC, 37 °C",
+    "bcAd1063T" = "bcAd1063\nno ab, 37 °C")) +
   theme(
-        text = element_text(family = "Palatino"),
+        text = element_text(family = "Times"),
         legend.text = element_text(face = "italic", size = 14, margin = margin(l = 7)),
         legend.title = element_blank(),
         axis.title.x = element_blank(),
-        axis.title.y = element_text(size = 14),
-        axis.text.y = element_text(size = 10),
-        axis.text.x = element_text(size = 10, hjust = 1, color = "black", vjust = 1, angle = 35),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(size = 12, hjust = 1, vjust = 1, angle = 35, face = "bold"),
         plot.title = element_text(size = 20),
         plot.subtitle = element_text(size = 14)) + 
   scale_fill_manual(values=c(cols))
 p
 
-ggsave(filename = "plots/HAMBI_sylph_>1_percent.png",
+ggsave(filename = "plots/HAMBI_sylph.png",
        width = 8, height = 6, dpi = 300, units = "in", device="png", scale = 1)
 
-ggsave(filename = "plots/HAMBI_sylph_>1_percent.svg", 
+ggsave(filename = "plots/HAMBI_sylph.svg", 
        width = 8, height = 6, units = "in")
 ```
+
+# Sylph wastewater community
+```{r}
+# Load data
+Sylph_HiFi_merged <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/Sylph_HiFi_merged_genus_full.txt", row.names=1)
+
+# Tax table
+tax_table0 <- data.frame("rownames" = rownames(Sylph_HiFi_merged))
+tax_table <- separate(tax_table0, rownames, 
+                       into = c("domain", "phylum", "class", "order", "family", "genus", "species", "strain"),
+                      sep = "\\|", fill = "right", remove = TRUE)
+tax_table$domain <- gsub("d__", "", tax_table$domain)
+tax_table$phylum <- gsub("p__", "", tax_table$phylum)
+tax_table$class <- gsub("c__", "", tax_table$class)
+tax_table$order <- gsub("o__", "", tax_table$order)
+tax_table$family <- gsub("f__", "", tax_table$family)
+tax_table$genus <- gsub("g__", "", tax_table$genus)
+tax_table$species <- gsub("s__", "", tax_table$species)
+tax_table$strain <- gsub("t__", "", tax_table$strain)
+
+# Otu table
+OTU_table = Sylph_HiFi_merged
+rownames(OTU_table) <- 1:nrow(Sylph_HiFi_merged)
+rownames(OTU_table) <- paste0("sp", rownames(OTU_table))
+
+# Sample data
+metadata <- data.frame("sample_type" = rep(c("effluent", "influent", "sludge"), each = 3),
+                       "sample" = colnames(OTU_table))
+rownames(metadata) <- colnames(OTU_table)
+meta <- sample_data(metadata)
+
+# Phyloseq
+OTU = otu_table(OTU_table, taxa_are_rows = TRUE)
+tax_table_matrix <- as.matrix(tax_table)
+TAX = tax_table(tax_table_matrix)
+
+PHY <- phyloseq(OTU, TAX, meta)
+
+PHY_genus <- tax_glom(PHY, taxrank = "genus")
+```
+# Plot
+```{r}
+cols <- c("#F5F5DC", "#34495E", "#5d7b65", "#c9f7d1", "#D35400", "#F1C40F", "#a40500", "#c9f063", "#06CC97",
+          "#E6E3E3", "#cfb189", "#3294c1", "#c1a3c0", "#7FDBFF", "#FF6B6B", "black", "navyblue",
+          "#808000","#1ABC9C", "#584691", "#1cb9be", "#f6b178", "#1f8d28", "#092fdb", "#fed7d1", "orange", "coral",
+          "#fe7fca", "#6698f5", "#FFB6B0", "#6f18c1", "#49c118", "grey", "#faec81",
+          "#35f2ef")
+
+# Get total relative abundance for each taxon across all samples
+PHY_genus_total_abund <- taxa_sums(PHY_genus)
+
+PHY_genus_filtered <- prune_taxa(PHY_genus_total_abund > 0.5, PHY_genus)
+# What does it mean? 1216 genera are filtered out and we are left with 14.966 % of the genus diversity.
+# 1430 - 1216 = 214
+# Still the sample sums are (so only rare genera were dropped):
+#    EFF1    EFF2    EFF3    INF1    INF2    INF3    SLU1    SLU2    SLU3 
+# 86.8107 86.7874 90.4764 88.3669 88.0146 86.6902 90.3468 90.3934 91.7258 
+
+#TopNOTUs <- names(sort(taxa_sums(PHY_genus), TRUE)[1:20])
+#PHY_filtered <- prune_species(TopNOTUs, PHY_genus)
+
+# Reorder sample_type with custom levels
+sample_data(PHY_genus_filtered)$sample_type <- factor(sample_data(PHY_genus_filtered)$sample_type,
+                                       levels = c("influent", "effluent", "sludge"))
+
+# Function to remove border color
+plot_bar_2 <-  function (PHY_genus_filtered, x = "sample", y = "Abundance", fill = NULL, title = NULL, facet_grid = NULL, border_color = NA) 
+{
+  mdf = psmelt(PHY_genus_filtered)
+  p = ggplot(mdf, aes_string(x = x, y = y, fill = fill))
+  p = p + geom_bar(stat = "identity", position = "stack",  color = border_color)
+  p = p + theme(axis.text.x = element_text(angle = -90, hjust = 0))
+  if (!is.null(facet_grid)) {
+    p <- p + facet_grid(facet_grid)
+  }
+  if (!is.null(title)) {
+    p <- p + ggtitle(title)
+  }
+  return(p)
+}
+
+p <- plot_bar_2(PHY_genus_filtered, fill = "phylum") + 
+  geom_bar(stat = "identity") + theme_minimal() + 
+  labs(title = "Bacterial composition (phylum)",
+       subtitle = "Wastewater community (genera > 0.5 %)",
+       y = "Relative abundance") +
+  scale_y_continuous(expand = c(0,0), breaks = seq(0, 100, by = 25)) +
+  theme(
+        text = element_text(family = "Times"),
+        legend.text = element_text(face = "italic", size = 14, margin = margin(l = 7)),
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(size = 12, face = "bold"),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 14)) + 
+  scale_fill_manual(values=c(cols)) +
+  facet_grid(~sample_type, scales = "free_x", space = "free_x", labeller = labeller(sample_type = function(x) rep("", length(x))))
+p
+
+ggsave(filename = "plots/WW_sylph_>0.5_percent.png",
+       width = 10, height = 6, dpi = 300, units = "in", device="png", scale = 1)
+
+ggsave(filename = "plots/WW_sylph_>0.5_percent.svg", 
+       width = 10, height = 6, units = "in")
+```
+
+
+
+
+
 
 
 
