@@ -227,26 +227,16 @@ awk -F'\t' '{print NF; exit}' merged_data.tsv
 # There are still empty columns in the end, remove them
 cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 ```
-
 ## Run ```notebooks/Random_Forest_analysis_HAMBI.ipynb```
 &nbsp;
 &nbsp;
-######### REMOVE
-## Run Random Forest analyses ```notebooks/Random_forest_HAMBI```
-### Sequence -20...20: 150 most important features
-### Sequence -5...5: All features
-```
-cd /scratch/project_2006608/Methylation/HAMBI_data
-# List of patterns to match against column names
-## 5...-5
-cut -f 1,17-27,58-68,99-109,140-150,181-191,222-232,263-273,304-314,345-355,386-396,427-437,468-478,494-510 merged_data.tsv > merged_data_short_5.tsv
-## 10...-10
-cut -f 1,12-34,53-73,94-114,135-155,176-196,217-237,258-278,299-319,340-360,381-401,422-442,463-483,494-510 merged_data.tsv > merged_data_short_10.tsv
-```
-&nbsp;
 &nbsp;
 ## Create Sequence logos
-######### REMOVE
+```
+export PYTHONUSERBASE=/projappl/project_2009999/my-python-env
+module load python-data
+python3 src/create_logos.py HAMBI_data/contigs HAMBI_data/logos
+```
 &nbsp;
 &nbsp;
 ## UMAP
