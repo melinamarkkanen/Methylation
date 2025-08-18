@@ -7,6 +7,7 @@ date: "2025-03-12"
 ```{r setup, include=FALSE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 # Libraries
 ```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -16,7 +17,9 @@ library(tidyr)
 library(phyloseq)
 library(stringr)
 library(eulerr)
+library(vegan)
 ```
+
 # Colors
 ```{r}
 cols <- c(
@@ -76,6 +79,7 @@ PHY <- phyloseq(OTU, TAX, meta)
 
 PHY_genus <- tax_glom(PHY, taxrank = "genus")
 ```
+
 # Plot
 ```{r}
 cols <- c("NA" = "#FF0000", "Citrobacter_B" = "#3cb44b", "Pseudomonas_E" = "#f032e6", "Bordatella" = "#4363d8", "Microvirga" = "#000000", "Paracoccus" = "#911eb4", "Comamonas" = "#46f0f0", "Morganella" = "#bcf60c", "Cupriavidus" = "#fabebe", "Sphingobium" = "#008080", "Aeromonas" = "#e6beff", "Agrobacterium" = "#9a6324", "Stenotrophomonas" = "#fffac8", "Sphingobacterium" = "#800000", "Kluyvera" = "#aaffc3", "Acinetobacter" = "navyblue", "Azorhizobium" = "#3294c1", "Azospirillum" = "#D35400", "Chromobacterium" = "grey", "Elizabethkingia" = "#A3E4D7", "Enterococcus" = "orange", "Escherichia" = "#cfb189", "Hafnia" = "#29522F", "Listeria" = "#D1D19B", "Phyllobacteria" = "#74A172", "Staphylococcus" = "#F56782")
@@ -174,6 +178,7 @@ PHY <- phyloseq(OTU, TAX, meta)
 
 PHY_genus <- tax_glom(PHY, taxrank = "genus")
 ```
+
 # Plot
 ```{r}
 cols <- c("#F5F5DC", "#34495E", "#5d7b65", "#c9f7d1", "#D35400", "#F1C40F", "#a40500", "#c9f063", "#06CC97",
@@ -235,29 +240,174 @@ p <- plot_bar_2(PHY_genus_filtered, fill = "phylum") +
   facet_grid(~sample_type, scales = "free_x", space = "free_x", labeller = labeller(sample_type = function(x) rep("", length(x))))
 p
 
-ggsave(filename = "plots/WW_sylph_>0.5_percent.png",
+#ggsave(filename = "plots/WW_sylph_>0.5_percent.png",
+#       width = 10, height = 6, dpi = 300, units = "in", device="png", scale = 1)
+
+#ggsave(filename = "plots/WW_sylph_>0.5_percent.svg", 
+#       width = 10, height = 6, units = "in")
+```
+
+# Sylph wastewater community
+## Bacteroidales
+```{r}
+cols <- c("#F5F5DC", "#34495E", "#5d7b65", "#c9f7d1", "#D35400", "#a40500", "#c9f063", "#E74C3C",
+          "#A3E4D7", "#cfb189", "#3294c1", "#c1a3c0", "#7FDBFF", "#FF6B6B", "black",
+          "#808000","#1ABC9C", "#584691", "#1cb9be", "#1f8d28", "#092fdb", "#fed7d1",
+          "#fe7fca", "#6698f5", "#FFB6B0", "#F1C40F", "#542C42", "#6f18c1", "#49c118", "grey", "#faec81", "#35f2ef")
+
+PHY_Bact <- subset_taxa(PHY_genus, order == "Bacteroidales")
+
+#PHY_Bact_rel_total_abund <- taxa_sums(PHY_Bact_rel)
+#PHY_Bact_filtered <- prune_taxa(PHY_Bact_rel_total_abund > 0.01, PHY_Bact_rel)
+
+# Reorder sample_type with custom levels
+sample_data(PHY_Bact)$sample_type <- factor(sample_data(PHY_Bact)$sample_type,
+                                       levels = c("influent", "effluent", "sludge"))
+
+# Function to remove border color
+plot_bar_2 <-  function (PHY_Bact, x = "sample", y = "Abundance", fill = NULL, title = NULL, facet_grid = NULL, border_color = NA) 
+{
+  mdf = psmelt(PHY_Bact)
+  p = ggplot(mdf, aes_string(x = x, y = y, fill = fill))
+  p = p + geom_bar(stat = "identity", position = "stack",  color = border_color)
+  p = p + theme(axis.text.x = element_text(angle = -90, hjust = 0))
+  if (!is.null(facet_grid)) {
+    p <- p + facet_grid(facet_grid)
+  }
+  if (!is.null(title)) {
+    p <- p + ggtitle(title)
+  }
+  return(p)
+}
+
+p <- plot_bar_2(PHY_Bact, fill = "family") + 
+  geom_bar(stat = "identity") + theme_minimal() + 
+  labs(title = "Bacterial composition (family)",
+       subtitle = "Wastewater community (order: Bacteroidales)",
+       y = "Relative abundance") +
+  scale_y_continuous(expand = c(0,0)) +
+    theme(
+        text = element_text(family = "Times"),
+        legend.text = element_text(face = "italic", size = 14, margin = margin(l = 7)),
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(size = 12, face = "bold"),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 14)) + 
+  scale_fill_manual(values=c(cols)) + 
+  facet_grid(~sample_type, scales = "free_x", space = "free_x", labeller = labeller(sample_type = function(x) rep("", length(x))))
+p
+
+ggsave(filename = "plots/WW_sylph_Bacteroidales_family.png",
        width = 10, height = 6, dpi = 300, units = "in", device="png", scale = 1)
 
-ggsave(filename = "plots/WW_sylph_>0.5_percent.svg", 
+ggsave(filename = "plots/WW_sylph_Bacteroidales_family.svg", 
        width = 10, height = 6, units = "in")
 ```
 
+# Sylph wastewater community
+## Acinetobacter
+```{r}
+cols <- c("#548058")
+
+PHY_Bact <- subset_taxa(PHY_genus, genus == "Acinetobacter")
+
+#PHY_Bact_rel_total_abund <- taxa_sums(PHY_Bact_rel)
+#PHY_Bact_filtered <- prune_taxa(PHY_Bact_rel_total_abund > 0.01, PHY_Bact_rel)
+
+# Reorder sample_type with custom levels
+sample_data(PHY_Bact)$sample_type <- factor(sample_data(PHY_Bact)$sample_type,
+                                       levels = c("influent", "effluent", "sludge"))
+
+# Function to remove border color
+plot_bar_2 <-  function (PHY_Bact, x = "sample", y = "Abundance", fill = NULL, title = NULL, facet_grid = NULL, border_color = NA) 
+{
+  mdf = psmelt(PHY_Bact)
+  p = ggplot(mdf, aes_string(x = x, y = y, fill = fill))
+  p = p + geom_bar(stat = "identity", position = "stack",  color = border_color)
+  p = p + theme(axis.text.x = element_text(angle = -90, hjust = 0))
+  if (!is.null(facet_grid)) {
+    p <- p + facet_grid(facet_grid)
+  }
+  if (!is.null(title)) {
+    p <- p + ggtitle(title)
+  }
+  return(p)
+}
+
+p <- plot_bar_2(PHY_Bact, fill = "genus") + 
+  geom_bar(stat = "identity") + theme_minimal() + 
+  labs(title = "Bacterial composition (genus)",
+       subtitle = expression("Wastewater community (genus: " * italic("Acinetobacter")*")"),
+       y = "Relative abundance") +
+  scale_y_continuous(expand = c(0,0)) +
+    theme(
+        text = element_text(family = "Times"),
+        legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(size = 12, face = "bold"),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 14)) + 
+  scale_fill_manual(values=c(cols)) + 
+  facet_grid(~sample_type, scales = "free_x", space = "free_x", labeller = labeller(sample_type = function(x) rep("", length(x))))
+p
+
+ggsave(filename = "plots/WW_sylph_Acinetobacter.png",
+       width = 10, height = 6, dpi = 300, units = "in", device="png", scale = 1)
+
+ggsave(filename = "plots/WW_sylph_Acinetobacter.svg", 
+       width = 10, height = 6, units = "in")
+```
+
+# Ordination on bacterial composition
+```{r}
+# Perform PCoA
+ord_PHY_genus <- ordinate(PHY_genus, method = "PCoA", distance = "bray")
+
+cols <- c("#17b2c2", "#47ecfd", "#29b3fc", "#f9e30a", "#fcf0a0", "#eac51e","#7c4107","#c89b6d", "#cc7442")
 
 
+# Plot the PCoA
+p <- plot_ordination(PHY_genus, ord_PHY_genus, color = "sample") + 
+  geom_point(size = 4) +
+  theme_minimal() +
+  labs(title = "PCoA of Taxonomic Diversity (genus)",
+       subtitle = "Bray-Curtis") +
+  theme(legend.title = element_blank(),
+        legend.text = element_text(size = 14),
+        text = element_text(family = "Times"),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 14),
+        axis.text = element_text(size = 14),
+        axis.title = element_text(size = 14, face = "bold")) +
+        scale_color_manual(values = c(cols)) + coord_fixed()
+p
 
+ggsave(filename = "plots/WW_sylph_ord.png",
+       width = 10, height = 6, dpi = 300, units = "in", device="png", scale = 1)
 
+ggsave(filename = "plots/WW_sylph_ord.svg", 
+       width = 10, height = 6, units = "in")
+```
 
+## PERMANOVA
+```{r}
+# Calculate Bray-Curtis distance matrix
+bray_dist <- phyloseq::distance(PHY_genus, method = "bray")
 
+# Extract sample metadata
+metadata <- as(sample_data(PHY_genus), "data.frame")
 
+# Run PERMANOVA
+permanova_result <- adonis2(bray_dist ~ sample_type, data = metadata)
 
-
-
-
-
-
-
-
-
+# View results
+print(permanova_result)
+```
 
 # HiFi MAG Pipeline results
 ```{r}
@@ -325,8 +475,97 @@ MAG_count_class_sample <- hifi_MAG_pipeline_results %>% count(class, Sample)
 MAG_count_phylum_sample <- hifi_MAG_pipeline_results %>% count(phylum, Sample)
 ```
 
+# tästä jatkuu, tsekkaa et onko oikeet numerot
 # Plot HiFi MAG Pipeline results
-## HQ
+## All
+```{r}
+# MAGs/taxa/Sample
+## Phylum
+p <- ggplot(MAG_count_phylum_sample, aes(x = phylum, y = n, fill = Sample)) + 
+  geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
+  ggtitle("MAGs by HiFi MAG Pipeline (phylum)") +
+  scale_y_continuous(expand = c(0,0)
+                     #, limits = c(0,50)
+                     ) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(size = 20),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_text(size = 16, angle = 65, hjust = 0.95),
+        plot.title = element_text(size = 30))
+p
+
+#ggsave(filename = "plots/MAGs_phylum.png",
+#       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
+
+# MAGs/taxa/Sample
+## Class
+p <- ggplot(MAG_count_class_sample, aes(x = class, y = n, fill = Sample)) + 
+  geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
+  ggtitle("MAGs by HiFi MAG Pipeline (class)") +
+  scale_y_continuous(expand = c(0,0)
+                     #, limits = c(0,50)
+                     ) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(size = 30),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_text(size = 16, angle = 60, hjust = 0.99),
+        plot.title = element_text(size = 30))
+p
+
+#ggsave(filename = "plots/MAGs_class.png",
+#       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
+
+# MAGs/taxa/Sample
+## Genus
+p <- ggplot(MAG_count_genus_sample, aes(x = genus, y = n, fill = Sample)) + 
+  geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
+  ggtitle("MAGs by HiFi MAG Pipeline (genus)") +
+  scale_y_continuous(expand = c(0,0)
+                     #, limits = c(0,45)
+                     ) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(size = 20),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 20),
+        axis.text.x = element_text(size = 8, angle = 90, face = "italic", vjust = 0.5, hjust=1),
+        plot.title = element_text(size = 20))
+p
+
+#ggsave(filename = "plots/MAGs_genus.png",
+#       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
+
+# MAGs/taxa/Sample
+## Species
+p <- ggplot(MAG_count_species_sample, aes(x = species, y = n, fill = Sample)) + 
+  geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
+  ggtitle("MAGs by HiFi MAG Pipeline (species)") +
+  scale_y_continuous(expand = c(0,0)
+                     #, limits = c(0,50)
+                     ) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(size = 20),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 20),
+        axis.text.x = element_text(size = 8, angle = 90, face = "italic", vjust = 0.5, hjust=1),
+        plot.title = element_text(size = 20))
+p
+
+#ggsave(filename = "plots/MAGs_species.png",
+#       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
+```
+
+# Plot HiFi MAG Pipeline results
+## High-quality
 ```{r}
 # colors
 cols <- c("EFF1" = "#17b2c2", "EFF2" = "#47ecfd", "EFF3" = "#29b3fc",
@@ -407,93 +646,18 @@ ggsave(filename = "plots/HQ_MAGs_species.png",
        width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
-# Plot HiFi MAG Pipeline results
-## All
-```{r}
-# MAGs/taxa/Sample
-## Phylum
-p <- ggplot(MAG_count_phylum_sample, aes(x = phylum, y = n, fill = Sample)) + 
-  geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  ggtitle("MAGs by HiFi MAG Pipeline (phylum)") +
-  scale_y_continuous(expand = c(0,0)
-                     #, limits = c(0,50)
-                     ) +
-  theme(
-        text = element_text(family = "Palatino"),
-        legend.text = element_text(size = 20),
-        legend.title = element_blank(),
-        axis.title = element_blank(),
-        axis.text.y = element_text(size = 30),
-        axis.text.x = element_text(size = 16, angle = 65, hjust = 0.95),
-        plot.title = element_text(size = 30))
-p
 
-ggsave(filename = "plots/MAGs_phylum.png",
-       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
-# MAGs/taxa/Sample
-## Class
-p <- ggplot(MAG_count_class_sample, aes(x = class, y = n, fill = Sample)) + 
-  geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  ggtitle("MAGs by HiFi MAG Pipeline (class)") +
-  scale_y_continuous(expand = c(0,0)
-                     #, limits = c(0,50)
-                     ) +
-  theme(
-        text = element_text(family = "Palatino"),
-        legend.text = element_text(size = 30),
-        legend.title = element_blank(),
-        axis.title = element_blank(),
-        axis.text.y = element_text(size = 30),
-        axis.text.x = element_text(size = 16, angle = 60, hjust = 0.99),
-        plot.title = element_text(size = 30))
-p
 
-ggsave(filename = "plots/MAGs_class.png",
-       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
-# MAGs/taxa/Sample
-## Genus
-p <- ggplot(MAG_count_genus_sample, aes(x = genus, y = n, fill = Sample)) + 
-  geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  ggtitle("MAGs by HiFi MAG Pipeline (genus)") +
-  scale_y_continuous(expand = c(0,0)
-                     #, limits = c(0,45)
-                     ) +
-  theme(
-        text = element_text(family = "Palatino"),
-        legend.text = element_text(size = 20),
-        legend.title = element_blank(),
-        axis.title = element_blank(),
-        axis.text.y = element_text(size = 20),
-        axis.text.x = element_text(size = 8, angle = 90, face = "italic", vjust = 0.5, hjust=1),
-        plot.title = element_text(size = 20))
-p
 
-ggsave(filename = "plots/MAGs_genus.png",
-       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
-# MAGs/taxa/Sample
-## Species
-p <- ggplot(MAG_count_species_sample, aes(x = species, y = n, fill = Sample)) + 
-  geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  ggtitle("MAGs by HiFi MAG Pipeline (species)") +
-  scale_y_continuous(expand = c(0,0)
-                     #, limits = c(0,50)
-                     ) +
-  theme(
-        text = element_text(family = "Palatino"),
-        legend.text = element_text(size = 20),
-        legend.title = element_blank(),
-        axis.title = element_blank(),
-        axis.text.y = element_text(size = 20),
-        axis.text.x = element_text(size = 8, angle = 90, face = "italic", vjust = 0.5, hjust=1),
-        plot.title = element_text(size = 20))
-p
 
-ggsave(filename = "plots/MAGs_species.png",
-       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
-```
+
+
+
+
+
 
 # Pie chart
 ```{r}
