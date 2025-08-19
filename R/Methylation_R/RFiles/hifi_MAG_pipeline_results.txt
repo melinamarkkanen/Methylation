@@ -42,7 +42,7 @@ EFF1_metabat2.587	EFF1	NA	73.1	2.3	14	Desulfobacterota_G	Syntrophorhabdia	Syntro
 EFF1_metabat2.588	EFF1	NA	87.2	1.36	15	Bdellovibrionota	Bacteriovoracia	Bacteriovoracales	Bacteriovoracaceae	Bacteriovorax	NA
 EFF1_semibin2_46	EFF1	NA	74.25	9.67	15	Patescibacteria	Saccharimonadia	Saccharimonadales	UBA7683	NA	NA
 EFF1_semibin2_3	EFF1	NA	88.05	0.22	20	Nitrospirota	Nitrospiria	Nitrospirales	Nitrospiraceae	Nitrospira_A	Nitrospira_A sp017986555
-EFF2_complete.20	EFF2	vanM_1_FJ349556	100	0.72	1	Firmicutes	Bacilli	Lactobacillales	Enterococcaceae	Enterococcus_F	NA
+EFF2_complete.20	EFF2	NA	100	0.72	1	Firmicutes	Bacilli	Lactobacillales	Enterococcaceae	Enterococcus_F	NA
 EFF2_complete.40	EFF2	NA	100	0.88	1	Proteobacteria	Alphaproteobacteria	Rhizobiales	Hyphomicrobiaceae	Hyphomicrobium	NA
 EFF2_complete.47	EFF2	NA	100	0.16	1	Proteobacteria	Alphaproteobacteria	Rhodobacterales	Rhodobacteraceae	Fuscovulum	Fuscovulum blasticum
 EFF2_complete.55	EFF2	NA	100	0.49	1	Patescibacteria	Paceibacteria	UBA9983_A	UBA9973	JAGOQQ01	NA

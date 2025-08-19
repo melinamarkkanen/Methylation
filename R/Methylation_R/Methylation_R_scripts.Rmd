@@ -370,7 +370,6 @@ ord_PHY_genus <- ordinate(PHY_genus, method = "PCoA", distance = "bray")
 
 cols <- c("#17b2c2", "#47ecfd", "#29b3fc", "#f9e30a", "#fcf0a0", "#eac51e","#7c4107","#c89b6d", "#cc7442")
 
-
 # Plot the PCoA
 p <- plot_ordination(PHY_genus, ord_PHY_genus, color = "sample") + 
   geom_point(size = 4) +
@@ -475,11 +474,38 @@ MAG_count_class_sample <- hifi_MAG_pipeline_results %>% count(class, Sample)
 MAG_count_phylum_sample <- hifi_MAG_pipeline_results %>% count(phylum, Sample)
 ```
 
-# tästä jatkuu, tsekkaa et onko oikeet numerot
 # Plot HiFi MAG Pipeline results
 ## All
+##### huom, luvut pitää mahd päivittää
 ```{r}
+cols <- c("#17b2c2", "#47ecfd", "#29b3fc", "#f9e30a", "#fcf0a0", "#eac51e","#7c4107","#c89b6d", "#cc7442")
+
 # MAGs/taxa/Sample
+## Class
+p <- ggplot(MAG_count_class_sample, aes(x = class, y = n, fill = Sample)) + 
+  geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
+  labs(y = "Number of MAGs", title = "MAGs by HiFi MAG Pipeline (class)") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,67)) +
+  theme(
+        text = element_text(family = "Times"),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text.y = element_text(size = 14),
+        axis.text.x = element_text(size = 13, angle = 60, hjust = 1.009),
+        plot.title = element_text(size = 20))
+p
+
+ggsave(filename = "plots/HiFi_MAGs_class.png",
+       width = 10, height = 6, dpi = 300, units = "in", device="png", scale = 1)
+
+ggsave(filename = "plots/HiFi_MAGs_class.svg", 
+       width = 10, height = 6, units = "in")
+
+
+# Other taxa levels
+
 ## Phylum
 p <- ggplot(MAG_count_phylum_sample, aes(x = phylum, y = n, fill = Sample)) + 
   geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
@@ -497,31 +523,6 @@ p <- ggplot(MAG_count_phylum_sample, aes(x = phylum, y = n, fill = Sample)) +
         plot.title = element_text(size = 30))
 p
 
-#ggsave(filename = "plots/MAGs_phylum.png",
-#       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
-
-# MAGs/taxa/Sample
-## Class
-p <- ggplot(MAG_count_class_sample, aes(x = class, y = n, fill = Sample)) + 
-  geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  ggtitle("MAGs by HiFi MAG Pipeline (class)") +
-  scale_y_continuous(expand = c(0,0)
-                     #, limits = c(0,50)
-                     ) +
-  theme(
-        text = element_text(family = "Palatino"),
-        legend.text = element_text(size = 30),
-        legend.title = element_blank(),
-        axis.title = element_blank(),
-        axis.text.y = element_text(size = 30),
-        axis.text.x = element_text(size = 16, angle = 60, hjust = 0.99),
-        plot.title = element_text(size = 30))
-p
-
-#ggsave(filename = "plots/MAGs_class.png",
-#       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
-
-# MAGs/taxa/Sample
 ## Genus
 p <- ggplot(MAG_count_genus_sample, aes(x = genus, y = n, fill = Sample)) + 
   geom_bar(stat = "identity") + scale_fill_manual(values = c(cols)) + theme_minimal() +
@@ -538,9 +539,6 @@ p <- ggplot(MAG_count_genus_sample, aes(x = genus, y = n, fill = Sample)) +
         axis.text.x = element_text(size = 8, angle = 90, face = "italic", vjust = 0.5, hjust=1),
         plot.title = element_text(size = 20))
 p
-
-#ggsave(filename = "plots/MAGs_genus.png",
-#       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 # MAGs/taxa/Sample
 ## Species
@@ -559,10 +557,141 @@ p <- ggplot(MAG_count_species_sample, aes(x = species, y = n, fill = Sample)) +
         axis.text.x = element_text(size = 8, angle = 90, face = "italic", vjust = 0.5, hjust=1),
         plot.title = element_text(size = 20))
 p
-
-#ggsave(filename = "plots/MAGs_species.png",
-#       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
+
+# Summary of HiFi MAG Pipeline results
+###### muokkaa tätä kokonaisuudessaan, tsekkaa luvut  #########
+```{r}
+cols <- c("EFF1" = "#17b2c2", "EFF2" = "#47ecfd", "EFF3" = "#29b3fc",
+          "INF1" = "#f9e30a", "INF2" = "#fcf0a0", "INF3" = "#eac51e",
+          "SLU1" = "#e38236", "SLU2" = "#fec191", "SLU3" = "#daa187")
+
+# Add ARGs
+counts_MAGs_with_ARGs <- MAGs_with_ARGs %>% count(Sample)
+View(counts_MAGs_with_ARGs)
+colnames(counts_MAGs_with_ARGs) <- c("Sample", "ARGs")
+
+# Match
+x <- match(MAG_count_sample$Sample, counts_MAGs_with_ARGs$Sample)
+counts_MAGs_with_ARGs <- counts_MAGs_with_ARGs[x,]
+
+# Bind
+df <- cbind(MAG_count_sample, "ARGs" = counts_MAGs_with_ARGs$ARGs)
+df[is.na(df)] <- ""
+
+# reorder
+df$Sample <- factor(df$Sample, levels = c("INF1", "INF2", "INF3", "EFF1", "EFF2", "EFF3", "SLU1", "SLU2", "SLU3"))
+
+# Plot
+p <- ggplot(df, aes(x = Sample, y = n, fill = Sample, label = ARGs)) + 
+  geom_bar(stat = "identity", alpha = 0.75) + theme_minimal() +
+  geom_text(size = 10, position = position_stack(vjust = .5), color = "black", family = "Times") +
+  labs(title = "Number of MAGs by HiFi MAG Pipeline", y = "Number of MAGs") + theme_minimal() +
+  scale_y_continuous(expand = c(0,0)) +
+  theme(
+        text = element_text(family = "Times"),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text.y = element_text(size = 14),
+        axis.text.x = element_text(size = 14, face = "bold"),
+        plot.title = element_text(size = 20)) + scale_fill_manual(values = c(cols))
+p
+
+ggsave(filename = "plots/Pipeline_MAGs.png",
+       width = 10, height = 6, dpi = 300, units = "in", device="png", scale = 1)
+
+ggsave(filename = "plots/Pipeline_MAGs.svg", 
+       width = 10, height = 6, units = "in")
+```
+
+# HiFi MAG Pipeline results vs. methylation-based MAGs
+##### huom, luvut ARG_MAG_counts.txt:ssa pitää päivittää
+```{r}
+ARG_MAGs_counts <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/ARG_MAG_counts.txt")
+ARG_MAGs_counts$Methylation_based_analysis <- as.numeric(ARG_MAGs_counts$Methylation_based_analysis)
+ARG_MAGs_counts$HiFi_MAG_Pipeline <- as.numeric(ARG_MAGs_counts$HiFi_MAG_Pipeline)
+
+ARG_MAGs_counts_long <- melt(setDT(ARG_MAGs_counts), id.vars = c("sample"), variable.name = "Methylation_based_analysis")
+ARG_MAGs_counts_long$sample_type <- ARG_MAGs_counts_long$sample
+ARG_MAGs_counts_long$sample_type <- gsub("[0-9]", "", ARG_MAGs_counts_long$sample_type)
+ARG_MAGs_counts_long$sample_type <- gsub("INF", "influent", ARG_MAGs_counts_long$sample_type)
+ARG_MAGs_counts_long$sample_type <- gsub("EFF", "effluent", ARG_MAGs_counts_long$sample_type)
+ARG_MAGs_counts_long$sample_type <- gsub("SLU", "dried sludge", ARG_MAGs_counts_long$sample_type)
+
+colnames(ARG_MAGs_counts_long) <- c("sample", "Method", "count", "sample_type")
+
+df <- ARG_MAGs_counts_long[1:18,]
+df$count <- as.integer(df$count)
+
+df$sample <- factor(df$sample, levels=c("INF1", "INF2", "INF3",
+                                          "EFF1", "EFF2", "EFF3",
+                                          "SLU1", "SLU2", "SLU3"))
+
+p <- ggplot(df, aes(x = sample, y = count, fill = interaction(sample, Method))) + 
+  geom_bar(stat = "identity", position = "dodge") + theme_bw() +
+  scale_y_continuous(labels = scales::number_format(accuracy = 1), expand = c(0,0), limits = c(0,10.75)) +
+  scale_fill_manual(values = c(
+        EFF1.Methylation_based_analysis = "#29b3fc", 
+        EFF2.Methylation_based_analysis = "#29b3fc", 
+        EFF3.Methylation_based_analysis = "#29b3fc",
+        EFF1.HiFi_MAG_Pipeline = "#b7e0f6", EFF2.HiFi_MAG_Pipeline = "#b7e0f6", EFF3.HiFi_MAG_Pipeline = "#b7e0f6",
+        INF1.Methylation_based_analysis = "#f9e30a",
+        INF2.Methylation_based_analysis = "#f9e30a",
+        INF3.Methylation_based_analysis = "#f9e30a",
+        INF1.HiFi_MAG_Pipeline = "#f9f5de", INF2.HiFi_MAG_Pipeline = "#f9f5de", INF3.HiFi_MAG_Pipeline = "#f9f5de",
+        SLU1.Methylation_based_analysis = "#daa187",
+        SLU2.Methylation_based_analysis = "#daa187",
+        SLU3.Methylation_based_analysis = "#daa187",
+        SLU1.HiFi_MAG_Pipeline = "#ffdcc0", SLU2.HiFi_MAG_Pipeline = "#ffdcc0", SLU3.HiFi_MAG_Pipeline = "#ffdcc0")) +
+  labs(title = "Number of MAGs with ARGs", y = "Number of MAGs") + theme_minimal() +
+  theme(text = element_text(family = "Times"),
+        legend.position = "none",
+        strip.text = element_text(size = 16, face = "bold"),
+    strip.placement = "outside",  # Puts strip labels outside panels
+    strip.placement.x = "top",    # Ensures strips are at the top
+    strip.text.x = element_text(margin = margin(b = 10)),  # Add space below strip label
+    panel.spacing = unit(1.2, "lines")   ,
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 16),
+        axis.text.x = element_text(size = 16),
+        #axis.text.x = element_text(size = 24, angle = 90, hjust = 1, color = "white"),
+        plot.title = element_text(size = 30)) + 
+  facet_grid(~factor(sample_type, levels=c("influent", "effluent", "dried sludge")),
+             space = "free", scales = "free", switch = "x")
+p
+
+ggsave(filename = "plots/ARG_MAGs_bar_plot.png",
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
+
+ggsave(filename = "plots/ARG_MAGs_bar_plot.svg",
+       width = 16, height = 13, dpi = 300, units = "in", device="svg", scale = 1)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Plot HiFi MAG Pipeline results
 ## High-quality
@@ -646,19 +775,6 @@ ggsave(filename = "plots/HQ_MAGs_species.png",
        width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Pie chart
 ```{r}
 MAG_count_phylum_sample_INF <- MAG_count_phylum_sample[grepl("INF", MAG_count_phylum_sample$Sample), ]
@@ -705,90 +821,6 @@ ggsave(filename = "plots/MAGs_pie_EFF.png",
        width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 
 ggsave(filename = "plots/MAGs_pie_SLU.png",
-       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
-```
-
-# Plot HiFi MAG Pipeline results
-## Summary plot
-```{r}
-colnames(MAG_count_sample) <- c("Sample", "other_MAGs")
-colnames(HQ_MAG_count_sample) <- c("Sample", "HQ_MAGs")
-
-MAG_counts <- cbind(MAG_count_sample, "HQ_MAGs" = HQ_MAG_count_sample$HQ_MAGs)
-
-long_MAG_counts <- melt(setDT(MAG_counts), id.vars = c("Sample"), variable.name = "MAGs")
-colnames(long_MAG_counts) <- c("sample", "MAGs", "count")
-
-# Colors
-#cols <- c("#87bbda", "#0540a0")
-
-cols <- c("#17b2c2", "#47ecfd", "#29b3fc", "#f9e30a", "#fcf0a0", "#eac51e","#e38236","#fec191", "#daa187")
-
-#cols <- c("EFF1" = "#17b2c2", "EFF2" = "#47ecfd", "EFF3" = "#29b3fc","INF1" = "#f9e30a", "INF2" = "#fcf0a0", "INF3" = "#eac51e","SLU1" = "#e38236", "SLU2" = "#fec191", "SLU3" = "#daa187")
-
-# Reorder
-long_MAG_counts$sample <- factor(long_MAG_counts$sample,
-                                 levels=c("INF1", "INF2", "INF3",
-                                          "EFF1", "EFF2", "EFF3",
-                                          "SLU1", "SLU2", "SLU3"))
-# Add ARGs
-counts_MAGs_with_ARGs <- MAGs_with_ARGs %>% count(Sample)
-View(counts_MAGs_with_ARGs)
-
-counts_HQ_MAGs_with_ARGs <- HQ_MAGs_with_ARGs %>% count(Sample)
-View(counts_HQ_MAGs_with_ARGs)
-
-ARGs <- data.frame(sample = c("EFF1","EFF2","EFF3", "INF1","INF2","INF3","SLU1","SLU2","SLU3",
-                              "EFF1","EFF2","EFF3","INF1","INF2","INF3","SLU1","SLU2","SLU3"),
-                   MAGs = c("other_MAGs", "other_MAGs", "other_MAGs", "other_MAGs", "other_MAGs",
-                            "other_MAGs", "other_MAGs", "other_MAGs", "other_MAGs",
-                            "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs"),
-                   ARGs = c(0,1,0,0,0,0,3,2,1,
-                            0,1,0,0,0,0,0,2,2))
-
-long_MAG_counts$ARGs <- as.numeric(ARGs$ARGs)
-
-long_MAG_counts$ARGs[long_MAG_counts$ARGs == 0] <- " "
-
-# Plot
-p <- ggplot(long_MAG_counts, aes(x = sample, y = count, fill = MAGs, label = ARGs)) + 
-  geom_bar(stat = "identity", alpha = 0.5) + scale_fill_manual(values = c(cols)) + theme_minimal() +
-  geom_text(size = 10, position = position_stack(vjust = .5), color = "red", family = "Courier",) +
-  ggtitle("Number of MAGs by HiFi MAG Pipeline") +  theme_minimal() +
-  scale_y_continuous(expand = c(0,0)) +
-  theme(
-        text = element_text(family = "Palatino"),
-        legend.text = element_text(size = 30),
-        legend.title = element_blank(),
-        axis.title = element_blank(),
-        axis.text.y = element_text(size = 30),
-        axis.text.x = element_text(size = 24, face = "bold"),
-        plot.title = element_text(size = 30))
-p
-
-
-p <- ggplot(long_MAG_counts, aes(x = sample, y = count, fill = interaction(sample, MAGs), label = ARGs)) + 
-  geom_bar(stat = "identity") +
-  geom_text(size = 10, position = position_stack(vjust = .5), color = "red", family = "Palatino") +
-  theme_minimal() +
-  scale_fill_manual(values = c(EFF1.HQ_MAGs = "#17b2c2", EFF2.HQ_MAGs = "#47ecfd", EFF3.HQ_MAGs = "#29b3fc",
-                               EFF1.other_MAGs = "#98e6ee", EFF2.other_MAGs = "#bff8fe", EFF3.other_MAGs = "#b7e0f6",
-                               INF1.HQ_MAGs = "#f9e30a", INF2.HQ_MAGs = "#fcf0a0", INF3.HQ_MAGs = "#eac51e",
-                               INF1.other_MAGs = "#fef174", INF2.other_MAGs = "#f9f5de", INF3.other_MAGs = "#f0de8e",
-                               SLU1.HQ_MAGs = "#e38236", SLU2.HQ_MAGs = "#fec191", SLU3.HQ_MAGs = "#daa187",
-                               SLU1.other_MAGs = "#e5aa7c", SLU2.other_MAGs = "#ffdcc0", SLU3.other_MAGs = "#dbbeb1")) +
-  ggtitle("Number of MAGs by HiFi MAG Pipeline") +  theme_minimal() +
-  scale_y_continuous(expand = c(0,0)) +
-  theme(
-        text = element_text(family = "Palatino"),
-        legend.position = "none",
-        axis.title = element_blank(),
-        axis.text.y = element_text(size = 30),
-        axis.text.x = element_text(size = 24, face = "bold"),
-        plot.title = element_text(size = 30))
-p
-
-ggsave(filename = "plots/Pipeline_MAGs.png",
        width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
 
@@ -1443,5 +1475,171 @@ p2 <- p1 + geom_vline(xintercept=value_v, linetype="dotdash", color = "blue", li
 p2
 
 ggsave(filename = "plots/feature_importance.png",
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
+```
+
+# Summary of HiFi MAG Pipeline results
+```{r}
+colnames(MAG_count_sample) <- c("Sample", "other_MAGs")
+colnames(HQ_MAG_count_sample) <- c("Sample", "HQ_MAGs")
+
+MAG_counts <- cbind(MAG_count_sample, "HQ_MAGs" = HQ_MAG_count_sample$HQ_MAGs)
+
+long_MAG_counts <- melt(setDT(MAG_counts), id.vars = c("Sample"), variable.name = "MAGs")
+colnames(long_MAG_counts) <- c("sample", "MAGs", "count")
+
+# Colors
+#cols <- c("#87bbda", "#0540a0")
+
+cols <- c("#17b2c2", "#47ecfd", "#29b3fc", "#f9e30a", "#fcf0a0", "#eac51e","#e38236","#fec191", "#daa187")
+
+#cols <- c("EFF1" = "#17b2c2", "EFF2" = "#47ecfd", "EFF3" = "#29b3fc","INF1" = "#f9e30a", "INF2" = "#fcf0a0", "INF3" = "#eac51e","SLU1" = "#e38236", "SLU2" = "#fec191", "SLU3" = "#daa187")
+
+# Reorder
+long_MAG_counts$sample <- factor(long_MAG_counts$sample,
+                                 levels=c("INF1", "INF2", "INF3",
+                                          "EFF1", "EFF2", "EFF3",
+                                          "SLU1", "SLU2", "SLU3"))
+# Add ARGs
+counts_MAGs_with_ARGs <- MAGs_with_ARGs %>% count(Sample)
+View(counts_MAGs_with_ARGs)
+
+counts_HQ_MAGs_with_ARGs <- HQ_MAGs_with_ARGs %>% count(Sample)
+View(counts_HQ_MAGs_with_ARGs)
+
+ARGs <- data.frame(sample = c("EFF1","EFF2","EFF3", "INF1","INF2","INF3","SLU1","SLU2","SLU3",
+                              "EFF1","EFF2","EFF3","INF1","INF2","INF3","SLU1","SLU2","SLU3"),
+                   MAGs = c("other_MAGs", "other_MAGs", "other_MAGs", "other_MAGs", "other_MAGs",
+                            "other_MAGs", "other_MAGs", "other_MAGs", "other_MAGs",
+                            "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs"),
+                   ARGs = c(0,1,0,0,0,0,3,2,1,
+                            0,1,0,0,0,0,0,2,2))
+
+long_MAG_counts$ARGs <- as.numeric(ARGs$ARGs)
+
+long_MAG_counts$ARGs[long_MAG_counts$ARGs == 0] <- " "
+
+# Plot
+p <- ggplot(long_MAG_counts, aes(x = sample, y = count, fill = MAGs, label = ARGs)) + 
+  geom_bar(stat = "identity", alpha = 0.5) + scale_fill_manual(values = c(cols)) + theme_minimal() +
+  geom_text(size = 10, position = position_stack(vjust = .5), color = "red", family = "Courier",) +
+  ggtitle("Number of MAGs by HiFi MAG Pipeline") +  theme_minimal() +
+  scale_y_continuous(expand = c(0,0)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(size = 30),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_text(size = 24, face = "bold"),
+        plot.title = element_text(size = 30))
+p
+
+
+p <- ggplot(long_MAG_counts, aes(x = sample, y = count, fill = interaction(sample, MAGs), label = ARGs)) + 
+  geom_bar(stat = "identity") +
+  geom_text(size = 10, position = position_stack(vjust = .5), color = "red", family = "Palatino") +
+  theme_minimal() +
+  scale_fill_manual(values = c(EFF1.HQ_MAGs = "#17b2c2", EFF2.HQ_MAGs = "#47ecfd", EFF3.HQ_MAGs = "#29b3fc",
+                               EFF1.other_MAGs = "#98e6ee", EFF2.other_MAGs = "#bff8fe", EFF3.other_MAGs = "#b7e0f6",
+                               INF1.HQ_MAGs = "#f9e30a", INF2.HQ_MAGs = "#fcf0a0", INF3.HQ_MAGs = "#eac51e",
+                               INF1.other_MAGs = "#fef174", INF2.other_MAGs = "#f9f5de", INF3.other_MAGs = "#f0de8e",
+                               SLU1.HQ_MAGs = "#e38236", SLU2.HQ_MAGs = "#fec191", SLU3.HQ_MAGs = "#daa187",
+                               SLU1.other_MAGs = "#e5aa7c", SLU2.other_MAGs = "#ffdcc0", SLU3.other_MAGs = "#dbbeb1")) +
+  ggtitle("Number of MAGs by HiFi MAG Pipeline") +  theme_minimal() +
+  scale_y_continuous(expand = c(0,0)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.position = "none",
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_text(size = 24, face = "bold"),
+        plot.title = element_text(size = 30))
+p
+
+ggsave(filename = "plots/Pipeline_MAGs.png",
+       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
+```
+# Summary of HiFi MAG Pipeline results
+###### muokkaa tätä kokonaisuudessaan, tsekkaa luvut  #########
+```{r}
+colnames(MAG_count_sample) <- c("Sample", "other_MAGs")
+colnames(HQ_MAG_count_sample) <- c("Sample", "HQ_MAGs")
+
+MAG_counts <- cbind(MAG_count_sample, "HQ_MAGs" = HQ_MAG_count_sample$HQ_MAGs)
+
+long_MAG_counts <- melt(setDT(MAG_counts), id.vars = c("Sample"), variable.name = "MAGs")
+colnames(long_MAG_counts) <- c("sample", "MAGs", "count")
+
+# Colors
+#cols <- c("#87bbda", "#0540a0")
+
+cols <- c("#17b2c2", "#47ecfd", "#29b3fc", "#f9e30a", "#fcf0a0", "#eac51e","#e38236","#fec191", "#daa187")
+
+#cols <- c("EFF1" = "#17b2c2", "EFF2" = "#47ecfd", "EFF3" = "#29b3fc","INF1" = "#f9e30a", "INF2" = "#fcf0a0", "INF3" = "#eac51e","SLU1" = "#e38236", "SLU2" = "#fec191", "SLU3" = "#daa187")
+
+# Reorder
+long_MAG_counts$sample <- factor(long_MAG_counts$sample,
+                                 levels=c("INF1", "INF2", "INF3",
+                                          "EFF1", "EFF2", "EFF3",
+                                          "SLU1", "SLU2", "SLU3"))
+# Add ARGs
+counts_MAGs_with_ARGs <- MAGs_with_ARGs %>% count(Sample)
+View(counts_MAGs_with_ARGs)
+
+counts_HQ_MAGs_with_ARGs <- HQ_MAGs_with_ARGs %>% count(Sample)
+View(counts_HQ_MAGs_with_ARGs)
+
+ARGs <- data.frame(sample = c("EFF1","EFF2","EFF3", "INF1","INF2","INF3","SLU1","SLU2","SLU3",
+                              "EFF1","EFF2","EFF3","INF1","INF2","INF3","SLU1","SLU2","SLU3"),
+                   MAGs = c("other_MAGs", "other_MAGs", "other_MAGs", "other_MAGs", "other_MAGs",
+                            "other_MAGs", "other_MAGs", "other_MAGs", "other_MAGs",
+                            "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs", "HQ_MAGs"),
+                   ARGs = c(0,1,0,0,0,0,3,2,1,
+                            0,1,0,0,0,0,0,2,2))
+
+long_MAG_counts$ARGs <- as.numeric(ARGs$ARGs)
+
+long_MAG_counts$ARGs[long_MAG_counts$ARGs == 0] <- " "
+
+# Plot
+p <- ggplot(long_MAG_counts, aes(x = sample, y = count, fill = MAGs, label = ARGs)) + 
+  geom_bar(stat = "identity", alpha = 0.5) + scale_fill_manual(values = c(cols)) + theme_minimal() +
+  geom_text(size = 10, position = position_stack(vjust = .5), color = "red", family = "Courier",) +
+  ggtitle("Number of MAGs by HiFi MAG Pipeline") +  theme_minimal() +
+  scale_y_continuous(expand = c(0,0)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.text = element_text(size = 30),
+        legend.title = element_blank(),
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_text(size = 24, face = "bold"),
+        plot.title = element_text(size = 30))
+p
+
+
+p <- ggplot(long_MAG_counts, aes(x = sample, y = count, fill = interaction(sample, MAGs), label = ARGs)) + 
+  geom_bar(stat = "identity") +
+  geom_text(size = 10, position = position_stack(vjust = .5), color = "red", family = "Palatino") +
+  theme_minimal() +
+  scale_fill_manual(values = c(EFF1.HQ_MAGs = "#17b2c2", EFF2.HQ_MAGs = "#47ecfd", EFF3.HQ_MAGs = "#29b3fc",
+                               EFF1.other_MAGs = "#98e6ee", EFF2.other_MAGs = "#bff8fe", EFF3.other_MAGs = "#b7e0f6",
+                               INF1.HQ_MAGs = "#f9e30a", INF2.HQ_MAGs = "#fcf0a0", INF3.HQ_MAGs = "#eac51e",
+                               INF1.other_MAGs = "#fef174", INF2.other_MAGs = "#f9f5de", INF3.other_MAGs = "#f0de8e",
+                               SLU1.HQ_MAGs = "#e38236", SLU2.HQ_MAGs = "#fec191", SLU3.HQ_MAGs = "#daa187",
+                               SLU1.other_MAGs = "#e5aa7c", SLU2.other_MAGs = "#ffdcc0", SLU3.other_MAGs = "#dbbeb1")) +
+  ggtitle("Number of MAGs by HiFi MAG Pipeline") +  theme_minimal() +
+  scale_y_continuous(expand = c(0,0)) +
+  theme(
+        text = element_text(family = "Palatino"),
+        legend.position = "none",
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 30),
+        axis.text.x = element_text(size = 24, face = "bold"),
+        plot.title = element_text(size = 30))
+p
+
+ggsave(filename = "plots/Pipeline_MAGs.png",
        width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
 ```
