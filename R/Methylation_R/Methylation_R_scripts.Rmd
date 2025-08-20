@@ -669,6 +669,24 @@ ggsave(filename = "plots/ARG_MAGs_bar_plot.svg",
        width = 16, height = 13, dpi = 300, units = "in", device="svg", scale = 1)
 ```
 
+# Convert to long format for UMAP
+```{r}
+EFF1_HiFi_MAGs_contigs <- read.table("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/EFF1_HiFi_MAGs_contigs.txt", sep = "\t", header = TRUE, stringsAsFactors = FALSE)
+
+# Convert to long format
+EFF1_HiFi_MAGs_contigs_long <- EFF1_HiFi_MAGs_contigs %>%
+  separate_rows(Contig_Names, sep = ",\\s*")  # splits by comma and optional space
+
+# Reorder columns
+EFF1_HiFi_MAGs_contigs_long <- EFF1_HiFi_MAGs_contigs_long[c("Contig_Names", "Name")]
+
+# Save
+write.table(EFF1_HiFi_MAGs_contigs_long, "RFiles/EFF1_HiFi_MAGs_contigs_long.csv", sep = ",", row.names = FALSE, quote = FALSE)
+```
+
+
+
+
 
 
 
