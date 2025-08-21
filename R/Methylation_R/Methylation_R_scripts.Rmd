@@ -670,6 +670,7 @@ ggsave(filename = "plots/ARG_MAGs_bar_plot.svg",
 ```
 
 # Convert to long format for UMAP
+## EFF1
 ```{r}
 EFF1_HiFi_MAGs_contigs <- read.table("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/EFF1_HiFi_MAGs_contigs.txt", sep = "\t", header = TRUE, stringsAsFactors = FALSE)
 
@@ -682,6 +683,21 @@ EFF1_HiFi_MAGs_contigs_long <- EFF1_HiFi_MAGs_contigs_long[c("Contig_Names", "Na
 
 # Save
 write.table(EFF1_HiFi_MAGs_contigs_long, "RFiles/EFF1_HiFi_MAGs_contigs_long.csv", sep = ",", row.names = FALSE, quote = FALSE)
+```
+
+## SLU1
+```{r}
+SLU1_HiFi_MAGs_contigs <- read.table("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/SLU1_HiFi_MAGs_contigs.txt", sep = "\t", header = TRUE, stringsAsFactors = FALSE)
+
+# Convert to long format
+SLU1_HiFi_MAGs_contigs_long <- SLU1_HiFi_MAGs_contigs %>%
+  separate_rows(Contig_Names, sep = ",\\s*")  # splits by comma and optional space
+
+# Reorder columns
+SLU1_HiFi_MAGs_contigs_long <- SLU1_HiFi_MAGs_contigs_long[c("Contig_Names", "Name")]
+
+# Save
+write.table(SLU1_HiFi_MAGs_contigs_long, "RFiles/SLU1_HiFi_MAGs_contigs_long.csv", sep = ",", row.names = FALSE, quote = FALSE)
 ```
 
 
