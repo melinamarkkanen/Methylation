@@ -663,10 +663,10 @@ p <- ggplot(df, aes(x = sample, y = count, fill = interaction(sample, Method))) 
 p
 
 ggsave(filename = "plots/ARG_MAGs_bar_plot.png",
-       width = 16, height = 13, dpi = 300, units = "in", device="png", scale = 1)
+       width = 10, height = 6, dpi = 300, units = "in", device="png", scale = 1)
 
 ggsave(filename = "plots/ARG_MAGs_bar_plot.svg",
-       width = 16, height = 13, dpi = 300, units = "in", device="svg", scale = 1)
+       width = 10, height = 6, dpi = 300, units = "in", device="svg", scale = 1)
 ```
 
 # Convert to long format for UMAP
@@ -699,6 +699,66 @@ SLU1_HiFi_MAGs_contigs_long <- SLU1_HiFi_MAGs_contigs_long[c("Contig_Names", "Na
 # Save
 write.table(SLU1_HiFi_MAGs_contigs_long, "RFiles/SLU1_HiFi_MAGs_contigs_long.csv", sep = ",", row.names = FALSE, quote = FALSE)
 ```
+
+# fARGene results, REMOVE THE "_model"
+```{r}
+fargene_counts <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/fargene_counts.tsv", row.names=1)
+
+rownames(fargene_counts) <- str_remove(rownames(fargene_counts), ".hmm")
+fargene_counts <- select(fargene_counts, -c("SUM"))
+
+fargene_counts_t <- data.frame(t(fargene_counts))
+fargene_counts_t$type <- c("EFF", "EFF", "EFF", "INF", "INF", "INF", "SLU", "SLU", "SLU")
+fargene_counts_t$sample <- c(rownames(fargene_counts_t))
+
+fargene <- melt(setDT(fargene_counts_t), id.vars = c("type", "sample"), variable.name = "class")
+
+order <- c("INF", "EFF", "SLU")
+fargene$type <- factor(fargene$type, levels = order)
+fargene = fargene[order(fargene$type), ]
+
+fargene$sample <- factor(fargene$sample, levels = unique(fargene$sample))
+
+
+cols <- c("#fabefa", "#d86950", "#ef360c", "#a27faf", "#c308a4", "#f7b2a5",
+          "#04c60a", "#1e7e21", "#779e78", "black", "#66e4e4", "#25a5a5", "#e8db16",
+          "#1656e8", "navyblue", "#86a4eb", "#5b48d8", "#146eb4",  "#6f87f3", "#85baec", "#04bdfe", "#0d68c2")
+
+p <- ggplot(fargene, aes(fill=class, y=value, x=sample)) + 
+    geom_bar(stat="identity") +
+    scale_y_continuous(expand = c(0,0)) +
+    scale_fill_manual(values = c(cols)) +
+    labs(title = "Latent ARGs by fARGene", y = "count") +
+    theme_minimal() + theme( 
+        text = element_text(family = "Times"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(size = 12, face = "bold"),
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 14)) + 
+  scale_fill_manual(values=c(cols))
+p
+
+ggsave(filename = "plots/WW_fARGene.png",
+       width = 10, height = 6, dpi = 300, units = "in", device="png", scale = 1)
+
+ggsave(filename = "plots/WW_fARGene.svg",
+       width = 10, height = 6, dpi = 300, units = "in", device="svg", scale = 1)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
