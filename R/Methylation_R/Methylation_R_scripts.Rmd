@@ -607,7 +607,6 @@ ggsave(filename = "plots/Pipeline_MAGs.svg",
 ```
 
 # HiFi MAG Pipeline results vs. methylation-based MAGs
-##### huom, luvut ARG_MAG_counts.txt:ssa pitää päivittää
 ```{r}
 ARG_MAGs_counts <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/ARG_MAG_counts.txt")
 ARG_MAGs_counts$Methylation_based_analysis <- as.numeric(ARG_MAGs_counts$Methylation_based_analysis)
@@ -668,6 +667,72 @@ ggsave(filename = "plots/ARG_MAGs_bar_plot.png",
 ggsave(filename = "plots/ARG_MAGs_bar_plot.svg",
        width = 10, height = 6, dpi = 300, units = "in", device="svg", scale = 1)
 ```
+
+
+# HiFi MAG Pipeline results vs. methylation-based MAGs with fARGene results
+```{r}
+ARG_MAGs_counts <- read.delim("~/Desktop/Git/Methylation/R/Methylation_R/RFiles/fARG_MAG_counts.txt")
+ARG_MAGs_counts$Methylation_based_analysis <- as.numeric(ARG_MAGs_counts$Methylation_based_analysis)
+ARG_MAGs_counts$HiFi_MAG_Pipeline <- as.numeric(ARG_MAGs_counts$HiFi_MAG_Pipeline)
+
+ARG_MAGs_counts_long <- melt(setDT(ARG_MAGs_counts), id.vars = c("sample"), variable.name = "Methylation_based_analysis")
+ARG_MAGs_counts_long$sample_type <- ARG_MAGs_counts_long$sample
+ARG_MAGs_counts_long$sample_type <- gsub("[0-9]", "", ARG_MAGs_counts_long$sample_type)
+ARG_MAGs_counts_long$sample_type <- gsub("INF", "influent", ARG_MAGs_counts_long$sample_type)
+ARG_MAGs_counts_long$sample_type <- gsub("EFF", "effluent", ARG_MAGs_counts_long$sample_type)
+ARG_MAGs_counts_long$sample_type <- gsub("SLU", "dried sludge", ARG_MAGs_counts_long$sample_type)
+
+colnames(ARG_MAGs_counts_long) <- c("sample", "Method", "count", "sample_type")
+
+df <- ARG_MAGs_counts_long[1:18,]
+df$count <- as.integer(df$count)
+
+df$sample <- factor(df$sample, levels=c("INF1", "INF2", "INF3",
+                                          "EFF1", "EFF2", "EFF3",
+                                          "SLU1", "SLU2", "SLU3"))
+
+p <- ggplot(df, aes(x = sample, y = count, fill = interaction(sample, Method))) + 
+  geom_bar(stat = "identity", position = "dodge") + theme_bw() +
+  scale_y_continuous(labels = scales::number_format(accuracy = 1), expand = c(0,0), limits = c(0,10.75)) +
+  scale_fill_manual(values = c(
+        EFF1.Methylation_based_analysis = "#29b3fc", 
+        EFF2.Methylation_based_analysis = "#29b3fc", 
+        EFF3.Methylation_based_analysis = "#29b3fc",
+        EFF1.HiFi_MAG_Pipeline = "#b7e0f6", EFF2.HiFi_MAG_Pipeline = "#b7e0f6", EFF3.HiFi_MAG_Pipeline = "#b7e0f6",
+        INF1.Methylation_based_analysis = "#f9e30a",
+        INF2.Methylation_based_analysis = "#f9e30a",
+        INF3.Methylation_based_analysis = "#f9e30a",
+        INF1.HiFi_MAG_Pipeline = "#f9f5de", INF2.HiFi_MAG_Pipeline = "#f9f5de", INF3.HiFi_MAG_Pipeline = "#f9f5de",
+        SLU1.Methylation_based_analysis = "#daa187",
+        SLU2.Methylation_based_analysis = "#daa187",
+        SLU3.Methylation_based_analysis = "#daa187",
+        SLU1.HiFi_MAG_Pipeline = "#ffdcc0", SLU2.HiFi_MAG_Pipeline = "#ffdcc0", SLU3.HiFi_MAG_Pipeline = "#ffdcc0")) +
+  labs(title = "Number of MAGs with Latent ARGs (fARGene)", y = "Number of MAGs") + theme_minimal() +
+  theme(text = element_text(family = "Times"),
+        legend.position = "none",
+        strip.text = element_text(size = 16, face = "bold"),
+    strip.placement = "outside",  # Puts strip labels outside panels
+    strip.placement.x = "top",    # Ensures strips are at the top
+    strip.text.x = element_text(margin = margin(b = 10)),  # Add space below strip label
+    panel.spacing = unit(1.2, "lines")   ,
+        axis.title = element_blank(),
+        axis.text.y = element_text(size = 16),
+        axis.text.x = element_text(size = 16),
+        #axis.text.x = element_text(size = 24, angle = 90, hjust = 1, color = "white"),
+        plot.title = element_text(size = 30)) + 
+  facet_grid(~factor(sample_type, levels=c("influent", "effluent", "dried sludge")),
+             space = "free", scales = "free", switch = "x")
+p
+
+ggsave(filename = "plots/fARG_MAGs_bar_plot.png",
+       width = 10, height = 6, dpi = 300, units = "in", device="png", scale = 1)
+
+ggsave(filename = "plots/fARG_MAGs_bar_plot.svg",
+       width = 10, height = 6, dpi = 300, units = "in", device="svg", scale = 1)
+```
+
+
+
 
 # Convert to long format for UMAP
 ## EFF1
