@@ -46,7 +46,7 @@ apptainer exec --bind $PWD:$PWD,$TMPDIR:/scratch/project_2006608/Methylation/tmp
         --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
 
 # Summarize
-cat HAMBI_data/MAGs/C10/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
+cat HAMBI_data/MAGs/C1/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
 ```
 ### Run GTDB-Tk
 ```

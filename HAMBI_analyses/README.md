@@ -1,7 +1,6 @@
 # Analysis steps for the synthetic community data
 &nbsp;
 ## Preparatory analysis
-&nbsp;
 ### Create database ```HAMBI_genomes.fasta``` for community members with WGS data
 ```
 # Download available HAMBI assemblies from NCBI (https://www.ncbi.nlm.nih.gov/bioproject/PRJNA1047486/)
@@ -229,4 +228,4 @@ awk '$1 ~ "clade_name" || $1 ~ "g__" {print $0}' Sylph_HAMBI_merged.txt | grep -
 sed -i 's/HiFi_fastq\///g' Sylph_HAMBI_merged_genus_full.txt
 sed -i 's/\.hifi_reads\.fastq\.gz//g' Sylph_HAMBI_merged_genus_full.txt
 sed -i 's/--bcAd10[0-9][0-9]T//g' Sylph_HAMBI_merged_genus_full.txt
-``
+```

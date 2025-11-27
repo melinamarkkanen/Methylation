@@ -3,3 +3,5 @@
   ## *bla*OXA-129
   ## *sul1*
   ## *erm(F)*
+
+  ### Bakta, geNomad, pdifFinder, vsearch, tree (MAFFT RAxML, iTOL), pyGenomeViz
