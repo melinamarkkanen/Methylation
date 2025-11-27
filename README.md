@@ -15,21 +15,21 @@
   -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)
 - Analyses and visualization of PWMs
   - Synthetic community:
-    - Random Forest classifier
-    - Sequence logos
-    - Uniform Manifold Approximation and Projection (UMAP)
-      - Generation of attached data
-      - Binning clustered contigs
+    - [Random Forest classifier]()
+    - [Sequence logos]()
+    - [Uniform Manifold Approximation and Projection (UMAP)]()
+      - [Generation of attached data]()
+      - [Binning clustered contigs]()
   - Wastewater community:
-    - Uniform Manifold Approximation and Projection (UMAP)
-      - Generation of attached data
-      - Binning clustered contigs
+    - [Uniform Manifold Approximation and Projection (UMAP)]()
+      - [Generation of attached data]()
+      - [Binning clustered contigs]()
 - Genetic context analyses:
-  - class D 2 beta-lactamase
-  - class C beta-lactamase
-  - blaOXA-129
-  - sul1
-  - erm(F)
+  - [Latent class D 2 beta-lactamase]()
+  - [Latent class C beta-lactamase]()
+  - [*bla*OXA-129]()
+  - [*sul1*]()
+  - [*erm*(F)]()
 
 
 ## Data
