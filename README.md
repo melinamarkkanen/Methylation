@@ -2,7 +2,10 @@
 
 ## *Preprint:*
 
-## *Contents*
+## Contents
+- [Go to Data](##Data) Sample descriptions
+- Preliminary analysis for methylation detection:
+  -  Synthetic community (HAMBI) 
 
 ## Data
 ### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*doi*)
