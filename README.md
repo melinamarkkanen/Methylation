@@ -4,15 +4,36 @@
 
 ## Contents
 - [Data](#Data)
-- **HiFi read generation and metagenomic assembly:**
-  -  [Synthetic community ("HAMBI"): ](./workflow/Snakefile_HAMBI_preanalysis)
-  -  [Wastewater community: ](./workflow/Snakefile_WW_preanalysis)
+- HiFi read generation and metagenomic assembly:
+  -  [Synthetic community](./workflow/Snakefile_HAMBI_preanalysis)
+  -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)
 - Preliminary analysis for methylation detection:
-  -  [Synthetic community ("HAMBI"): ](./workflow/Snakefile_HAMBI_methylation_analysis)
-  -  [Wastewater community: ](./workflow/Snakefile_WW_methylation_analysis)
+  -  [Synthetic community](./workflow/Snakefile_HAMBI_methylation_analysis)
+  -  [Wastewater community](./workflow/Snakefile_WW_methylation_analysis)
+- Generation of Position Weight Matrices (PWMs)
+  -  [Synthetic community](./workflow/Snakefile_HAMBI_preanalysis)
+  -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)
+- Analyses and visualization of PWMs
+  - Synthetic community:
+    - Random Forest classifier
+    - Sequence logos
+    - Uniform Manifold Approximation and Projection (UMAP)
+      - Generation of attached data
+      - Binning clustered contigs
+  - Wastewater community:
+    - Uniform Manifold Approximation and Projection (UMAP)
+      - Generation of attached data
+      - Binning clustered contigs
+- Genetic context analyses:
+  - class D 2 beta-lactamase
+  - class C beta-lactamase
+  - blaOXA-129
+  - sul1
+  - erm(F)
+
 
 ## Data
-### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*doi*)
+### Synthethic community ("HAMBI") of 36 species by Partanen *et al.* 2025 (*doi*)
 #### PacBio HiFi metagenomic long-reads
 | Sample code | Sample | Description |
 | -------------------- | ------------ | ------------ |
