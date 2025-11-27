@@ -1,6 +1,8 @@
 # Analysis for the synthetic community data
+&nbsp;
 
 ## Preparatory analysis steps
+&nbsp;
 ### Create database ```HAMBI_genomes.fasta``` for community members with WGS data
 ```
 # Download available HAMBI assemblies from NCBI (https://www.ncbi.nlm.nih.gov/bioproject/PRJNA1047486/)
@@ -18,6 +20,7 @@ snakemake --profile workflow/profile --use-envmodules --use-singularity \
         --snakefile workflow/Snakefile_HAMBI_preanalysis --use-singularity \
         --singularity-args "--bind ~/Raw_subread_data/m64145_231126_001443.subreads.bam" -np
 ```
+&nbsp;
 ## Preliminary analysis for the methylation detection
 ### Extract contigs for methylation analysis
 ```
@@ -54,6 +57,7 @@ snakemake --profile workflow/profile --use-envmodules --use-singularity \
 snakemake --profile workflow/profile --use-envmodules --use-singularity \
         --snakefile workflow/Snakefile_HAMBI_methylation_analysis --use-singularity --keep-going -np
 ```
+&nbsp;
 ## Generate Position Weight Matrices (PWM):
 - to filter data, the methylation types that have less than 50 detected sites are filled with 0 matrices which increased the models performance
 - the scoring matrices are then flattened to feature matrices. The flattened feature matrices are then used to train the random forest model to predict the taxonomic classification of the contigs. 
@@ -196,43 +200,38 @@ awk -F'\t' '{print NF; exit}' merged_data.tsv
 # There are still empty columns in the end, remove them
 cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
 ########## OLD ###############
 # Method validation
 &nbsp;
