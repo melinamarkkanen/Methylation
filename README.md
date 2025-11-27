@@ -15,21 +15,21 @@
   -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)
 - Analyses and visualization of PWMs
   - Synthetic community:
-    - [Random Forest classifier]()
-    - [Sequence logos]()
-    - [Uniform Manifold Approximation and Projection (UMAP)]()
-      - [Generation of attached data]()
-      - [Binning clustered contigs]()
+    - [Random Forest classifier](./HAMBI_analyses/Random_Forest_classifier.md)
+    - [Sequence logos](./HAMBI_analyses/Sequence_logos.md)
+    - [Uniform Manifold Approximation and Projection (UMAP)](./HAMBI_analyses/UMAP.md)
+      - [Generation of attached data](./HAMBI_analyses/UMAP.md#generating-attached-data)
+      - [Binning clustered contigs](./HAMBI_analyses/UMAP.md#binning-clustered-contigs)
   - Wastewater community:
-    - [Uniform Manifold Approximation and Projection (UMAP)]()
-      - [Generation of attached data]()
-      - [Binning clustered contigs]()
+    - [Uniform Manifold Approximation and Projection (UMAP)](./WW_analyses/UMAP.md)
+      - [Generation of attached data](./WW_analyses/UMAP.md#generating-attached-data)
+      - [Binning clustered contigs](./WW_analyses/UMAP.md#binning-clustered-contigs)
 - Genetic context analyses:
-  - [Latent class D 2 beta-lactamase]()
-  - [Latent class C beta-lactamase]()
-  - [*bla*OXA-129]()
-  - [*sul1*]()
-  - [*erm*(F)]()
+  - [Latent class D 2 beta-lactamase](./WW_analyses/Genetic_context_analyses.md#class-d-2-beta-lactamase)
+  - [Latent class C beta-lactamase](./WW_analyses/Genetic_context_analyses.md#class-c-beta-lactamase)
+  - [*bla*OXA-129](./WW_analyses/Genetic_context_analyses.md#blaoxa-129)
+  - [*sul1*](./WW_analyses/Genetic_context_analyses.md#sul1)
+  - [*erm*(F)](./WW_analyses/Genetic_context_analyses.md#ermf)
 
 
 ## Data
