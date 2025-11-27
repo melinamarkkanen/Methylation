@@ -1,10 +1,13 @@
-# Create database ```HAMBI_genomes.fasta``` for community members with WGS data
+# Analysis for the synthetic community data
+
+## Preparatory analysis steps
+### Create database ```HAMBI_genomes.fasta``` for community members with WGS data
 ```
 # Download available HAMBI assemblies from NCBI (https://www.ncbi.nlm.nih.gov/bioproject/PRJNA1047486/)
 cd HAMBI_data/WGS_data
 cat *fna > HAMBI_genomes.fasta
 ```
-# Run ```workflow/Snakefile_HAMBI_preanalysis``` for:
+### Run ```workflow/Snakefile_HAMBI_preanalysis``` for:
 - generation of HiFi reads **without** kinetics tags (fastq.gz) for the assembly
 - metagenomic assembly of the community
 - BLASTn search between the metagenomic assemblies and WGS data
@@ -15,10 +18,10 @@ snakemake --profile workflow/profile --use-envmodules --use-singularity \
         --snakefile workflow/Snakefile_HAMBI_preanalysis --use-singularity \
         --singularity-args "--bind ~/Raw_subread_data/m64145_231126_001443.subreads.bam" -np
 ```
-# Preliminary analysis for the methylation detection
-## Extract contigs for methylation analysis
+## Preliminary analysis for the methylation detection
+### Extract contigs for methylation analysis
 ```
-## Extract metagenome assembled contigs from each samples into individual files in ```contigs/```
+# Extract metagenome assembled contigs from each samples into individual files in ```contigs/```
 cd HAMBI_data/metagenomic_assembly
 cp *_contigs.fasta ../contigs
 cd ../contigs/
@@ -37,7 +40,7 @@ rename bcad1039t--bcad1039t bcAd1039T--bcAd1039T *.fasta
 rename bcad1046t--bcad1046t bcAd1046T--bcAd1046T *.fasta
 rename bcad1063t--bcad1063t bcAd1063T--bcAd1063T *.fasta
 ```
-## Run ```workflow/Snakefile_HAMBI_methylation_analysis```:
+### Run ```workflow/Snakefile_HAMBI_methylation_analysis```:
 - align the HiFi reads with kinetics to the assemblies
 - run ipSummary to obtain the .gff files for downatream analyses
 ```
@@ -51,7 +54,7 @@ snakemake --profile workflow/profile --use-envmodules --use-singularity \
 snakemake --profile workflow/profile --use-envmodules --use-singularity \
         --snakefile workflow/Snakefile_HAMBI_methylation_analysis --use-singularity --keep-going -np
 ```
-# Generate Position Weight Matrices (PWM):
+## Generate Position Weight Matrices (PWM):
 - to filter data, the methylation types that have less than 50 detected sites are filled with 0 matrices which increased the models performance
 - the scoring matrices are then flattened to feature matrices. The flattened feature matrices are then used to train the random forest model to predict the taxonomic classification of the contigs. 
 ```
@@ -71,7 +74,7 @@ cd /scratch/project_2006608/Methylation/HAMBI_data/contigs
 rm -r bcAd1023T--bcAd1023T/
 ...
 ```
-# Create ```HAMBI_labels.txt``` for connecting taxonomical identities and methylation profiles of metagenomic contigs for method vaidation
+### Create ```HAMBI_labels.txt``` for connecting taxonomical identities and methylation profiles of metagenomic contigs for method vaidation
 ```
 # Combine results
 cd HAMBI_data/metagenomic_assembly
@@ -89,7 +92,7 @@ less HAMBI_genomes.fasta | grep ">" | sed 's/>//' > WGS_ID.txt
 sed -i 's/\.1 /\.1\t/g' WGS_ID.txt
 awk 'NR==FNR {a[$1]=$0; next} $2 in a {print $0, a[$2]}' WGS_ID.txt ../metagenomic_assembly/filtered_blast_out.txt > ../metagenomic_assembly/HAMBI_taxa_names.txt
 ```
-# Modify ```HAMBI_taxa_names.txt``` further in excel, save as ```HAMBI_labels.txt```:
+#### Modify ```HAMBI_taxa_names.txt``` further in excel, save as ```HAMBI_labels.txt```:
 - modify the labels according to GTDB nomenclature
 - fill in column headers (see below)
 - transfer back to Puhti for further modifications
@@ -100,7 +103,7 @@ bcAd1023T--bcAd1023T_ptg000001l	Bacteria	Pseudomonadota	Gammaproteobacteria	Burk
 bcAd1023T--bcAd1023T_ptg000003l	Bacteria	Pseudomonadota	Gammaproteobacteria	Enterobacterales	Enterobacteriaceae	Kluyvera	Kluyvera intermedia	plasmid unnamed	HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia_plasmid_unnamed_HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales	Bacteria_Pseudomonadota_Gammaproteobacteria	Bacteria_Pseudomonadota
 …																		
 ```
-## Process missing values in ```HAMBI_labels.txt```
+#### Process missing values in ```HAMBI_labels.txt```
 ```
 # count contigs missing values
 cd HAMBI_data/metagenomic_assembly
@@ -110,7 +113,7 @@ grep -v -f label_IDs.txt contig_IDs.txt > missing_IDs.txt
 less missing_IDs.txt | wc -l
 # 669
 ```
-### Run ```./create_file.sh``` to create data entries for contigs with no labels and fill in 'NA'
+#### Run ```./create_file.sh``` to create data entries for contigs with no labels and fill in 'NA'
 ```
 #!/bin/bash
 
@@ -134,12 +137,12 @@ create_file() {
 # Create a file with 699 rows and 16 columns, repeating the string "NA"
 create_file 669 16 "NA" "missing_values.txt"
 ```
-### Append them to the original file
+#### Append them to the original file
 ```
 paste -d '\t' missing_IDs.txt missing_values.txt > missing_data.txt
 cat missing_data.txt >> HAMBI_labels.txt
 ```
-# Combine PWMs with ```HAMBI_labels.txt```
+#### Combine PWMs with ```HAMBI_labels.txt```
 ```
 # Combine modification types
 cd HAMBI_data/bcAd1023T_matrices/flattened  # repeat for all samples
