@@ -20,8 +20,8 @@
   -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)
 - Analyses and visualization of PWMs
   - Synthetic community:
-    - [Random Forest classifier](./HAMBI_analyses/Random_Forest_classifier.md)
-    - [Sequence logos](./HAMBI_analyses/Sequence_logos.md)
+    - [Random Forest classifier](./notebooks/Random_Forest_analysis_HAMBI.ipynb)
+    - [Sequence logos](?)
     - [Uniform Manifold Approximation and Projection (UMAP)](./HAMBI_analyses/UMAP.md)
       - [Generation of attached data](./HAMBI_analyses/UMAP.md#generating-attached-data)
       - [Binning clustered contigs](./HAMBI_analyses/UMAP.md#binning-clustered-contigs)
@@ -38,7 +38,7 @@
 
 
 ## Data
-### Synthethic community ("HAMBI") of 36 species by Partanen *et al.* 2025 (*doi*)
+### Synthethic community ("HAMBI") of 36 species by Partanen *et al.* 2025 [🔗](https://doi.org/10.1093/ismeco/ycaf113)
 #### PacBio HiFi metagenomic long-reads
 | Sample code | Sample | Description |
 | -------------------- | ------------ | ------------ |

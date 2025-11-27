@@ -1,6 +1,5 @@
 # Analysis steps for the synthetic community data
 &nbsp;
-
 ## Preparatory analysis
 &nbsp;
 ### Create database ```HAMBI_genomes.fasta``` for community members with WGS data
