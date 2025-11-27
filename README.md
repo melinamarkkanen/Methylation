@@ -3,9 +3,13 @@
 ## *Preprint:*
 
 ## Contents
-- [Wastewater](#Wastewater) Sample descriptions
+- [Data](#Data)
+- HiFi read generation and metagenomic assembly:
+  -  Synthetic community ("HAMBI"): [workflow/Snakefile_HAMBI_preanalysis] (./workflow/Snakefile_HAMBI_preanalysis)
+  -  Wastewater community: workflow/Snakefile_WW_preanalysis
 - Preliminary analysis for methylation detection:
-  -  Synthetic community (HAMBI) 
+  -  Synthetic community ("HAMBI"): workflow/Snakefile_HAMBI_methylation_analysis
+  -  Wastewater community: workflow/Snakefile_WW_methylation_analysis
 
 ## Data
 ### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*doi*)
@@ -18,8 +22,8 @@
 | bcAd1046T | tc_0.02_37_3 | 0.02 µg/ml tetracycline, 37 °C  |
 | bcAd1063T | no_0_37_3    | no antibiotic, 37 °C            |
 
-### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*doi*)
-#### Assemblies for available WGS data (n=18 strains)
+### Synthethic community (HAMBI) of 36 species by Partanen *et al.* 2025 (*[doi](https://doi.org/10.1093/ismeco/ycaf113)*)
+#### Assemblies for available WGS data (n=18 strains) by Hogle *et al.* 2024 (*[doi](https://doi.org/10.1128/mra.00111-24)*)
 
 | Strain ID | Species | Element |
 | ------------- | ------------- | ------------- |
