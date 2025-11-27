@@ -2,8 +2,13 @@
 
 ## *Preprint:*
 
+## *Graphical abstract*
+
 ## Contents
 - [Data](#Data)
+- Analysis steps:
+  - [Synthetic community](./HAMBI_analyses/README.md)
+  - [Wastewater community](./WW_analyses/README.md)
 - HiFi read generation and metagenomic assembly:
   -  [Synthetic community](./workflow/Snakefile_HAMBI_preanalysis)
   -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)

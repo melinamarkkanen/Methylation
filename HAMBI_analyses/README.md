@@ -1,7 +1,7 @@
-# Analysis for the synthetic community data
+# Analysis steps for the synthetic community data
 &nbsp;
 
-## Preparatory analysis steps
+## Preparatory analysis
 &nbsp;
 ### Create database ```HAMBI_genomes.fasta``` for community members with WGS data
 ```
@@ -201,6 +201,36 @@ awk -F'\t' '{print NF; exit}' merged_data.tsv
 cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 ```
 &nbsp;
+## Random Forest classifier
+### Run ```notebooks/Random_Forest_analysis_HAMBI.ipynb```
+&nbsp;
+## Sequence logos
+```
+export PYTHONUSERBASE=/projappl/project_2009999/my-python-env
+module load python-data
+python3 src/create_logos.py HAMBI_data/contigs HAMBI_data/logos
+```
+&nbsp;
+## Taxonomical composition
+```
+# Run Sylph 
+cd HAMBI_data/
+apptainer_wrapper exec sylph profile gtdb_database.syldb HiFi_fastq/*.hifi_reads.fastq.gz -t $SLURM_CPUS_PER_TASK > Sylph_out/Sylph_HAMBI.tsv
+
+# Run Sylph-tax
+apptainer_wrapper exec sylph-tax taxprof Sylph_out/Sylph_HAMBI.tsv -t GTDB_r214 -o Sylph_out/prefix_
+
+# Merge samples
+apptainer_wrapper exec sylph-tax merge *.sylphmpa --column relative_abundance -o Sylph_HAMBI_merged.txt
+
+# Get genus
+awk '$1 ~ "clade_name" || $1 ~ "g__" {print $0}' Sylph_HAMBI_merged.txt | grep -v "|t__" | grep -v "|s__"  > Sylph_HAMBI_merged_genus_full.txt
+
+# Edit
+sed -i 's/HiFi_fastq\///g' Sylph_HAMBI_merged_genus_full.txt
+sed -i 's/\.hifi_reads\.fastq\.gz//g' Sylph_HAMBI_merged_genus_full.txt
+sed -i 's/--bcAd10[0-9][0-9]T//g' Sylph_HAMBI_merged_genus_full.txt
+```
 &nbsp;
 &nbsp;
 &nbsp;
