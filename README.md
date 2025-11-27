@@ -3,7 +3,7 @@
 ## *Preprint:*
 
 ## Contents
-- [Wastewater](###Wastewater) Sample descriptions
+- [Wastewater](#Wastewater) Sample descriptions
 - Preliminary analysis for methylation detection:
   -  Synthetic community (HAMBI) 
 
