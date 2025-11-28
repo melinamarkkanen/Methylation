@@ -1,4 +1,9 @@
-# Analysis steps for the ARG genetic contexts of selected ARG bins
+# ARG genetic contexts of selected ARG bins
+- [Class D 2 beta-lactamase](#class-d-2-beta-lactamase)
+- [Class C beta-lactamase](#class-c-beta-lactamase)
+- [*bla*OXA-129](#blaoxa-129)
+- [*sul1*](#sul1)
+- [*erm*(F)](#ermf)
 &nbsp;
 ## Class D 2 beta-lactamase
 ### Gather hits from fARGene results
@@ -469,14 +474,190 @@ export PATH="/projappl/project_2006608/pdifFinder/pdifFinder_installation/bin:$P
 ls *pdifFinder_out/*
 tail *_pdifFinder_out/*/pdif_site.txt
 ```
-
-
-
-
-
-
-
-
 ## *bla*OXA-129
+```
+mkdir blaOXA-129
+cd blaOXA-129
+for i in $(less INF1_lista.txt);do grep -A 1 -f <(echo "$i") ../INF1/INF1_contigs.fasta > "INF1_"$i".fasta";done
+```
+### Add reference sequences
+| Accession | Description |
+| ------------- | ------------- |
+| FJWZ01000025.1 | Enterobacter hormaechei |
+| NZ_AP022010.1 | Klebsiella quasipneumoniae |
+| NZ_CP031449.2 | Pseudomonas aeruginosa |
+
+### Run Bakta
+```
+ls I*fasta | sed 's/\.fasta//g' > contig_names.txt
+ls N*fasta | sed 's/\.fasta//g' >> contig_names.txt
+
+contig=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt)
+
+# Run
+export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
+export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+
+apptainer_wrapper exec bakta $contig".fasta" \
+        --prefix $contig \
+        --output $contig"_bakta_out" \
+        --db $BAKTA_DB \
+        --keep-contig-headers \
+        --threads $SLURM_CPUS_PER_TASK
+```
+### Extract flanking regions
+```
+# Check locations
+cat *_bakta_out/*.tsv | grep "OXA" > locations.txt
+
+awk '{print $1,$3,$4}' locations.txt > tmp && mv tmp locations.txt
+sed -i 's/ /\t/g' locations.txt
+```
+```
+./get_regions.sh locations.txt
+```
+```
+#!/bin/bash
+
+touch startFlank.txt
+touch endFlank.txt
+
+while read -a line
+do
+  	contig=${line[0]}
+        start=${line[1]}
+        end=${line[2]}
+        startFlank=$((${line[1]} - 10000))
+        endFlank=$((${line[2]} + 10000))
+        echo $startFlank >> startFlank.txt
+        echo $endFlank >> endFlank.txt
+
+        # Combine into one file
+        paste -d '\t' locations.txt startFlank.txt endFlank.txt > locations_flanking.txt
+
+done < $1
+```
+#### Polish results
+```
+# replace negative with one
+less locations_flanking.txt | grep "-"
+
+sed -i 's/-[0-9][0-9][0-9]/1/g' locations_flanking.txt
+sed -i 's/-[0-9][0-9]/1/g' locations_flanking.txt
+
+less locations_flanking.txt | grep "-"
+
+rm startFlank.txt
+rm endFlank.txt
+
+mkdir extracted_data
+
+# update sample_names.txt
+cut -f 1 locations_flanking.txt > sample_names.txt
+
+mkdir extracted_data
+```
+```
+./extract_regions.sh
+```
+```
+#!/bin/bash
+
+# Load tools
+module load seqkit/2.5.1
+
+accessions=$(less sample_names.txt)
+
+for a in $accessions;
+do
+        line=$(grep "$a" locations_flanking.txt)
+        if [[ -n "$line" ]]; then
+                startFlank=$(echo $line | cut -d' ' -f 4)
+                endFlank=$(echo $line | cut -d' ' -f 5)
+                seqkit subseq -r $startFlank:$endFlank *$a"_bakta_out"/*$a".fna" > extracted_data/$a".fasta"
+        fi
+done
+```
+### Run bakta on the extracted squences
+```
+export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
+export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+
+apptainer_wrapper exec bakta $name".fasta" \
+        --prefix $name \
+        --output $name"_bakta_out"/ \
+        --db $BAKTA_DB \
+        --keep-contig-headers \
+        --threads $SLURM_CPUS_PER_TASK
+```
+
+### Extract the genes
+```
+cd WW_data/blaOXA-129/extracted_data
+cat *fasta > contigs_blaOXA-129.fasta
+
+# Load the tools
+module load biokit
+
+blastn -query contigs_blaOXA-129.fasta \
+        -subject ../blaOXA-129.fasta \
+        -out blastn_out.txt -outfmt 6 -max_target_seqs 1
+```
+```
+./extract_gene.sh
+```
+```
+#!/bin/bash
+
+# Load tools
+module load seqkit/2.5.1
+
+accessions=$(less ../sample_names.txt)
+
+for a in $accessions;
+do
+        line=$(grep "$a" blastn_out.txt)
+        if [[ -n "$line" ]]; then
+                startFlank=$(echo $line | cut -d' ' -f 7)
+                endFlank=$(echo $line | cut -d' ' -f 8)
+                seqkit subseq -r $startFlank:$endFlank *$a".fasta" > $a"_gene_blaOXA-129_"$startFlank"_"$endFlank".fasta"
+        fi
+done
+```
+### Visualize the genetic contexts using pyGenomeViz
+#### Some of the sequences are in reverted orientation, run ```revert.py```:
+```
+module load python-data
+module load biopythontools
+python3 revert.py
+```
+#### (From this on locally)
+#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running ```replace_gene_names.py```
+```
+python3 replace_gene_names.py
+```
+#### Create the figures by running ```pyGenomeViz_BLAST_blaOXA-129.py```
+```
+python3 pyGenomeViz_BLAST_blaOXA-129.py
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## *sul1*
 ## *erm*(F)
