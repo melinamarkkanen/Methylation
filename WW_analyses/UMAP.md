@@ -62,7 +62,7 @@ sed -i '1i contig\tARG_name' EFF1_ARG_names.txt
 ```
 fargene -i fARGene_in/*.fasta \
         --hmm-model db/fargene/fargene_analysis/models/beta_lactamase_d_2.hmm \
-        -o fARGene_beta_lactamase_d_2_out -p $SLURM_CPUS_PER_TASK --score 200
+        -o fARGene_d_2_out -p $SLURM_CPUS_PER_TASK --score 200
 ```
 
 # Binning clustered contigs
