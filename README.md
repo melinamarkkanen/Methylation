@@ -2,26 +2,26 @@
 
 ## *Preprint:*
 
-## *Graphical abstract*
+## *Picture of the workflow* / *Graphical abstract*
 
 ## Contents
 - [Data](#Data)
 - Analysis steps:
   - [Synthetic community](./HAMBI_analyses/README.md)
   - [Wastewater community](./WW_analyses/README.md)
-- HiFi read generation and metagenomic assembly:
+- **HiFi read generation and metagenomic assembly**
   -  [Synthetic community](./workflow/Snakefile_HAMBI_preanalysis)
   -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)
-- Preliminary analysis for methylation detection:
+- **Preliminary analysis for methylation detection**
   -  [Synthetic community](./workflow/Snakefile_HAMBI_methylation_analysis)
   -  [Wastewater community](./workflow/Snakefile_WW_methylation_analysis)
-- Generation of Position Weight Matrices (PWMs)
+- **Generation of Position Weight Matrices (PWMs)**
   -  [Synthetic community](./workflow/Snakefile_HAMBI_preanalysis)
   -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)
-- Analyses and visualization of PWMs
+- **Analyses and visualization of PWMs**
   - Synthetic community:
     - [Random Forest classifier](./notebooks/Random_Forest_analysis_HAMBI.ipynb)
-    - [Sequence logos](?)
+    - [Sequence logos](./src/create_logos.py)
     - [Uniform Manifold Approximation and Projection (UMAP)](./HAMBI_analyses/UMAP.md)
       - [Generation of attached data](./HAMBI_analyses/UMAP.md#generating-attached-data)
       - [Binning clustered contigs](./HAMBI_analyses/UMAP.md#binning-clustered-contigs)
@@ -29,14 +29,13 @@
     - [Uniform Manifold Approximation and Projection (UMAP)](./WW_analyses/UMAP.md)
       - [Generation of attached data](./WW_analyses/UMAP.md#generating-attached-data)
       - [Binning clustered contigs](./WW_analyses/UMAP.md#binning-clustered-contigs)
-- Genetic context analyses:
+- **Genetic context analyses**
   - [Latent class D 2 beta-lactamase](./WW_analyses/Genetic_context_analyses.md#class-d-2-beta-lactamase)
   - [Latent class C beta-lactamase](./WW_analyses/Genetic_context_analyses.md#class-c-beta-lactamase)
   - [*bla*OXA-129](./WW_analyses/Genetic_context_analyses.md#blaoxa-129)
   - [*sul1*](./WW_analyses/Genetic_context_analyses.md#sul1)
   - [*erm*(F)](./WW_analyses/Genetic_context_analyses.md#ermf)
-
-- Results/README.md?
+- [Intermediate results](./Results/README.md)
 
 
 ## Data

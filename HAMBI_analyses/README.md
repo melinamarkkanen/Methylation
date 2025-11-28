@@ -213,10 +213,10 @@ python3 src/create_logos.py HAMBI_data/contigs HAMBI_data/logos
 ```
 # Run Sylph 
 cd HAMBI_data/
-apptainer_wrapper exec sylph profile gtdb_database.syldb HiFi_fastq/*.hifi_reads.fastq.gz -t $SLURM_CPUS_PER_TASK > Sylph_out/Sylph_HAMBI.tsv
+apptainer_wrapper exec sylph profile gtdb_database.syldb HiFi_fastq/*.hifi_reads.fastq.gz -t $SLURM_CPUS_PER_TASK > Sylph_HAMBI_out/Sylph_HAMBI.tsv
 
 # Run Sylph-tax
-apptainer_wrapper exec sylph-tax taxprof Sylph_out/Sylph_HAMBI.tsv -t GTDB_r214 -o Sylph_out/prefix_
+apptainer_wrapper exec sylph-tax taxprof Sylph_HAMBI_out/Sylph_HAMBI.tsv -t GTDB_r214 -o Sylph_HAMBI_out/prefix_
 
 # Merge samples
 apptainer_wrapper exec sylph-tax merge *.sylphmpa --column relative_abundance -o Sylph_HAMBI_merged.txt

@@ -33,7 +33,7 @@ awk '$4 >= 100' EFF1_resfinder_out.txt" > tmp && mv tmp EFF1_resfinder_out.txt
 
 cp EFF1_resfinder_out.txt raw_EFF1_resfinder_out.txt
 
-##### First manually (set # and then remove those lines) check hits that are duplicates
+## First manually (set # and then remove those lines) check hits that are duplicates
 
 sed -i '/^#/d' EFF1_resfinder_out.txt
 
@@ -50,7 +50,7 @@ sed -i 's/\(.*_.*\)_.*$/\1/' ARG_names.txt
 # Check those that have multiple
 cut -f 1 ARG_names.txt | sort | uniq -d
 
-##### Manually fix those contigs that have multiple
+## Manually fix those contigs that have multiple
 
 # Add contig names of those where there is no ARG
 cut -f 1 ARG_names.txt > contig_ARG_names.txt
@@ -59,6 +59,11 @@ cat ARG_names.txt remaining_contig_names.txt > EFF1_ARG_names.txt
 sed -i '1i contig\tARG_name' EFF1_ARG_names.txt
 ```
 ## Latent ARGs
+```
+fargene -i fARGene_in/*.fasta \
+        --hmm-model db/fargene/fargene_analysis/models/beta_lactamase_d_2.hmm \
+        -o fARGene_beta_lactamase_d_2_out -p $SLURM_CPUS_PER_TASK --score 200
+```
 
 # Binning clustered contigs
 ## Extract clusters

@@ -16,7 +16,7 @@ seqretsplit EFF1_contigs.fasta
 # For the Snakemake the assembly files must be in specific folders
 cd Methylation/WW_data/EFF1
 ```
-### Creating the .bam with kinetic tags??!!??
+### The .bam with kinetic tags were created previously with this [workflow](https://github.com/melinamarkkanen/sul4_project/blob/main/workflow/Snakefile_HiFi_reads)
 
 ### Run ```workflow/Snakefile_WW_preanalysis``` for:
 - aligning HiFi reads **with** kinetics tags (.bam) for the methylation analysis
@@ -94,12 +94,22 @@ awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
 mv EFF1_concat_matrices.tsv EFF1_concat_matrices_top50.tsv
 ```
 
-## Taxonomical composition (check again!)
+## Taxonomical composition
 ```
-# Run Sylph
-???
+# Run Sylph 
+apptainer_wrapper exec sylph profile db/gtdb_database.syldb HiFi_fastq/*.hifi_reads.fastq.gz -t $SLURM_CPUS_PER_TASK > Sylph_out/Sylph_WW.tsv
 
-#
-# head -n 1 Sylph_HiFi_merged.txt > Sylph_HiFi_merged_genus.txt (?)
+# Run sylph-tax
+apptainer_wrapper exec sylph-tax taxprof Sylph_out/Sylph_WW.tsv -t GTDB_r214 -o Sylph_out/prefix_
+
+# Merge samples
+apptainer_wrapper exec sylph-tax merge *.sylphmpa --column relative_abundance -o Sylph_WW_merged.txt
+
+# Get genus
 awk '$1 ~ "clade_name" || $1 ~ "g__" {print $0}' Sylph_HiFi_merged.txt | grep -v "|t__" | grep -v "|s__"  > Sylph_HiFi_merged_genus_full.txt
+
+# Edit
+sed -i 's/HiFi_fastq\///g' Sylph_WW_merged_genus_full.txt
+sed -i 's/\.hifi_reads\.fastq\.gz//g' Sylph_WW_merged_genus_full.txt
+sed -i 's/--bcAd10[0-9][0-9]T//g' Sylph_WW_merged_genus_full.txt
 ```
