@@ -33,7 +33,7 @@
   - [Latent class D 2 beta-lactamase](./WW_analyses/Genetic_context_analyses.md#class-d-2-beta-lactamase)
   - [Latent class C beta-lactamase](./WW_analyses/Genetic_context_analyses.md#class-c-beta-lactamase)
   - [*bla*OXA-129](./WW_analyses/Genetic_context_analyses.md#blaoxa-129)
-  - [*sul1*](./WW_analyses/Genetic_context_analyses.md#sul1)
+  - [*sul1_9*-like](./WW_analyses/Genetic_context_analyses.md#sul1_9-like)
   - [*erm*(F)](./WW_analyses/Genetic_context_analyses.md#ermf)
 - [Intermediate results](./results/README.md)
 

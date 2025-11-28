@@ -2,7 +2,7 @@
 - [Class D 2 beta-lactamase](#class-d-2-beta-lactamase)
 - [Class C beta-lactamase](#class-c-beta-lactamase)
 - [*bla*OXA-129](#blaoxa-129)
-- [*sul1*](#sul1)
+- [*sul1_9*-like](#*sul1_9*-like)
 - [*erm*(F)](#ermf)
 &nbsp;
 ## Class D 2 beta-lactamase
@@ -638,8 +638,7 @@ python3 replace_gene_names.py
 ```
 python3 pyGenomeViz_BLAST_blaOXA-129.py
 ```
-## *sul1*
-### Explore within all data
+## *sul1_9*-like
 ```
 sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p ID.txt)
 
