@@ -171,11 +171,20 @@ INF3_s10.ctg003382l C7f
 ```
 #### Add also the reference sequences from NCBI based in their similarity to our sequences (context/ARG)
 ```
-blaOXA-464 (KU721147) (for rooting the tree, root.fna)
-blaOXA-490 (KU721146) (for rooting the tree, root.fna)
+KU721147 (blaOXA-464 for rooting the tree, root.fna)
+KU721146 (blaOXA-490 for rooting the tree, root.fna)
 CP183406.1
 CP042652.1
 CP032100.1
+
+| Accession | Description |
+| ------------- | ------------- |
+| KU721147 | *bla*OXA-464 for rooting the tree, root.fna |
+| KU721146 | *bla*OXA-490 for rooting the tree, root.fna |
+| CP183406.1 | *Arcobacter butzleri* |
+| CP053835.1 | *Arcobacter defluvii* |
+| CP042652.1 | *Arcobacter articola* |
+| CP032100.1 | *Arcobacter suis* |
 ```
 ### Create the phylogenetic tree
 #### The ARG sequences are gathered to ```genes_bl_d_2.fasta```
@@ -207,17 +216,20 @@ python3 revert.py
 ```
 python3 replace_gene_names.py
 ```
-#### Create the figures by running ```pyGenomeViz_BLAST.py```
+#### Create the figures by running ```pyGenomeViz_BLAST_d_2.py```
 ```
-python3 pyGenomeViz_BLAST.py
+python3 pyGenomeViz_BLAST_d_2.py
 ```
 
-### Run geNomad
+### Run geNomad to check the likelyhood of the sequences being plasmid-borne
 ```
 # Run
 apptainer exec --bind $PWD:$PWD,$DB_PATH:$DB_PATH \
         /projappl/project_2006608/containers/genomad:1.8.0.sif genomad end-to-end \
         --cleanup --splits 8 $contig".fasta" geNomad_out/$contig $DB_PATH
+
+# Check
+cat */*_summary/*_plasmid_summary.tsv | grep -v "seq_name"
 ```
 
 
