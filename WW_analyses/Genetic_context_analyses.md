@@ -170,13 +170,6 @@ INF2_s1.ctg008129l C7f
 INF3_s10.ctg003382l C7f
 ```
 #### Add also the reference sequences from NCBI based in their similarity to our sequences (context/ARG)
-```
-KU721147 (blaOXA-464 for rooting the tree, root.fna)
-KU721146 (blaOXA-490 for rooting the tree, root.fna)
-CP183406.1
-CP042652.1
-CP032100.1
-
 | Accession | Description |
 | ------------- | ------------- |
 | KU721147 | *bla*OXA-464 for rooting the tree, root.fna |
@@ -185,7 +178,6 @@ CP032100.1
 | CP053835.1 | *Arcobacter defluvii* |
 | CP042652.1 | *Arcobacter articola* |
 | CP032100.1 | *Arcobacter suis* |
-```
 ### Create the phylogenetic tree
 #### The ARG sequences are gathered to ```genes_bl_d_2.fasta```
 ```
