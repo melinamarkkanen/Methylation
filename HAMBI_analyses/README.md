@@ -144,7 +144,7 @@ create_file 669 16 "NA" "missing_values.txt"
 paste -d '\t' missing_IDs.txt missing_values.txt > missing_data.txt
 cat missing_data.txt >> HAMBI_labels.txt
 ```
-#### Combine PWMs with ```HAMBI_labels.txt```
+#### Combine PWMs with [HAMBI_labels.txt](./../results/HAMBI_labels.txt)
 ```
 # Combine modification types
 cd HAMBI_data/bcAd1023T_matrices/flattened  # repeat for all samples

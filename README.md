@@ -35,7 +35,7 @@
   - [*bla*OXA-129](./WW_analyses/Genetic_context_analyses.md#blaoxa-129)
   - [*sul1*](./WW_analyses/Genetic_context_analyses.md#sul1)
   - [*erm*(F)](./WW_analyses/Genetic_context_analyses.md#ermf)
-- [Intermediate results](./Results/README.md)
+- [Intermediate results](./results/README.md)
 
 
 ## Data
