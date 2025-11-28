@@ -1,7 +1,7 @@
 # Analysis steps for the ARG genetic contexts of selected ARG bins
 &nbsp;
 ## Class D 2 beta-lactamase
-### Gather hits
+### Gather hits from fARGene results
 ```
 mkdir beta_lactamase_d_2
 cd beta_lactamase_d_2
@@ -11,7 +11,24 @@ cat ../fARGene_d_2_out/predictedGenes/predicted-orfs.fasta > beta_lactamase_d_2.
 
 # Manually create lists for contig names with hits per sample to obtain the contigs
 for i in $(less EFF1_lista.txt);do grep -A 1 -f <(echo "$i") ../../EFF1/EFF1_contigs.fasta > "EFF1_"$i".fasta";done
+```
+### Explore within all data
+```
+sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p ID.txt)
 
+blastn -query ../$sample/$sample"_contigs.fasta" \
+        -subject beta_lactamase_d_2.fasta \
+        -out $sample"_beta_lactamase_d_2_out.txt" -outfmt 6
+
+# Filter hits
+awk '$3 >= 90' EFF1_beta_lactamase_d_2_out.txt > filt_EFF1_beta_lactamase_d_2_out.txt
+
+# Extract contigs
+cut -f 1  filt_EFF1_beta_lactamase_d_2_out.txt > EFF1_beta_lactamase_d_2_lista.txt
+for i in $(less EFF1_beta_lactamase_d_2_lista.txt);do grep -A 1 -f <(echo "$i") ../EFF1/EFF1_contigs.fasta > "EFF1_"$i".fasta";done
+```
+### Gather all sequences
+```
 # Concatenate sequences
 cat *l.fasta > contigs_beta_lactamase_d_2.fasta
 cat *c.fasta >> contigs_beta_lactamase_d_2.fasta
