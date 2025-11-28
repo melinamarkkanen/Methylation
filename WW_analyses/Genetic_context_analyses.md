@@ -640,6 +640,11 @@ python3 pyGenomeViz_BLAST_blaOXA-129.py
 ```
 ## *sul1_9*-like
 ```
+mkdir sul1_9
+cd sul1_9
+```
+### Gather contigs with mach to sul1_9
+```
 sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p ID.txt)
 
 blastn -query ../$sample/$sample"_contigs.fasta" \
@@ -654,9 +659,9 @@ for i in $(less EFF1_lista.txt);do grep -A 1 -f <(echo "$i") ../../EFF1/EFF1_con
 ### Add reference sequences
 | Accession | Description |
 | ------------- | ------------- |
-| CP026207.1 | Escherichia coli |
-| CP055486.1 | Klebsiella sp. |
-| CP021775.1 | Pseudomomas aeruginosa |
+| CP026207.1 | *Escherichia coli* |
+| CP055486.1 | *Klebsiella* sp. |
+| CP021775.1 | *Pseudomomas aeruginosa* |
 ### Get the locations of the ARGs
 ```
 # Run
@@ -781,23 +786,225 @@ python3 replace_gene_names.py
 ```
 python3 pyGenomeViz_BLAST_sul1_9.py
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## *erm*(F)
+```
+mkdir erm_F
+cd erm_F
+```
+### Gather the contigs with hits to erm(F)_1, erm(F)_3 or erm(F)_4
+```
+blastn -query $sample".fasta" \
+        -subject erm_F.fasta \
+        -out $sample"_resfinder_out.txt" -outfmt 6 -max_target_seqs 1
+
+for i in $(less EFF1_lista.txt);do grep -A 1 -f <(echo "$i") ../EFF1/EFF1_contigs.fasta > "EFF1_"$i".fasta";done
+```
+### Run Bakta
+```
+ls *fasta | sed 's/\.fasta//g' > contig_names.txt
+
+contig=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt)
+
+# Run
+export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
+export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+
+apptainer_wrapper exec bakta $contig".fasta" \
+        --prefix $contig \
+        --output $contig"_bakta_out" \
+        --db $BAKTA_DB \
+        --keep-contig-headers \
+        --threads $SLURM_CPUS_PER_TASK
+```
+
+### Check locations
+```
+cat *_bakta_out/*l.tsv | grep "erm(F)" > locations.txt
+awk '{print $1,$3,$4}' locations.txt > tmp && mv tmp locations.txt
+sed -i 's/ /\t/g' locations.txt
+
+# And and those identified only by BLAST
+cat *resf* | cut -f 1,7-8 >> locations.txt
+
+# Also some hits and their locations has to be fixed manually
+```
+### Extract flanking regions
+#### Get the locations
+```
+./get_regions.sh locations.txt
+```
+```
+#!/bin/bash
+
+touch startFlank.txt
+touch endFlank.txt
+
+while read -a line
+do
+  	contig=${line[0]}
+        start=${line[1]}
+        end=${line[2]}
+        startFlank=$((${line[1]} - 5000))
+        endFlank=$((${line[2]} + 5000))
+        echo $startFlank >> startFlank.txt
+        echo $endFlank >> endFlank.txt
+
+        # Combine into one file
+        paste -d '\t' locations.txt startFlank.txt endFlank.txt > locations_flanking.txt
+
+done < $1
+```
+#### Polish the resulys
+```
+# replace negative with one
+less locations_flanking.txt | grep "-"
+
+sed -i 's/-[0-9][0-9][0-9]/1/g' locations_flanking.txt
+sed -i 's/-[0-9][0-9]/1/g' locations_flanking.txt
+
+less locations_flanking.txt | grep "-"
+
+rm startFlank.txt
+rm endFlank.txt
+
+
+mkdir extracted_data
+
+# update sample_names.txt
+cut -f 1 locations_flanking.txt > sample_names.txt
+```
+#### Extract flanking region
+```
+./extract_regions.sh
+```
+```
+#!/bin/bash
+
+# Load tools
+module load seqkit/2.5.1
+
+accessions=$(less sample_names.txt)
+
+for a in $accessions;
+do
+        line=$(grep "$a" locations_flanking.txt)
+        if [[ -n "$line" ]]; then
+                startFlank=$(echo $line | cut -d' ' -f 4)
+                endFlank=$(echo $line | cut -d' ' -f 5)
+                seqkit subseq -r $startFlank:$endFlank *$a"_bakta_out"/*$a".fna" > extracted_data/$a".fasta"
+        fi
+done
+```
+### Extract genes
+```
+cd extracted_data
+cat *fasta > contigs_erm_f.fasta
+
+# Load the tools
+module load biokit
+
+blastn -query contigs_erm_f.fasta \
+        -subject ../erm_F.fasta \
+        -out blastn_out.txt -outfmt 6 -max_target_seqs 1
+```
+```
+./extract_gene.sh
+```
+```
+#!/bin/bash
+
+# Load tools
+module load seqkit/2.5.1
+
+accessions=$(less ../sample_names.txt)
+
+for a in $accessions;
+do
+        line=$(grep "$a" blastn_out.txt)
+        if [[ -n "$line" ]]; then
+                startFlank=$(echo $line | cut -d' ' -f 7)
+                endFlank=$(echo $line | cut -d' ' -f 8)
+                seqkit subseq -r $startFlank:$endFlank *$a".fasta" > $a"_gene_erm_f_"$startFlank"_"$endFlank".fasta"
+        fi
+done
+```
+#### Wrangle
+```
+cat *gene_erm_f* > genes_erm_f.fasta
+# Filter
+awk '$2 >= 700' genes_erm_f_lengths.txt > filt_genes_erm_f_lengths.txt
+
+# Extract contigs
+cut -f 1 filt_genes_erm_f_lengths.txt > erm_f_lista.txt
+
+# Remove extra space after gene name
+sed -i 's/ //g' genes_erm_f.fasta
+sed -i 's/ //g' erm_f_lista.txt
+seqkit grep -f erm_f_lista.txt genes_erm_f.fasta > filt_genes_erm_f.fasta
+
+cut -f 1 genes_erm_f_lengths.txt > ID.txt
+cut -f 1 filt_genes_erm_f_lengths.txt > filt_ID.txt
+sed -i 's/ //g' filt_ID.txt
+grep -v -f filt_ID.txt ID.txt > remove_ID.txt
+
+# Remove them
+grep -Ff remove_ID.txt <(ls)
+grep -Ff remove_ID.txt <(ls) | xargs -d '\n' rm -v
+
+# Also from contigs_erm_f.fasta
+seqkit grep -f remove_ID.txt -v contigs_erm_f.fasta > filt_contigs_erm_f.fasta
+```
+### Bakta for extracted
+```
+apptainer_wrapper exec bakta $name".fasta" \
+        --prefix $name \
+        --output $name"_bakta_out"/ \
+        --db $BAKTA_DB \
+        --keep-contig-headers \
+        --threads $SLURM_CPUS_PER_TASK
+```
+### vsearch to reduce the number of sequences
+```
+cd extracted_data
+cat *l.fasta > erm_f_clustered.fasta
+vsearch --cluster_fast erm_f_clustered.fasta --id 0.50 --centroids erm_f_clustered_vsearch_50.fasta --strand both --sizeout --threads $SLURM_CPUS_PER_TASK
+
+sed -i 's/;/_/g' erm_f_clustered_vsearch_50.fasta
+sed -i 's/=/_/g' erm_f_clustered_vsearch_50.fasta
+
+mkdir vsearch_50
+nano vsearch_50/vsearch_50_list.txt
+```
+### Filter the genes in ```genes_erm_f.fasta``` according to the dereplication results
+```
+seqkit grep -f vsearch_50_list.txt ../genes_erm_f.fasta > genes_erm_f_vsearch_50.fasta
+```
+### Add reference sequences
+| Accession | Description |
+| ------------- | ------------- |
+| M17808.1 | *Bacteroides fragilis* |
+| CP054002.1 | *Bacteroides fragilis* |
+### Build phylogenetic tree (no root?)
+```
+module load mafft/7.505
+mafft genes_erm_f_vsearch_50.fasta > genes_erm_f_vsearch_50_aln
+module load raxml/8.2.12
+raxmlHPC-PTHREADS -T 6 -s genes_erm_f_vsearch_50_aln -m GTRGAMMA -p 12345 -n erm_f_genes_vsearch_50_tree
+```
+### Visualize the genetic contexts using pyGenomeViz
+#### Some of the sequences are in reverted orientation, run ```revert.py```:
+```
+module load python-data
+module load biopythontools
+python3 revert.py
+```
+#### (From this on locally)
+#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running ```replace_gene_names.py```
+```
+python3 replace_gene_names.py
+```
+#### Create the figures by running ```pyGenomeViz_BLAST_ermF.py```
+```
+python3 pyGenomeViz_BLAST_ermF.py
+```
 
