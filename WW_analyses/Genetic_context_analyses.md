@@ -187,14 +187,12 @@ seqretsplit beta_lactamase_d_2_clustered_vsearch_99.fasta
 - Run Bakta
 - Identify and extract the ARG locations
 #### Add the bin sequences eventhought they would have be excluded by the deprelication
-```
 | ID | bin |
 | ------------- | ------------- |
 | INF1_s0.ctg006697l | C5f |
 | INF3_s20.ctg001312l | C4f |
 | INF2_s1.ctg008129l | C7f |
 | INF3_s10.ctg003382l | C7f |
-```
 #### Add also the reference sequences from NCBI based in their similarity to our sequences (context/ARG)
 | Accession | Description |
 | ------------- | ------------- |
@@ -640,24 +638,167 @@ python3 replace_gene_names.py
 ```
 python3 pyGenomeViz_BLAST_blaOXA-129.py
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## *sul1*
+### Explore within all data
+```
+sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p ID.txt)
+
+blastn -query ../$sample/$sample"_contigs.fasta" \
+        -subject sul1_9.fasta \
+        -out $sample"_sul1_9.txt" -outfmt 6
+
+# Filter only the best hits to avoid getting much of the other variants of sul1
+
+# Extract contigs
+for i in $(less EFF1_lista.txt);do grep -A 1 -f <(echo "$i") ../../EFF1/EFF1_contigs.fasta > $i".fasta";done
+```
+### Add reference sequences
+| Accession | Description |
+| ------------- | ------------- |
+| CP026207.1 | Escherichia coli |
+| CP055486.1 | Klebsiella sp. |
+| CP021775.1 | Pseudomomas aeruginosa |
+### Get the locations of the ARGs
+```
+# Run
+blastn -query $sample".fasta" \
+        -subject sul1_9.fasta \
+        -out $sample"_resfinder_out.txt" -outfmt 6 -max_target_seqs 1
+
+# Create the locations.txt
+cat *_resfinder_out.txt | cut -f 1,7-8 > locations.txt
+```
+```
+./get_regions.sh locations.txt
+```
+```
+#!/bin/bash
+
+touch startFlank.txt
+touch endFlank.txt
+
+while read -a line
+do
+  	contig=${line[0]}
+        start=${line[1]}
+        end=${line[2]}
+        startFlank=$((${line[1]} - 10000))
+        endFlank=$((${line[2]} + 10000))
+        echo $startFlank >> startFlank.txt
+        echo $endFlank >> endFlank.txt
+
+        # Combine into one file
+        paste -d '\t' locations.txt startFlank.txt endFlank.txt > locations_flanking.txt
+
+done < $1
+```
+#### Polish results
+```
+# replace negative with one
+less locations_flanking.txt | grep "-"
+
+sed -i 's/-[0-9][0-9][0-9]/1/g' locations_flanking.txt
+sed -i 's/-[0-9][0-9]/1/g' locations_flanking.txt
+
+less locations_flanking.txt | grep "-"
+
+rm startFlank.txt
+rm endFlank.txt
+
+mkdir extracted_data
+
+# update sample_names.txt
+cut -f 1 locations_flanking.txt > sample_names.txt
+```
+```
+./extract_regions.sh
+```
+```
+#!/bin/bash
+
+# Load tools
+module load seqkit/2.5.1
+
+accessions=$(less sample_names.txt)
+
+for a in $accessions;
+do
+        line=$(grep "$a" locations_flanking.txt)
+        if [[ -n "$line" ]]; then
+                startFlank=$(echo $line | cut -d' ' -f 4)
+                endFlank=$(echo $line | cut -d' ' -f 5)
+                seqkit subseq -r $startFlank:$endFlank *$a".fasta" > extracted_data/$a".fasta"
+        fi
+done
+```
+### Run Bakta for the extracted data
+```
+cd extracted_data
+
+apptainer_wrapper exec bakta s399.ctg000560l.fasta \
+        --prefix s399.ctg000560l \
+        --output s399.ctg000560l_bakta_out \
+        --db $BAKTA_DB \
+        --keep-contig-headers \
+        --threads $SLURM_CPUS_PER_TASK
+```
+### vsearch to dereplicate the contexts
+```
+cd extracted_data
+cat s*fasta > sul1_clustered.fasta
+
+vsearch --cluster_fast sul1_clustered.fasta --id 0.90 --centroids sul1_clustered_vsearch_90.fasta --strand both --sizeout --threads $SLURM_CPUS_PER_TASK
+
+# Polish
+sed -i 's/;/_/g' sul1_clustered_vsearch_90.fasta
+sed -i 's/=/_/g' sul1_clustered_vsearch_90.fasta
+sed -i 's/_size_[0-9]//g' sul1_clustered_vsearch_90.fasta
+sed -i 's/_size_[0-9]//g' sul1_clustered_vsearch_90.fasta
+```
+### Create phylogenetic tree
+```
+# Alignment
+mafft genes_bl_c.fasta > genes_sul1_9_aln
+
+# Create the tree
+module load raxml/8.2.12
+raxmlHPC-PTHREADS -T 6 -s genes_sul1_9_aln -m GTRGAMMA -p 12345 -n sul1_9_genes_tree_vsearch_90
+
+# Visualize the tree in iTOL
+```
+### Visualize the genetic contexts using pyGenomeViz
+#### Some of the sequences are in reverted orientation, run ```revert.py```:
+```
+module load python-data
+module load biopythontools
+python3 revert.py
+```
+#### (From this on locally)
+#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running ```replace_gene_names.py```
+```
+python3 replace_gene_names.py
+```
+#### Create the figures by running ```pyGenomeViz_BLAST_sul1_9.py```
+```
+python3 pyGenomeViz_BLAST_sul1_9.py
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## *erm*(F)
+
