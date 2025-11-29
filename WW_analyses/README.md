@@ -34,7 +34,7 @@ module load snakemake
 snakemake --profile workflow/profile --use-envmodules \
 	--snakefile workflow/Snakefile_WW_methylation_analysis --use-singularity -np
 
-# Actual run in HyperQueue
+# Actual run in HyperQueue [sbatch-hq-sing.sh](./src/sbatch-hq-sing.sh)
 sbatch sbatch-hq-sing.sh
 ```
 &nbsp;
