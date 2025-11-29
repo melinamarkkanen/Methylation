@@ -203,18 +203,18 @@ raxmlHPC-PTHREADS -T 6 -s updated_aln -m GTRGAMMA -p 12345 -n beta_lactamase_d_2
 ```
 
 ### Visualize the genetic contexts using pyGenomeViz
-#### Some of the sequences are in reverted orientation, run ```revert.py```:
+#### Some of the sequences are in reverted orientation, run [revert.py](./../src/revert.py):
 ```
 module load python-data
 module load biopythontools
 python3 revert.py
 ```
 #### (From this on locally)
-#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running ```replace_gene_names.py```
+#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running [replace_gene_names.py](./../src/replace_gene_names.py)
 ```
 python3 replace_gene_names.py
 ```
-#### Create the figures by running ```pyGenomeViz_BLAST_d_2.py```
+#### Create the figures by running [pyGenomeViz_BLAST_d_2.py](./../src/pyGenomeViz_BLAST_d_2.py)
 ```
 python3 pyGenomeViz_BLAST_d_2.py
 ```
@@ -398,18 +398,18 @@ raxmlHPC-PTHREADS -T 6 -s genes_bl_c_aln -m GTRGAMMA -p 12345 -n beta_lactamase_
 # Visualize the tree in iTOL
 ```
 ### Visualize the genetic contexts using pyGenomeViz
-#### Some of the sequences are in reverted orientation, run ```revert.py```:
+#### Some of the sequences are in reverted orientation, run [revert.py](./../src/revert.py):
 ```
 module load python-data
 module load biopythontools
 python3 revert.py
 ```
 #### (From this on locally)
-#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running ```replace_gene_names.py```
+#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running [replace_gene_names.py](./../src/replace_gene_names.py)
 ```
 python3 replace_gene_names.py
 ```
-#### Create the figures by running ```pyGenomeViz_BLAST_c.py```
+#### Create the figures by running [pyGenomeViz_BLAST_c.py](./../src/pyGenomeViz_BLAST_c.py)
 ```
 python3 pyGenomeViz_BLAST_c.py
 ```
@@ -570,18 +570,18 @@ do
 done
 ```
 ### Visualize the genetic contexts using pyGenomeViz
-#### Some of the sequences are in reverted orientation, run ```revert.py```:
+#### Some of the sequences are in reverted orientation, run [revert.py](./../src/revert.py):
 ```
 module load python-data
 module load biopythontools
 python3 revert.py
 ```
 #### (From this on locally)
-#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running ```replace_gene_names.py```
+#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running [replace_gene_names.py](./../src/replace_gene_names.py)
 ```
 python3 replace_gene_names.py
 ```
-#### Create the figures by running ```pyGenomeViz_BLAST_blaOXA-129.py```
+#### Create the figures by running [pyGenomeViz_BLAST_blaOXA-129.py](./../src/pyGenomeViz_BLAST_blaOXA-129.py)
 ```
 python3 pyGenomeViz_BLAST_blaOXA-129.py
 ```
@@ -701,18 +701,18 @@ raxmlHPC-PTHREADS -T 6 -s genes_sul1_9_aln -m GTRGAMMA -p 12345 -n sul1_9_genes_
 # Visualize the tree in iTOL
 ```
 ### Visualize the genetic contexts using pyGenomeViz
-#### Some of the sequences are in reverted orientation, run ```revert.py```:
+#### Some of the sequences are in reverted orientation, run [revert.py](./../src/revert.py):
 ```
 module load python-data
 module load biopythontools
 python3 revert.py
 ```
 #### (From this on locally)
-#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running ```replace_gene_names.py```
+#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running [replace_gene_names.py](./../src/replace_gene_names.py)
 ```
 python3 replace_gene_names.py
 ```
-#### Create the figures by running ```pyGenomeViz_BLAST_sul1_9.py```
+#### Create the figures by running [pyGenomeViz_BLAST_sul1_9.py](./../src/pyGenomeViz_BLAST_sul1_9.py)
 ```
 python3 pyGenomeViz_BLAST_sul1_9.py
 ```
@@ -904,18 +904,18 @@ module load raxml/8.2.12
 raxmlHPC-PTHREADS -T 6 -s genes_erm_f_vsearch_50_aln -m GTRGAMMA -p 12345 -n erm_f_genes_vsearch_50_tree
 ```
 ### Visualize the genetic contexts using pyGenomeViz
-#### Some of the sequences are in reverted orientation, run ```revert.py```:
+#### Some of the sequences are in reverted orientation, run [revert.py](./../src/revert.py):
 ```
 module load python-data
 module load biopythontools
 python3 revert.py
 ```
 #### (From this on locally)
-#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running ```replace_gene_names.py```
+#### Update the gene names so that more information on the gene annotations are available for the sequence visualization by running [replace_gene_names.py](./../src/replace_gene_names.py)
 ```
 python3 replace_gene_names.py
 ```
-#### Create the figures by running ```pyGenomeViz_BLAST_ermF.py```
+#### Create the figures by running [pyGenomeViz_BLAST_ermF.py](./../src/pyGenomeViz_BLAST_ermF.py)
 ```
 python3 pyGenomeViz_BLAST_ermF.py
 ```
