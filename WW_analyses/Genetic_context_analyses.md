@@ -117,27 +117,9 @@ mkdir extracted_data
 # update sample_names.txt
 cut -f 1 locations_flanking.txt > sample_names.txt
 ```
-#### extract_regions.sh
+#### Run [extract_regions.sh](./../src/extract_regions.sh)
 ```
 ./extract_regions.sh
-```
-```
-#!/bin/bash
-
-# Load tools
-module load seqkit/2.5.1
-
-accessions=$(less sample_names.txt)
-
-for a in $accessions;
-do
-        line=$(grep "$a" locations_flanking.txt)
-        if [[ -n "$line" ]]; then
-                startFlank=$(echo $line | cut -d' ' -f 4)
-                endFlank=$(echo $line | cut -d' ' -f 5)
-                seqkit subseq -r $startFlank:$endFlank *$a"_bakta_out"/*$a".fna" > extracted_data/$a".fasta"
-        fi
-done
 ```
 ### Look for similar genes among the established ones
 ```
@@ -358,27 +340,9 @@ mkdir extracted_data
 # update sample_names.txt
 cut -f 1 locations_flanking.txt > sample_names.txt
 ```
-#### extract_regions.sh
+#### Run [extract_regions.sh](./../src/extract_regions.sh)
 ```
 ./extract_regions.sh
-```
-```
-#!/bin/bash
-
-# Load tools
-module load seqkit/2.5.1
-
-accessions=$(less sample_names.txt)
-
-for a in $accessions;
-do
-        line=$(grep "$a" locations_flanking.txt)
-        if [[ -n "$line" ]]; then
-                startFlank=$(echo $line | cut -d' ' -f 4)
-                endFlank=$(echo $line | cut -d' ' -f 5)
-                seqkit subseq -r $startFlank:$endFlank *$a"_bakta_out"/*$a".fna" > extracted_data/$a".fasta"
-        fi
-done
 ```
 ### Bakta for extarcted sequences
 ```
@@ -555,26 +519,9 @@ cut -f 1 locations_flanking.txt > sample_names.txt
 
 mkdir extracted_data
 ```
+#### Run [extract_regions.sh](./../src/extract_regions.sh)
 ```
 ./extract_regions.sh
-```
-```
-#!/bin/bash
-
-# Load tools
-module load seqkit/2.5.1
-
-accessions=$(less sample_names.txt)
-
-for a in $accessions;
-do
-        line=$(grep "$a" locations_flanking.txt)
-        if [[ -n "$line" ]]; then
-                startFlank=$(echo $line | cut -d' ' -f 4)
-                endFlank=$(echo $line | cut -d' ' -f 5)
-                seqkit subseq -r $startFlank:$endFlank *$a"_bakta_out"/*$a".fna" > extracted_data/$a".fasta"
-        fi
-done
 ```
 ### Run bakta on the extracted squences
 ```
@@ -714,26 +661,9 @@ mkdir extracted_data
 # update sample_names.txt
 cut -f 1 locations_flanking.txt > sample_names.txt
 ```
+#### Run [extract_regions.sh](./../src/extract_regions.sh)
 ```
 ./extract_regions.sh
-```
-```
-#!/bin/bash
-
-# Load tools
-module load seqkit/2.5.1
-
-accessions=$(less sample_names.txt)
-
-for a in $accessions;
-do
-        line=$(grep "$a" locations_flanking.txt)
-        if [[ -n "$line" ]]; then
-                startFlank=$(echo $line | cut -d' ' -f 4)
-                endFlank=$(echo $line | cut -d' ' -f 5)
-                seqkit subseq -r $startFlank:$endFlank *$a".fasta" > extracted_data/$a".fasta"
-        fi
-done
 ```
 ### Run Bakta for the extracted data
 ```
@@ -873,27 +803,9 @@ mkdir extracted_data
 # update sample_names.txt
 cut -f 1 locations_flanking.txt > sample_names.txt
 ```
-#### Extract flanking region
+#### Run [extract_regions.sh](./../src/extract_regions.sh)
 ```
 ./extract_regions.sh
-```
-```
-#!/bin/bash
-
-# Load tools
-module load seqkit/2.5.1
-
-accessions=$(less sample_names.txt)
-
-for a in $accessions;
-do
-        line=$(grep "$a" locations_flanking.txt)
-        if [[ -n "$line" ]]; then
-                startFlank=$(echo $line | cut -d' ' -f 4)
-                endFlank=$(echo $line | cut -d' ' -f 5)
-                seqkit subseq -r $startFlank:$endFlank *$a"_bakta_out"/*$a".fna" > extracted_data/$a".fasta"
-        fi
-done
 ```
 ### Extract genes
 ```
