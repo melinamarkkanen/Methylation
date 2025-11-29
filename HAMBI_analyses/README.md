@@ -7,7 +7,7 @@
 cd HAMBI_data/WGS_data
 cat *fna > HAMBI_genomes.fasta
 ```
-### Run ```workflow/Snakefile_HAMBI_preanalysis``` for:
+### Run [Snakefile_HAMBI_preanalysis](./../workflow/Snakefile_HAMBI_preanalysis) for:
 - generation of HiFi reads **without** kinetics tags (fastq.gz) for the assembly
 - metagenomic assembly of the community
 - BLASTn search between the metagenomic assemblies and WGS data
@@ -41,7 +41,7 @@ rename bcad1039t--bcad1039t bcAd1039T--bcAd1039T *.fasta
 rename bcad1046t--bcad1046t bcAd1046T--bcAd1046T *.fasta
 rename bcad1063t--bcad1063t bcAd1063T--bcAd1063T *.fasta
 ```
-### Run ```workflow/Snakefile_HAMBI_methylation_analysis```:
+### Run [Snakefile_HAMBI_methylation](./../workflow/Snakefile_HAMBI_methylation):
 - align the HiFi reads with kinetics to the assemblies
 - run ipSummary to obtain the .gff files for downatream analyses
 ```
@@ -56,7 +56,7 @@ snakemake --profile workflow/profile --use-envmodules --use-singularity \
         --snakefile workflow/Snakefile_HAMBI_methylation_analysis --use-singularity --keep-going -np
 ```
 &nbsp;
-## Generate Position Weight Matrices (PWM):
+## Generate Position Weight Matrices (PWM) ([scoring_matrices_HAMBI.py](./../src/scoring_matrices_HAMBI.py)):
 - to filter data, the methylation types that have less than 50 detected sites are filled with 0 matrices which increased the models performance
 - the scoring matrices are then flattened to feature matrices. The flattened feature matrices are then used to train the random forest model to predict the taxonomic classification of the contigs. 
 ```
@@ -76,7 +76,7 @@ cd /scratch/project_2006608/Methylation/HAMBI_data/contigs
 rm -r bcAd1023T--bcAd1023T/
 ...
 ```
-### Create ```HAMBI_labels.txt``` for connecting taxonomical identities and methylation profiles of metagenomic contigs for method vaidation
+### Create [HAMBI_labels.txt](./../results/HAMBI_labels.txt) for connecting taxonomical identities and methylation profiles of metagenomic contigs for method vaidation
 ```
 # Combine results
 cd HAMBI_data/metagenomic_assembly
@@ -94,7 +94,7 @@ less HAMBI_genomes.fasta | grep ">" | sed 's/>//' > WGS_ID.txt
 sed -i 's/\.1 /\.1\t/g' WGS_ID.txt
 awk 'NR==FNR {a[$1]=$0; next} $2 in a {print $0, a[$2]}' WGS_ID.txt ../metagenomic_assembly/filtered_blast_out.txt > ../metagenomic_assembly/HAMBI_taxa_names.txt
 ```
-#### Modify ```HAMBI_taxa_names.txt``` further in excel, save as ```HAMBI_labels.txt```:
+#### Modify ```HAMBI_taxa_names.txt``` further in excel, save as [HAMBI_labels.txt](./../results/HAMBI_labels.txt):
 - modify the labels according to GTDB nomenclature
 - fill in column headers (see below)
 - transfer back to Puhti for further modifications
@@ -105,7 +105,7 @@ bcAd1023T--bcAd1023T_ptg000001l	Bacteria	Pseudomonadota	Gammaproteobacteria	Burk
 bcAd1023T--bcAd1023T_ptg000003l	Bacteria	Pseudomonadota	Gammaproteobacteria	Enterobacterales	Enterobacteriaceae	Kluyvera	Kluyvera intermedia	plasmid unnamed	HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia_plasmid_unnamed_HAMBI_1299	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera_Kluyvera_intermedia	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae_Kluyvera	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales_Enterobacteriaceae	Bacteria_Pseudomonadota_Gammaproteobacteria_Enterobacterales	Bacteria_Pseudomonadota_Gammaproteobacteria	Bacteria_Pseudomonadota
 …																		
 ```
-#### Process missing values in ```HAMBI_labels.txt```
+#### Process missing values in [HAMBI_labels.txt](./../results/HAMBI_labels.txt)
 ```
 # count contigs missing values
 cd HAMBI_data/metagenomic_assembly
@@ -200,7 +200,7 @@ cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 ```
 &nbsp;
 ## Random Forest classifier
-### Run ```notebooks/Random_Forest_analysis_HAMBI.ipynb```
+### Run [Random_Forest_analysis_HAMBI.ipynb](./../notebooks/Random_Forest_analysis_HAMBI.ipynb])
 &nbsp;
 ## Sequence logos
 ```

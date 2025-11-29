@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /scratch/project_2006608/Methylation/HAMBI_data/contigs
+cd HAMBI_data/contigs
 
 contigs=$(ls *gff | sed 's/_basemods\.gff//g')
 

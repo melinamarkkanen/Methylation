@@ -120,7 +120,7 @@ def create_PWM(context_seqs:list, fasta_counts:dict, n:int, logger, window_size=
 
     PWM = pd.DataFrame(index=possible_nucleotides, columns=positions, dtype=float).fillna(0.0)
 
-    if not context_seqs or len(context_seqs) < 20:
+    if not context_seqs or len(context_seqs) < 50:
         return PWM
 
     counts = defaultdict(int)
