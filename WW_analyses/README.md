@@ -18,7 +18,7 @@ cd Methylation/WW_data/EFF1
 ```
 ### The .bam with kinetic tags were created previously with this [workflow](https://github.com/melinamarkkanen/sul4_project/blob/main/workflow/Snakefile_HiFi_reads)
 
-### Run ```workflow/Snakefile_WW_preanalysis``` for:
+### Run [Snakefile_WW_preanalysis_analysis](./../workflow/Snakefile_WW_preanalysis_analysis) for:
 - aligning HiFi reads **with** kinetics tags (.bam) for the methylation analysis
 - preparing the required files for the downstream steps of the methylation analysis
 ```
@@ -26,7 +26,7 @@ snakemake --profile workflow/profile --use-envmodules \
 	--snakefile workflow/Snakefile_WW_preanalysis --use-singularity --singularity-args "--bind /scratch/project_2006608/Methylation_Viikki_HiFi/data/" -np
 ```
 ## Preliminary analysis for the methylation detection
-### Run ```workflow/Snakefile_WW_methylation_analysis``` using HyperQueue:
+### Run [Snakefile_WW_methylation_analysis](./../workflow/Snakefile_WW_methylation_analysis) using HyperQueue [script](./../src/sbatch-hq-sing.sh):
 - obtain the .gff files for downatream analyses
 ```
 # Dry run
@@ -38,7 +38,7 @@ snakemake --profile workflow/profile --use-envmodules \
 sbatch sbatch-hq-sing.sh
 ```
 &nbsp;
-## Generation of Position Weight Matrices (PWM)
+## Generation of Position Weight Matrices (PWM) ([scoring_matrices_WW.py](./../src/scoring_matrices_WW.py))
 - to filter data, the methylation types that have less than **50** detected sites are filled with 0 matrices which increased the models performance
 - the scoring matrices are then flattened to feature matrices. The flattened feature matrices are then used to train the random forest model to predict the taxonomic classification of the contigs. 
 ```

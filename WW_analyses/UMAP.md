@@ -4,13 +4,13 @@
 module load seqkit/2.5.1
 seqkit fx2tab --length --name --header-line EFF1_contigs.fasta > EFF1_contigs_lengths.txt
 ```
-## Base modification counts
+## Base modification counts ([WW_count_gff_lines.sh](./../src/WW_count_gff_lines.sh))
 ```
 cd src/
 ./WW_count_gff_lines.sh EFF1
 sed -i '1i contig\tmod_count' EFF1_mod_counts.txt
 ```
-## Established ARGs (WW_blastn_resfinder.sh)
+## Established ARGs
 ```
 # Load the tools
 module load biokit
@@ -25,16 +25,13 @@ sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p ../sample_names.txt)
 blastn -query EFF1_contigs.fasta \
         -subject ../../db/resfinder_db/all.fsa \
         -out EFF1_resfinder_out.txt -outfmt 6 \
-		-perc_identity 90 -max_target_seqs 5
+        -perc_identity 90 -max_target_seqs 5
 ```
-### Filter & count ARGs / contig
+### Filter & count ARGs/contig ([WW_count_ARGs.sh](./../src/WW_count_ARGs.sh))
 ```
 awk '$4 >= 100' EFF1_resfinder_out.txt" > tmp && mv tmp EFF1_resfinder_out.txt
-
 cp EFF1_resfinder_out.txt raw_EFF1_resfinder_out.txt
-
 ## First manually (set # and then remove those lines) check hits that are duplicates
-
 sed -i '/^#/d' EFF1_resfinder_out.txt
 
 # Then run
@@ -67,7 +64,7 @@ fargene -i fARGene_in/*.fasta \
 
 # Binning clustered contigs
 ## Extract clusters
-### ./WW_get_contigs_for_MAGs.sh <sample> <cluster> <above>
+### [./WW_get_contigs_for_MAGs.sh](./../src/WW_get_contigs_for_MAGs.sh) <sample> <cluster> <above>
 ```
 ./WW_get_contigs_for_MAGs.sh EFF1 C1
 ```
