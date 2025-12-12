@@ -10,14 +10,10 @@ input_dir = "input_dir_mod"
 
 desired_order = [
 "CP026207.1.gbff",
+"AY963803.6.gbff",
 "s137.ctg000200l.gbff",
 "s399.ctg000560l.gbff",
-"s17.ctg041013l.gbff",
-"rev_CP055486.1.gbff",
-"rev_s5821.ctg007802l.gbff",
-"rev_s30.ctg032113lf.gbff",
-"CP021775.1.gbff",
-"s21430.ctg025057l.gbff",
+"s17.ctg041013l.gbff"
 ]
 
 # Load and parse Genbank files in desired order
@@ -30,72 +26,51 @@ gv.set_scale_xticks(labelsize=0)
 manual_colors = {
 
 # ARGs
-  "sul1": "red",
-  "aadA1": "#0B9948",
-  "aadA2": "#0B9948",
-  "ant(2'')-Ia": "#9477A6",
-  "blaBEL-1": "#E8FFE9",
-  "blaBEL": "#E5FCA9",
-  "blaOXA-10": "#581845",
-  "catB": "#BF5C0F",
-  "catB3": "#BF5C0F",
-  "qacEdelta1": "#6A2CC7",
-  "N-acetyltransferase domain-containing protein": "#FCA41C",
-  "dfrA1": "#808000",
+"ant(2'')-Ia": "#9467bd",
+"catB3": "#8c564b",
+"dfrA1": "#FFB30A",
+"floR2": "#F2BEFA",
+"mph(E)": "#016620",
+"msr(E)": "#9BBA77",
+"sul1": "#F54927",
+"tet(G)": "#ABA28A",
+"tetR(G)": "#82775B",
 
 # MGEs
-  "Integrase": "#FCFFBF",
-  "Integron gene cassette protein": "#BD9E04",
-  "intI1": "#FADB41",
-  "IS6-like element IS6100 family transposase": "#4157FA",
-  "ISXO2-like transposase domain-containing protein": "#daa520",
-  "Prophage protein": "#000000",
-  "Resolvase/invertase-type recombinase catalytic": "#B2BABB",
+"Chaperonin/integrase fusion protein": "#CACC91",
+"DNA-invertase hin": "#17becf",
+"Integrase catalytic domain-containing protein": "#843c39",
+"Integrase": "#C9B608",
+"intI1": "#F2D335",
+"IS6-like element IS6100 family transposase": "#35ADF2",
+"istB": "#31a354",
+"Putative transposase": "#ce6dbd",
+"tnp": "#3B27F2",
+"Transposase for transposon Tn21": "#a55194",
+"Transposase": "#ff9896",
+"xerC": "#F2F5A2",
 
-  "Transposase for transposon Tn21": "#0B1FB5",
-  "Transposase Tn21": "#0B1FB5",
-  "Transposase": "#279BF5",
-  "Transposon Tn501 resolvase": "#4263B8",
 
-  "3-oxoacyl-ACP synthase": "#e6194b",
-  "AAA+ ATPase domain-containing protein": "#3cb44b",
-  "ABC transporter domain-containing protein": "#f58231",
-  "Abi-like protein": "#911eb4",
-  "AbiTii domain-containing protein": "#46f0f0",
-  "citrate synthase (unknown stereospecificity)": "#9a6324",
-  "CobQ/CobB/MinD/ParA nucleotide binding": "#fffac8",
-  "Cupin type-2 domain-containing protein": "#800000",
-  "Cytochrome c": "#aaffc3",
-  "DNA-invertase hin": "#ffd8b1",
-  "Dna-invertase": "#000075",
-  "DUF1010 domain-containing protein": "#808080",
-  "DUF3018 domain-containing protein": "#ffffff",
-  "DUF86 domain-containing protein": "#a9a9a9",
-  "Essential protein Yae1 N-terminal domain-containing": "#ff69b4",
-  "GGDEF domain-containing protein": "#b0e0e6",
-  "hrtB": "#ff7f00",
-  "HTH tetR-type domain-containing protein": "#8b0000",
-  "mobB": "#cd5c5c",
-  "mobC": "#87ceeb",
-  "Mobilization protein": "#6a5acd",
-  "N-acetyltransferase domain-containing protein": "#00ced1",
-  "NTP-binding protein": "#db7093",
-  "Peptidase M23 domain-containing protein": "#556b2f",
-  "Polymerase nucleotidyl transferase domain-containing": "#708090",
-  "Secreted protein": "#5f9ea0",
-  "Serpin domain-containing protein": "#bc8f8f",
-  "SpoVT-AbrB domain-containing protein": "#6495ed",
-  "STAS domain-containing protein": "#dc143c",
-  "Transcriptional regulator": "#ffdead",
-  "Transmembrane protein": "#20b2aa",
-  "vapC": "#32cd32",
-  "Zinc finger DksA/TraR C4-type domain-containing": "#000000",
-  "istB": "#242411",
-  "ydiV": "#035C49",
-  "xerC": "#F7F705",
-  "tnp": "#0535F7",
-  "mph(E)": "#F77605",
-  "msr(E)": "#05F7A2"
+#"AAA domain-containing protein, putative AbiEii": "#1f77b4",
+#"AAA+ ATPase domain-containing protein": "#ff7f0e",
+#"Abi-like protein": "#2ca02c",
+#"AbiTii domain-containing protein": "#d62728",
+#"citrate synthase (unknown stereospecificity)": "#7f7f7f",
+
+#"Essential protein Yae1 N-terminal domain-containing": "#393b79",
+#"GGDEF domain-containing protein": "#8c6d31",
+
+
+#"N-acetyltransferase domain-containing protein": "#636363",
+#"NTP-binding protein": "#b5cf6b",
+#"Peptidase M23 domain-containing protein": "#9c9ede",
+#"Peptidase S8/S53 domain-containing protein": "#6b6ecf",
+#"Secreted protein": "#bd9e39",
+#"Serpin domain-containing protein": "#fd8d3c",
+#"Transcriptional regulator": "#969696",
+#"Transmembrane protein": "#c7e9c0",
+#"ydiV": "#9edae5"
+
 }
 
 
@@ -155,6 +130,6 @@ if len(align_coords) > 0:
         gv.add_link(ac.query_link, ac.ref_link, color=color, inverted_color=inverted_color, v=ac.identity, vmin=min_ident, curve=True)
     gv.set_colorbar([color, inverted_color], vmin=min_ident)
 
-gv.savefig("genbank_comparison_by_blast_nucl.svg")
-gv.savefig("genbank_comparison_by_blast_nucl.png")
+gv.savefig("december_genbank_comparison_by_blast_nucl.svg")
+gv.savefig("december_genbank_comparison_by_blast_nucl.png")
 

@@ -73,49 +73,49 @@ manual_colors = {
     "blaOXA-464": "#F54927",
     "msrA": "#A327F5",
 
-    "Putative membrane-bound redox modulator Alx": "#ebdf21",
-    "Diacylglycerol kinase": "#f96f9c",
-    "rhlE": "#4D2D59",
-    "Aldose 1-epimerase": "#2D5934",
-    "MOSC domain-containing protein": "#46d9c0",
-    "N-succinyldiaminopimelate-aminotransferase /": "#172b86",		# N-succinyldiaminopimelate-aminotransferase/acetylornithine transaminase
-    "Pyridoxamine 5'-phosphate oxidase family protein": "#2702d5",
-    "histidine kinase": "#c5c06c",
-    "BaiN-like insert domain-containing protein": "#0376fd",
-    "Metallophosphoesterase": "#062b3f",
-    "N-acetylmuramoyl-L-alanine amidase": "#3b5c87",
-    "DNA repair protein Rad50": "#3f71fa",
-    "Potassium transporter": "#cbd097",
-    "DUF3010 domain-containing protein": "#4a4c2b",
-    "hipA": "#7be79a",
-    "HTH cro/C1-type domain-containing protein": "#2cc4f2",
-    "DUF4376 domain-containing protein": "#7cd093",
-    "DUF302 domain-containing protein": "#dcb11a",
-    "ycaO": "#74ed3b",
-    "Glutamine amidotransferase, class I": "#33d5f5",
-    "Dihydrolipoyl dehydrogenase": "#bb6c26",
-    "DUF155 domain-containing protein": "#8479cb",
-    "AAA+ ATPase domain-containing protein": "#416add",
-    "Resolvase/invertase-type recombinase catalytic": "#3a73f5",	# Resolvase/invertase-type recombinase catalytic domain-containing protein
-    "Nicotinamide mononucleotide transporter": "#2f79ad",
-    "Glutathione peroxidase": "#429c83",
-    "Mutator family transposase": "#89bbd4",
-    "30S ribosomal protein S6": "#5ccf11",
-    "Acetyltransferase component of pyruvate": "#4056ef",		# Acetyltransferase component of pyruvate dehydrogenase complex
-    "HD-GYP domain-containing protein": "#aa5e69",
-    "Nucleotidyl transferase AbiEii/AbiGii toxin family": "#e8c909",	# Nucleotidyl transferase AbiEii/AbiGii toxin family protein
+    #"Putative membrane-bound redox modulator Alx": "#ebdf21",
+    #"Diacylglycerol kinase": "#f96f9c",
+    "rhlE": "#21179A",
+    "Aldose 1-epimerase": "#709C6E",
+    #"MOSC domain-containing protein": "#46d9c0",
+    #"N-succinyldiaminopimelate-aminotransferase /": "#172b86",		# N-succinyldiaminopimelate-aminotransferase/acetylornithine transaminase
+    #"Pyridoxamine 5'-phosphate oxidase family protein": "#2702d5",
+    #"histidine kinase": "#c5c06c",
+    #"BaiN-like insert domain-containing protein": "#0376fd",
+    #"Metallophosphoesterase": "#062b3f",
+    #"N-acetylmuramoyl-L-alanine amidase": "#3b5c87",
+    #"DNA repair protein Rad50": "#3f71fa",
+    #"Potassium transporter": "#cbd097",
+    #"DUF3010 domain-containing protein": "#4a4c2b",
+    #"hipA": "#7be79a",
+    #"HTH cro/C1-type domain-containing protein": "#2cc4f2",
+    #"DUF4376 domain-containing protein": "#7cd093",
+    #"DUF302 domain-containing protein": "#dcb11a",
+    #"ycaO": "#74ed3b",
+    #"Glutamine amidotransferase, class I": "#33d5f5",
+    #"Dihydrolipoyl dehydrogenase": "#bb6c26",
+    #"DUF155 domain-containing protein": "#8479cb",
+    #"AAA+ ATPase domain-containing protein": "#416add",
+    "Resolvase/invertase-type recombinase catalytic domain-containing protein": "#F9E45E",	# Resolvase/invertase-type recombinase catalytic domain-containing protein
+    #"Nicotinamide mononucleotide transporter": "#2f79ad",
+    #"Glutathione peroxidase": "#429c83",
+    #"Mutator family transposase": "#89bbd4",
+    #"30S ribosomal protein S6": "#5ccf11",
+    #"Acetyltransferase component of pyruvate": "#4056ef",		# Acetyltransferase component of pyruvate dehydrogenase complex
+    #"HD-GYP domain-containing protein": "#aa5e69",
+    #"Nucleotidyl transferase AbiEii/AbiGii toxin family": "#e8c909",	# Nucleotidyl transferase AbiEii/AbiGii toxin family protein
     "putative DNA invertase": "#e1ad4c",
-    "Benzoate transporter": "#02cce9",
-    "istB": "#d8c89a",
-    "htpG": "#774879",
-    "ciaB": "#207bcb",
-    "HNH domain-containing protein": "#b64834",
-    "Bro-N domain-containing protein": "#bdde66",
-    "lysE": "#2fbe0b",
-    "DEAD/DEAH box helicase": "#83c548",
-    "algI": "#76cbcb",
-    "DUF2721 domain-containing protein": "#87f39d",
-    "PAS domain-containing protein": "#f2992c",
+    #"Benzoate transporter": "#02cce9",
+    "istB": "#5E98F9",
+    #"htpG": "#774879",
+    #"ciaB": "#207bcb",
+    #"HNH domain-containing protein": "#b64834",
+    #"Bro-N domain-containing protein": "#bdde66",
+    #"lysE": "#2fbe0b",
+    #"DEAD/DEAH box helicase": "#83c548",
+    #"algI": "#76cbcb",
+    #"DUF2721 domain-containing protein": "#87f39d",
+    #"PAS domain-containing protein": "#f2992c",
 
 # MGEs
     "IS21 family transposase": "#7AC1F5",
@@ -123,14 +123,13 @@ manual_colors = {
     "Transposase IS4-like domain-containing protein": "#A2DEF2",
     "Transposase": "#6FFCF3",
     "Phage protein": "black",
-    "Site-specific tyrosine recombinase, phage integrase": "#8A8A79",	# Site-specific tyrosine recombinase, phage integrase family (INT_XerDC domain)
+    "Site-specific tyrosine recombinase, phage integrase family (INT_XerDC domain)": "#8A8A79",	# Site-specific tyrosine recombinase, phage integrase family (INT_XerDC domain)
 
 # Methylation
-    "site-specific DNA-methyltransferase": "#ED98D3",			# site-specific DNA-methyltransferase (adenine-specific)
-    "Serine hydroxymethyltransferase": "#AB87A0",
-    "Methyl-accepting transducer domain-containing": "#FAA07D"		# Methyl-accepting transducer domain-containing protein
+    #"site-specific DNA-methyltransferase": "#ED98D3",			# site-specific DNA-methyltransferase (adenine-specific)
+    #"Serine hydroxymethyltransferase": "#AB87A0",
+    #"Methyl-accepting transducer domain-containing": "#FAA07D"		# Methyl-accepting transducer domain-containing protein
 }
-
 default_color = "#E3E3E3"
 
 # Plot CDS and misc_feature with custom coloring
@@ -187,6 +186,6 @@ if len(align_coords) > 0:
         gv.add_link(ac.query_link, ac.ref_link, color=color, inverted_color=inverted_color, v=ac.identity, vmin=min_ident, curve=True)
     gv.set_colorbar([color, inverted_color], vmin=min_ident)
 
-gv.savefig("genbank_comparison_by_blast_nucl.svg")
-gv.savefig("genbank_comparison_by_blast_nucl.png")
+gv.savefig("december_genbank_comparison_by_blast_nucl.svg")
+gv.savefig("december_genbank_comparison_by_blast_nucl.png")
 

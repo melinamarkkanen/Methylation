@@ -30,8 +30,8 @@ manual_colors = {
   "aph(3'')-Ib": "#F58231",
   "aph(6)-Id": "#46F0F0",
   "Aspartate--tRNA ligase": "#f58231",
-  "blaOXA-129": "red",
-  "blaOXA": "red",
+  "blaOXA-129": "#F54927",
+  "blaOXA": "#F54927",
   "Chromosome-partitioning ATPase Soj": "#f032e6",
   "Class 1 integrase": "#F1F505",
   "Cupin type-2 domain-containing protein": "#fabebe",
@@ -138,6 +138,6 @@ if len(align_coords) > 0:
         gv.add_link(ac.query_link, ac.ref_link, color=color, inverted_color=inverted_color, v=ac.identity, vmin=min_ident, curve=True)
     gv.set_colorbar([color, inverted_color], vmin=min_ident)
 
-gv.savefig("genbank_comparison_by_blast_nucl.svg")
-gv.savefig("genbank_comparison_by_blast_nucl.png")
+gv.savefig("december_genbank_comparison_by_blast_nucl.svg")
+gv.savefig("december_genbank_comparison_by_blast_nucl.png")
 
