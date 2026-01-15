@@ -38,12 +38,12 @@ ls -d *contigs/ | sed 's/_contigs\///g' > sample_names.txt
 sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p sample_names.txt)
 
 # Set temp dir
-export TMPDIR="/scratch/project_2006608/Methylation/tmp_dir"
+export TMPDIR="tmp_dir"
 
 # Run
-apptainer exec --bind $PWD:$PWD,$TMPDIR:/scratch/project_2006608/Methylation/tmp_dir,$CHECKM2DB:/scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd /projappl/project_2006608/containers/checkm2:1.0.1.sif checkm2 predict --input $sample"_contigs"/*.fasta \
+checkm2 predict --input $sample"_contigs"/*.fasta \
         --output-directory $sample"_CheckM2_out" --extension fasta --threads 6 --force \
-        --database_path /scratch/project_2006608/Methylation_Viikki_HiFi/db/CheckM2_database/uniref100.KO.1.dmnd
+        --database_path db/CheckM2_database/uniref100.KO.1.dmnd
 
 # Summarize
 cat HAMBI_data/MAGs/C1/*_CheckM2_out/quality_report.tsv | cut -f 1-3 | grep -v "Name"
@@ -57,8 +57,8 @@ cd HAMBI_data/MAGs/C1
 sample=$(sed -n ${SLURM_ARRAY_TASK_ID}p sample_names.txt)
 
 # Load the environment and variables
-export PATH="/projappl/project_2006608/GTDB-Tk/bin:$PATH"
-export GTDBTK_DATA_PATH=/scratch/project_2006608/GTDB-Tk/release220/
+export PATH="GTDB-Tk/bin:$PATH"
+export GTDBTK_DATA_PATH=GTDB-Tk/release220/
 
 # Run
 gtdbtk classify_wf --genome_dir $sample"_contigs" -x fasta \

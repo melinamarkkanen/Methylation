@@ -2,7 +2,7 @@ import os
 if not os.path.exists('slurm_logs'):
 			os.makedirs('slurm_logs')
 
-SAMPLES, = glob_wildcards("/scratch/project_2006608/Methylation/WW_data/EFF3_contigs/{contig}.fasta")
+SAMPLES, = glob_wildcards("WW_data/EFF3_contigs/{contig}.fasta")
 
 rule all:
 	input:

@@ -50,7 +50,7 @@ module load snakemake
 snakemake --profile workflow/profile --use-envmodules --use-singularity \
         --snakefile workflow/Snakefile_HAMBI_methylation_analysis --use-singularity -np
 
-# With two latter **rule all**s add flag ```--keep-going``` to avoid crashing after every contig with no kinetic reads mapped (=failed ipdSummary)
+# With two latter rule all add flag --keep-going to avoid crashing after every contig with no kinetic reads mapped (=failed ipdSummary)
  module load snakemake
 snakemake --profile workflow/profile --use-envmodules --use-singularity \
         --snakefile workflow/Snakefile_HAMBI_methylation_analysis --use-singularity --keep-going -np
@@ -73,7 +73,6 @@ cd /scratch/project_2006608/Methylation
 python3 src/scoring_matrices_HAMBI.py HAMBI_data/contigs/bcAd1023T--bcAd1023T HAMBI_data/bcAd1023T_matrices
 
 # Clean subfolders
-cd /scratch/project_2006608/Methylation/HAMBI_data/contigs
 rm -r bcAd1023T--bcAd1023T/
 ...
 ```
@@ -205,7 +204,7 @@ cut -f 1-510 merged_data.tsv > tmp && mv tmp merged_data.tsv
 &nbsp;
 ## Sequence logos
 ```
-export PYTHONUSERBASE=/projappl/project_2009999/my-python-env
+export PYTHONUSERBASE=my-python-env
 module load python-data
 python3 src/create_logos.py HAMBI_data/contigs HAMBI_data/logos
 ```
