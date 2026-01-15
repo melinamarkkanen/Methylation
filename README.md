@@ -4,36 +4,35 @@
 
 ## Contents
 - [Data](#Data)
-- Analysis steps:
-  - [Synthetic community](./HAMBI_analyses/README.md)
-  - [Wastewater community](./WW_analyses/README.md)
-  - **HiFi read generation and metagenomic assembly**
-    -  [Synthetic community](./workflow/Snakefile_HAMBI_preanalysis)
-    -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)
-  - **Preliminary analysis for methylation detection**
-    -  [Synthetic community](./workflow/Snakefile_HAMBI_methylation_analysis)
-    -  [Wastewater community](./workflow/Snakefile_WW_methylation_analysis)
-  - **Generation of Position Weight Matrices (PWMs)**
-    -  [Synthetic community](./HAMBI_analyses/README.md#generate-position-weight-matrices-pwm)
-    -  [Wastewater community](./WW_analyses/README.md#generate-position-weight-matrices-pwm)
-  - **Analyses and visualization of PWMs**
-    - Synthetic community:
-      - [Random Forest classifier](./notebooks/Random_Forest_analysis_HAMBI.ipynb)
-      - [Sequence logos](./src/create_logos.py)
-      - [Uniform Manifold Approximation and Projection (UMAP)](./HAMBI_analyses/UMAP.md)
-        - [Generation of attached data](./HAMBI_analyses/UMAP.md#generating-attached-data)
-        - [Binning clustered contigs](./HAMBI_analyses/UMAP.md#binning-clustered-contigs)
-    - Wastewater community:
-      - [Uniform Manifold Approximation and Projection (UMAP)](./WW_analyses/UMAP.md)
-        - [Generation of attached data](./WW_analyses/UMAP.md#generating-attached-data)
-        - [Binning clustered contigs](./WW_analyses/UMAP.md#binning-clustered-contigs)
-  - **Genetic context analyses**
-    - [Latent class D 2 beta-lactamase](./WW_analyses/Genetic_context_analyses.md#class-d-2-beta-lactamase)
-    - [Latent class C beta-lactamase](./WW_analyses/Genetic_context_analyses.md#class-c-beta-lactamase)
-    - [*bla*OXA-129](./WW_analyses/Genetic_context_analyses.md#blaoxa-129)
-    - [*sul1_9*](./WW_analyses/Genetic_context_analyses.md#sul1_9-like)
-    - [*erm*(F)](./WW_analyses/Genetic_context_analyses.md#ermf)
-  - [Intermediate results](./results/README.md)
+- Analysis steps for [Synthetic community](./HAMBI_analyses/README.md)
+- Analysis steps for [Wastewater community](./WW_analyses/README.md)
+- **HiFi read generation and metagenomic assembly**
+  -  [Synthetic community](./workflow/Snakefile_HAMBI_preanalysis)
+  -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)
+- **Preliminary analysis for methylation detection**
+  -  [Synthetic community](./workflow/Snakefile_HAMBI_methylation_analysis)
+  -  [Wastewater community](./workflow/Snakefile_WW_methylation_analysis)
+- **Generation of Position Weight Matrices (PWMs)**
+  -  [Synthetic community](./HAMBI_analyses/README.md#generate-position-weight-matrices-pwm)
+  -  [Wastewater community](./WW_analyses/README.md#generate-position-weight-matrices-pwm)
+- **Analyses and visualization of PWMs**
+  - Synthetic community:
+    - [Random Forest classifier](./notebooks/Random_Forest_analysis_HAMBI.ipynb)
+    - [Sequence logos](./src/create_logos.py)
+    - [Uniform Manifold Approximation and Projection (UMAP)](./HAMBI_analyses/UMAP.md)
+      - [Generation of attached data](./HAMBI_analyses/UMAP.md#generating-attached-data)
+      - [Binning clustered contigs](./HAMBI_analyses/UMAP.md#binning-clustered-contigs)
+  - Wastewater community:
+    - [Uniform Manifold Approximation and Projection (UMAP)](./WW_analyses/UMAP.md)
+      - [Generation of attached data](./WW_analyses/UMAP.md#generating-attached-data)
+      - [Binning clustered contigs](./WW_analyses/UMAP.md#binning-clustered-contigs)
+- **Genetic context analyses**
+  - [Latent class D 2 beta-lactamase](./WW_analyses/Genetic_context_analyses.md#class-d-2-beta-lactamase)
+  - [Latent class C beta-lactamase](./WW_analyses/Genetic_context_analyses.md#class-c-beta-lactamase)
+  - [*bla*OXA-129](./WW_analyses/Genetic_context_analyses.md#blaoxa-129)
+  - [*sul1_9*](./WW_analyses/Genetic_context_analyses.md#sul1_9-like)
+  - [*erm*(F)](./WW_analyses/Genetic_context_analyses.md#ermf)
+- [Intermediate results](./results/README.md)
 
 
 ## Data

@@ -9,7 +9,6 @@
 | bcAd1039T   | 713   | 698      | 171               |
 | bcAd1046T   | 263   | 262      | 159               |
 | bcAd1063T   | 373   | 364      | 126               |
-&nbsp;
 ### Unique taxa
 |---------| All data | After filtering >50 |
 |---------|----------|-----------------|
@@ -19,8 +18,6 @@
 | Order   |    9     | 7  |
 | Class   |    3     | 2  |
 | Phylum  |    2     | 1  |
-&nbsp;
-&nbsp;
 ## Wastewater
 ### Number of contigs and analyzed for methylation
 | sample | contigs | .gff files |
