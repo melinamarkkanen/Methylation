@@ -14,8 +14,8 @@
     -  [Synthetic community](./workflow/Snakefile_HAMBI_methylation_analysis)
     -  [Wastewater community](./workflow/Snakefile_WW_methylation_analysis)
   - **Generation of Position Weight Matrices (PWMs)**
-    -  [Synthetic community](./HAMBI_analyses/README.md#Generate-Position-Weight-Matrices-(PWM))
-    -  [Wastewater community](./workflow/Snakefile_WW_preanalysis)
+    -  [Synthetic community](./HAMBI_analyses/README.md#generate-position-weight-matrices-pwm)
+    -  [Wastewater community](./WW_analyses/README.md#generate-position-weight-matrices-pwm)
   - **Analyses and visualization of PWMs**
     - Synthetic community:
       - [Random Forest classifier](./notebooks/Random_Forest_analysis_HAMBI.ipynb)
