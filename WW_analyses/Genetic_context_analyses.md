@@ -48,8 +48,8 @@ seqkit fx2tab --length --name --header-line contigs_beta_lactamase_d_2.fasta > c
 ls *l.fasta | sed 's/\.fasta//g' > sample_names.txt
 ls *c.fasta | sed 's/\.fasta//g' >> sample_names.txt
 
-export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
-export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+export SING_IMAGE=bakta:1.11.0.sif
+export BAKTA_DB=db/bakta_db/db-light
 
 apptainer_wrapper exec bakta $name".fasta" \
 	--prefix $name \
@@ -139,8 +139,8 @@ cd extracted_data
 name=$(sed -n ${SLURM_ARRAY_TASK_ID}p ../sample_names.txt)
 
 # Run
-export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
-export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+export SING_IMAGE=bakta:1.11.0.sif
+export BAKTA_DB=db/bakta_db/db-light
 
 apptainer_wrapper exec bakta $name".fasta" \
         --prefix $name \
@@ -223,7 +223,7 @@ python3 pyGenomeViz_BLAST_d_2.py
 ```
 # Run
 apptainer exec --bind $PWD:$PWD,$DB_PATH:$DB_PATH \
-        /projappl/project_2006608/containers/genomad:1.8.0.sif genomad end-to-end \
+        containers/genomad:1.8.0.sif genomad end-to-end \
         --cleanup --splits 8 $contig".fasta" geNomad_out/$contig $DB_PATH
 
 # Check
@@ -271,8 +271,8 @@ seqkit fx2tab --length --name --header-line contigs_beta_lactamase_c.fasta > con
 ls *l.fasta | sed 's/\.fasta//g' > sample_names.txt
 ls *c.fasta | sed 's/\.fasta//g' >> sample_names.txt
 
-export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
-export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+export SING_IMAGE=bakta:1.11.0.sif
+export BAKTA_DB=db/bakta_db/db-light
 
 apptainer_wrapper exec bakta $name".fasta" \
 	--prefix $name \
@@ -352,8 +352,8 @@ cd extracted_data
 name=$(sed -n ${SLURM_ARRAY_TASK_ID}p ../sample_names.txt)
 
 # Run
-export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
-export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+export SING_IMAGE=bakta:1.11.0.sif
+export BAKTA_DB=db/bakta_db/db-light
 
 apptainer_wrapper exec bakta $name".fasta" \
         --prefix $name \
@@ -416,7 +416,7 @@ python3 pyGenomeViz_BLAST_c.py
 ```
 # Run
 apptainer exec --bind $PWD:$PWD,$DB_PATH:$DB_PATH \
-        /projappl/project_2006608/containers/genomad:1.8.0.sif genomad end-to-end \
+        containers/genomad:1.8.0.sif genomad end-to-end \
         --cleanup --splits 8 $contig".fasta" geNomad_out/$contig $DB_PATH
 
 # Check
@@ -425,11 +425,11 @@ cat */*_summary/*_plasmid_summary.tsv | grep -v "seq_name"
 ### pdifFinder
 ```
 # Add the program to your path
-export PYTHONUSERBASE=/projappl/project_2006608/my-python-env
-export PATH="/projappl/project_2006608/pdifFinder/pdifFinder_installation/bin:$PATH"
+export PYTHONUSERBASE=my-python-env
+export PATH="pdifFinder/pdifFinder_installation/bin:$PATH"
 
 # Run
-/projappl/project_2006608/my-python-env/bin/pdifFinder --inFile $name".fasta" --outdir $name"_pdifFinder_out"
+my-python-env/bin/pdifFinder --inFile $name".fasta" --outdir $name"_pdifFinder_out"
 
 # View
 ls *pdifFinder_out/*
@@ -456,8 +456,8 @@ ls N*fasta | sed 's/\.fasta//g' >> contig_names.txt
 contig=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt)
 
 # Run
-export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
-export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+export SING_IMAGE=bakta:1.11.0.sif
+export BAKTA_DB=db/bakta_db/db-light
 
 apptainer_wrapper exec bakta $contig".fasta" \
         --prefix $contig \
@@ -524,8 +524,8 @@ mkdir extracted_data
 ```
 ### Run bakta on the extracted squences
 ```
-export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
-export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+export SING_IMAGE=bakta:1.11.0.sif
+export BAKTA_DB=db/bakta_db/db-light
 
 apptainer_wrapper exec bakta $name".fasta" \
         --prefix $name \
@@ -735,8 +735,8 @@ ls *fasta | sed 's/\.fasta//g' > contig_names.txt
 contig=$(sed -n ${SLURM_ARRAY_TASK_ID}p contig_names.txt)
 
 # Run
-export SING_IMAGE=/projappl/project_2006608/containers/bakta:1.11.0.sif
-export BAKTA_DB=/scratch/project_2006608/Methylation/db/bakta_db/db-light
+export SING_IMAGE=bakta:1.11.0.sif
+export BAKTA_DB=db/bakta_db/db-light
 
 apptainer_wrapper exec bakta $contig".fasta" \
         --prefix $contig \
