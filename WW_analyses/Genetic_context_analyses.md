@@ -380,11 +380,10 @@ module load biokit
 seqretsplit beta_lactamase_c_clustered_vsearch_90.fasta
 ```
 ### Add reference sequences
-- Run Bakta
-- Identify and extract the ARG locations
 | Accession | Description |
 | ------------- | ------------- |
 | MRSN15084 | Acinetobacter baumannii |
+
 ### Create the phylogenetic tree
 #### The ARG sequences are gathered to ```genes_bl_c.fasta```
 ```
