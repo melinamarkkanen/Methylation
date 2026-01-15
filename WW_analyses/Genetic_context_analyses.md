@@ -2,7 +2,7 @@
 - [Class D 2 beta-lactamase](#class-d-2-beta-lactamase)
 - [Class C beta-lactamase](#class-c-beta-lactamase)
 - [*bla*OXA-129](#blaoxa-129)
-- [*sul1_9*](#*sul1_9*)
+- [*sul1_9*](#sul1_9)
 - [*erm*(F)](#ermf)
 &nbsp;
 ## Class D 2 beta-lactamase
