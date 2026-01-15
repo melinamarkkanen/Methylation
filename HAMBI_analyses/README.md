@@ -22,7 +22,7 @@ snakemake --profile workflow/profile --use-envmodules --use-singularity \
 ## Preliminary analysis for the methylation detection
 ### Extract contigs for methylation analysis
 ```
-# Extract metagenome assembled contigs from each samples into individual files in ```contigs/```
+# Extract metagenome assembled contigs from each samples into individual files in contigs/
 cd HAMBI_data/metagenomic_assembly
 cp *_contigs.fasta ../contigs
 cd ../contigs/
