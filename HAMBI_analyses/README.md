@@ -56,7 +56,8 @@ snakemake --profile workflow/profile --use-envmodules --use-singularity \
         --snakefile workflow/Snakefile_HAMBI_methylation_analysis --use-singularity --keep-going -np
 ```
 &nbsp;
-## Generate Position Weight Matrices (PWM) ([scoring_matrices_HAMBI.py](./../src/scoring_matrices_HAMBI.py)):
+## Generate Position Weight Matrices (PWM)
+### ([scoring_matrices_HAMBI.py](./../src/scoring_matrices_HAMBI.py)):
 - to filter data, the methylation types that have less than 50 detected sites are filled with 0 matrices which increased the models performance
 - the scoring matrices are then flattened to feature matrices. The flattened feature matrices are then used to train the random forest model to predict the taxonomic classification of the contigs. 
 ```
