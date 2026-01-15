@@ -382,7 +382,7 @@ seqretsplit beta_lactamase_c_clustered_vsearch_90.fasta
 ### Add reference sequences
 | Accession | Description |
 | ------------- | ------------- |
-| MRSN15084 | Acinetobacter baumannii |
+| MRSN15084 | *Acinetobacter baumannii* |
 
 ### Create the phylogenetic tree
 #### The ARG sequences are gathered to ```genes_bl_c.fasta```
@@ -444,9 +444,9 @@ for i in $(less INF1_lista.txt);do grep -A 1 -f <(echo "$i") ../INF1/INF1_contig
 ### Add reference sequences
 | Accession | Description |
 | ------------- | ------------- |
-| FJWZ01000025.1 | Enterobacter hormaechei |
-| NZ_AP022010.1 | Klebsiella quasipneumoniae |
-| NZ_CP031449.2 | Pseudomonas aeruginosa |
+| FJWZ01000025.1 | *Enterobacter hormaechei* |
+| NZ_AP022010.1 | *Klebsiella quasipneumoniae* |
+| NZ_CP031449.2 | *Pseudomonas aeruginosa* |
 
 ### Run Bakta
 ```
@@ -918,4 +918,3 @@ python3 replace_gene_names.py
 ```
 python3 pyGenomeViz_BLAST_ermF.py
 ```
-
