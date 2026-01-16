@@ -895,7 +895,7 @@ seqkit grep -f vsearch_50_list.txt ../genes_erm_f.fasta > genes_erm_f_vsearch_50
 | ------------- | ------------- |
 | M17808.1 | *Bacteroides fragilis* |
 | CP054002.1 | *Bacteroides fragilis* |
-### Build phylogenetic tree (no root?)
+### Build phylogenetic tree
 ```
 module load mafft/7.505
 mafft genes_erm_f_vsearch_50.fasta > genes_erm_f_vsearch_50_aln

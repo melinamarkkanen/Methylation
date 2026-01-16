@@ -48,29 +48,7 @@ manual_colors = {
 "tnp": "#3B27F2",
 "Transposase for transposon Tn21": "#a55194",
 "Transposase": "#ff9896",
-"xerC": "#F2F5A2",
-
-
-#"AAA domain-containing protein, putative AbiEii": "#1f77b4",
-#"AAA+ ATPase domain-containing protein": "#ff7f0e",
-#"Abi-like protein": "#2ca02c",
-#"AbiTii domain-containing protein": "#d62728",
-#"citrate synthase (unknown stereospecificity)": "#7f7f7f",
-
-#"Essential protein Yae1 N-terminal domain-containing": "#393b79",
-#"GGDEF domain-containing protein": "#8c6d31",
-
-
-#"N-acetyltransferase domain-containing protein": "#636363",
-#"NTP-binding protein": "#b5cf6b",
-#"Peptidase M23 domain-containing protein": "#9c9ede",
-#"Peptidase S8/S53 domain-containing protein": "#6b6ecf",
-#"Secreted protein": "#bd9e39",
-#"Serpin domain-containing protein": "#fd8d3c",
-#"Transcriptional regulator": "#969696",
-#"Transmembrane protein": "#c7e9c0",
-#"ydiV": "#9edae5"
-
+"xerC": "#F2F5A2"
 }
 
 

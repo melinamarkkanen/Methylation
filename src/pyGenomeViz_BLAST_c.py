@@ -38,10 +38,6 @@ desired_order = [
 "s21891.ctg024122c.gbff",
 "rev_s26768.ctg034942l.gbff",
 "s0.ctg009177l.gbff"
-
-#"rev_s39922.ctg053620l.gbff",
-#"s0.ctg049933l.gbff",
-#"s1.ctg045269l.gbff",
 ]
 
 # Load and parse Genbank files in desired order
@@ -69,16 +65,6 @@ manual_colors = {
 	"Toxin HigB-2": "#08571F",
 	"Toxin-antitoxin system, antitoxin component": "#7CA684",
 	"Major facilitator superfamily (MFS) profile domain-containing protein": "#738F80",
-
-# RE
-#	"site-specific DNA-methyltransferase (adenine-specific)": "#7A0F2C",
-#	"Cytosine-specific methyltransferase": "#8F0033",
-#	"Type II restriction endonuclease, subtype P (Modular protein)": "#6A1147",
-#	"Restriction endonuclease": "#4C0A2B",
-#	"Type II methyltransferase M-CfrBI": "#9B2E4F",
-#	"site-specific DNA-methyltransferase": "#8A1A22",
-#	"Type II restriction endonuclease, subtype P (Modular": "#A1232D",
-#	"Type III restriction enzyme, res subunit": "#7C003F",
 
 # MGE
 	"repB": "#FFB030",
@@ -112,53 +98,6 @@ manual_colors = {
 
 # other
 	"Short-chain dehydrogenase/reductase SDR": "#B7BF4C"
-
-
-
-
-#    "ampC": "#b96d85",
-#"3-oxoacyl-[acyl-carrier-protein] synthase 3": "#e0c2b2",
-#"AAA+ ATPase domain-containing protein": "#0f95b0",
-#"abrB": "#cbfdfd",
-#"Adenylosuccinate lyase": "#b869b9",
-#"Aldehyde dehydrogenase domain-containing protein": "#f33f94",
-#"Amidase": "#92b46d",
-#"Arc family DNA-binding protein": "#cd9a4b",
-#"Arsenate reductase": "#54e38f",
-#"C2H2-type domain-containing protein": "#fb711e",
-#"C4": "#b7d0b5",
-#"CD-NTase-associated protein 12/Pycsar effector": "#a564ed",
-#"Cytoplasmic protein": "#d1f1e9",
-#"dacC": "#3cb6c6",
-#"DNA-binding protein HU": "#ea9c63",
-#"DNA-binding protein": "#786e85",
-#"DUF3387 domain-containing protein": "#95a7fb",
-#"Fido domain-containing protein": "#fcf7b2",
-#"Gamma carbonic anhydrase family protein": "#c05af3",
-#"Helix-turn-helix domain-containing protein": "#7acba0",
-#"High frequency lysogenization HflD-like protein": "#568e2f",
-#"Hsp20/alpha crystallin family protein": "#dc9e3c",
-#"HTH cro/C1-type domain-containing protein": "#62dffb",
-#"HTH marR-type domain-containing protein": "#f2b08e",
-#"Immunity protein 43 domain-containing protein": "#2f5d2e",
-#"Knr4/Smi1-like domain-containing protein": "#dc3a1a",
-#"Lipoprotein": "#6c87fa",
-#"lysM": "#a94a71",
-#"Macro domain-containing protein": "#d0d2fa",
-#"Major facilitator superfamily (MFS) profile": "#6a3e2f",
-#"mnmA": "#b4f775",
-#"Nucleotidyl transferase AbiEii/AbiGii toxin family": "#a0c4a8",
-#"nudJ": "#f2decc",
-#"OmpR/PhoB-type domain-containing protein": "#7d1bb3",
-#"Short-chain dehydrogenase/reductase SDR": "#397a9e",
-#"SHSP domain-containing protein": "#fe5b87",
-#"surE": "#bc93c3",
-#"Tsi6 domain-containing protein": "#516060",
-#"vbhA": "#dc6889",
-#"Very short patch repair endonuclease": "#fdab48",
-#"yafQ": "#8bbfed",
-#"yflT": "#4f8a35"
-
 }
 
 default_color = "#E3E3E3"
