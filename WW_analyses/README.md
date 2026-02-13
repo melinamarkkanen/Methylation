@@ -95,6 +95,39 @@ awk -F'\t' '{print NF; exit}' EFF1_concat_matrices.tsv
 mv EFF1_concat_matrices.tsv EFF1_concat_matrices_top50.tsv
 ```
 
+## ARG annotations
+### Established ARGs
+```
+blastn -query $sample"_contigs.fasta" \
+        -subject db/resfinder_db/all.fsa \
+        -out $sample"_resfinder_out.txt" -outfmt 6 \
+		-perc_identity 90 -max_target_seqs 1
+# Filter hits
+awk '$4 >= 100' $sample"_resfinder_out.txt" > tmp && mv tmp $sample"_resfinder_out.txt"
+sed -i '/^#/d' $sample"_resfinder_out.txt"
+
+# Counts
+cd src/
+./WW_count_ARGs.sh $sample
+
+# Names
+cut -f 1-2 $sample"_resfinder_out.txt" > ARG_names.txt
+sed -i 's/\(.*_.*\)_.*$/\1/' ARG_names.txt
+
+# Check those that have multiple
+cut -f 1 ARG_names.txt | sort | uniq -d
+```
+
+### Latent ARGs
+```
+# Run for each model separately
+# Model specific scores: https://github.com/fannyhb/fargene/blob/master/fargene_analysis/fargene_analysis.py 
+fargene -i fARGene_in/$sample"_contigs.fasta" \
+        --hmm-model db/fargene/fargene_analysis/models/erm_typeA.hmm \
+        -o fARGene_erm_type_a_out -p $SLURM_CPUS_PER_TASK \
+		--score 200
+```
+
 ## Taxonomical composition
 ```
 # Run Sylph 
