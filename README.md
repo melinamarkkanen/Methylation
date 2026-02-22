@@ -1,6 +1,6 @@
 # Methylation project
 
-## *Preprint: [TBA]*
+## *Preprint: https://doi.org/10.64898/2026.02.18.26346558*
 
 ## Contents
 - [Data](#Data)

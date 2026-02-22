@@ -118,7 +118,7 @@ sed -i 's/\(.*_.*\)_.*$/\1/' ARG_names.txt
 cut -f 1 ARG_names.txt | sort | uniq -d
 ```
 
-### Latent ARGs
+### Latent ARGs by fARGene
 ```
 # Run for each model separately
 # Model specific scores: https://github.com/fannyhb/fargene/blob/master/fargene_analysis/fargene_analysis.py 
