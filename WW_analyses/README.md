@@ -1,6 +1,10 @@
 # Analysis steps for the wastewater community data
 &nbsp;
 ## Preparatory analysis
+
+### The .bam with kinetic tags were created by [Snakefile_HiFi_reads](./../workflow/Snakefile_HiFi_reads)
+### The .bam without kinetic tags were created by [Snakefile_HiFi_reads_no_kinetics](./../workflow/Snakefile_HiFi_reads_no_kinetics)
+
 ### Metagenomic assembly
 ```
 hifiasm_meta -t 4 -o assemblies/EFF1 EFF1.hifi_reads.fastq.gz
@@ -16,7 +20,6 @@ seqretsplit EFF1_contigs.fasta
 # For the Snakemake the assembly files must be in specific folders
 cd Methylation/WW_data/EFF1
 ```
-### The .bam with kinetic tags were created by [Snakefile_HiFi_reads](./../workflow/Snakefile_HiFi_reads)
 
 ### Run [Snakefile_WW_preanalysis_analysis](./../workflow/Snakefile_WW_preanalysis_analysis) for:
 - aligning HiFi reads **with** kinetics tags (.bam) for the methylation analysis

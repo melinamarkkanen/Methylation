@@ -1,0 +1,124 @@
+import os
+if not os.path.exists('slurm_logs'):
+	    os.makedirs('slurm_logs')
+
+MOVIES, = glob_wildcards("/scratch/<project>/PacBio_data/Subread_data/{movie}.subreads.bam")
+BARCODES = ["bcAd1045T--bcAd1045T", "bcAd1046T--bcAd1046T", "bcAd1047T--bcAd1047T", "bcAd1048T--bcAd1048T", "bcAd1049T--bcAd1049T", "bcAd1050T--bcAd1050T", "bcAd1052T--bcAd1052T", "bcAd1053T--bcAd1053T", "bcAd1054T--bcAd1054T"]
+
+rule all:
+    input:
+        expand("Subread_data/{movie}.subreads.bam", movie=MOVIES),
+        expand("ccs_reads/{movie}.ccs.bam", movie=MOVIES),
+        expand("HiFi_bam/{movie}/demultiplex.{barcode}.bam", movie=MOVIES, barcode=BARCODES),
+        expand("data/{barcode}.hifi_reads.fastq.gz", barcode=BARCODES)
+
+rule ccs:
+    input:
+        "Subread_data/{movie}.subreads.bam"
+    output:
+        bam=temp("ccs_reads/{movie}.ccs.bam"),
+        report="ccs_reads/{movie}.report"
+    message:
+        "-- Creating CCS reads  --"
+    singularity:
+        "docker://quay.io/biocontainers/pbccs:6.4.0--h9ee0642_0"
+    log:
+        "ccs_reads/{movie}.log"
+    resources:
+        cpus=40, mem_mb=24000, time_min=3000, tmpdir="tmp_dir/"
+    threads:
+        40
+    shell:
+        """
+        ccs {input} {output.bam} --hifi-kinetics \
+	--report-file {output.report} \
+	--num-threads {threads} --log-file {log}
+        """
+
+rule lima:
+    input:
+        bam="ccs_reads/{movie}.ccs.bam",
+        fasta="ccs_reads/barcodes.fasta"
+    output:
+        temp("HiFi_bam/{movie}/demultiplex.{barcode}.bam")
+    message:
+        "-- Demultiplex --"
+    singularity:
+        "docker://quay.io/biocontainers/lima:2.6.0--h9ee0642_0"
+    resources:
+        cpus=4
+    threads:
+        4
+    params:
+        prefix="HiFi_bam/{movie}/demultiplex.bam"
+    shell:
+        """
+        lima --ccs {input.bam} {input.fasta} {params.prefix} \
+	--peek-guess \
+	--hifi-preset SYMMETRIC-ADAPTERS \
+	--split-bam-named -j {threads}
+        """
+
+rule create_lists:
+    input:
+        expand("HiFi_bam/{movie}/demultiplex.{barcode}.bam", movie=MOVIES, barcode=BARCODES)
+    output:
+        "HiFi_bam/{barcode}_lista.txt"
+    message:
+        "-- Creating lists --"
+    resources:
+        cpus=1
+    threads:
+        1
+    shell:
+        """
+        touch {output}
+        echo "HiFi_bam/m64145_211210_031838/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_220205_005908/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_220211_151822/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_220213_002448/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_220214_093030/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_220215_183556/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_221004_141111/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_221026_134514/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_221027_225207/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_221111_084247/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_221112_182448/demultiplex.{wildcards.barcode}.bam" >> {output}
+        echo "HiFi_bam/m64145_221202_091010/demultiplex.{wildcards.barcode}.bam" >> {output}
+        """
+
+rule combine_bam:
+    input:
+        "HiFi_bam/{barcode}_lista.txt"
+    output:
+        bam="data/{barcode}.bam"
+    message:
+        "-- Combining bam files --"
+    envmodules:
+        "samtools/1.16.1"
+    resources:
+        cpus=1
+    threads:
+        1
+    shell:
+        """
+        samtools merge -b {input} -o {output.bam}
+        """
+
+rule bam2fastq:
+    input:
+        "data/{barcode}.bam"
+    output:
+        "data/{barcode}.hifi_reads.fastq.gz"
+    params:
+        prefix="data/{barcode}.hifi_reads"
+    message:
+        "-- Converting bam files into fastq files --"
+    resources:
+        cpus=1
+    threads:
+        1
+    shell:
+        """
+        bam2fastq {input} -o {params.prefix}
+        """
