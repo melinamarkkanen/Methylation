@@ -16,14 +16,14 @@ seqretsplit EFF1_contigs.fasta
 # For the Snakemake the assembly files must be in specific folders
 cd Methylation/WW_data/EFF1
 ```
-### The .bam with kinetic tags were created previously with this [workflow](https://github.com/melinamarkkanen/sul4_project/blob/main/workflow/Snakefile_HiFi_reads)
+### The .bam with kinetic tags were created by [Snakefile_HiFi_reads](./../workflow/Snakefile_HiFi_reads)
 
 ### Run [Snakefile_WW_preanalysis_analysis](./../workflow/Snakefile_WW_preanalysis_analysis) for:
 - aligning HiFi reads **with** kinetics tags (.bam) for the methylation analysis
 - preparing the required files for the downstream steps of the methylation analysis
 ```
 snakemake --profile workflow/profile --use-envmodules \
-	--snakefile workflow/Snakefile_WW_preanalysis --use-singularity --singularity-args "--bind /scratch/project_2006608/Methylation_Viikki_HiFi/data/" -np
+	--snakefile workflow/Snakefile_WW_preanalysis --use-singularity --singularity-args "--bind /scratch/<project>/Methylation_Viikki_HiFi/data/" -np
 ```
 ## Preliminary analysis for the methylation detection
 ### Run [Snakefile_WW_methylation_analysis](./../workflow/Snakefile_WW_methylation_analysis) using HyperQueue [script](./../src/sbatch-hq-sing.sh):
